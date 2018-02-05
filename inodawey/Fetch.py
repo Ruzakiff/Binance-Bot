@@ -16,7 +16,7 @@ def login():
 	return client
 
 #main
-client=login();
+client=login();jhjhj
 while True:
 	try:
 		symbol_ticker=json.dumps(client.get_symbol_ticker(symbol='ETHBTC'))
