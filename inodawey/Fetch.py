@@ -16,7 +16,7 @@ def login():
 	return client
 
 #main
-client=login();jhjhj
+client=login();
 while True:
 	try:
 		symbol_ticker=json.dumps(client.get_symbol_ticker(symbol='ETHBTC'))
@@ -29,7 +29,7 @@ while True:
 		time.sleep(1)
 	except:
 		print "holl up"
-	else:sdfgsdfg
+	else:
 		print "gucci"
 	#last_updated=coin[77:86]
 	#print last_updated
