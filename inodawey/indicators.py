@@ -1,7 +1,9 @@
 import numpy as np
+import time
 lower=[0]*172800
 upper=[0]*172800
 lengthTime=172800
+
 def sma(price,seconds):
 	temp=0
 	for x in xrange(0,seconds):
