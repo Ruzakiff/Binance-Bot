@@ -29,7 +29,7 @@ while True:
 		time.sleep(1)
 	except:
 		print "holl up"
-	else:
+	else:sdfgsdfg
 		print "gucci"
 	#last_updated=coin[77:86]
 	#print last_updated
