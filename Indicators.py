@@ -51,3 +51,5 @@ def ema():
 	ema.append((ethbtc_price-ema[len(ema-1)])*.181818)+len(ema-1)
 	if(len(ema)>lengthTime):
 		del ema[0]
+def rsi():
+	
