@@ -52,4 +52,20 @@ def ema():
 	if(len(ema)>lengthTime):
 		del ema[0]
 def rsi():
-	
+	currentGains=0
+	currentLosses=0
+	if((ethbtc_price[len(ethbtc_price)-1]-ethbtc_price[len(ethbtc_price)-2])>0):
+       		currentGains=ethbtc_price[len(ethbtc_price)-1]-ethbtc_price[len(ethbtc_price)-2])
+         	currentLosses=0
+	else if((ethbtc_price[len(ethbtc_price)-1]-ethbtc_price[len(ethbtc_price)-2])<0)):
+        	currentGains=0
+        	currentLosses=abs(ethbtc_price[len(ethbtc_price)-1]-ethbtc_price[len(ethbtc_price)-2]))
+	else:
+        	currentGains=0
+         	currentLosses=0
+	avgGain=(13*avggain + cureentgains)/14
+	avgLoss=(13*avgloss + current loss)/14
+	Rs = avggain/avgloss
+	rsi.append(100-(100/1+rs))
+	if(len(rsi)>172800):
+		del rsi[0]
