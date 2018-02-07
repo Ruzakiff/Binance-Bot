@@ -14,7 +14,7 @@ import time
 from indicators import *
 import matplotlib.pyplot as plt
 
-
+#robsayshi
 #initialize list names with correct lengths. sma, upper, rsi etc. fill size and with zeros.
 #make each indicator a boolean isReady variable. start as false
 #make each indicator a counter for how many times they were updated. when each has reached a certain amount, set true
