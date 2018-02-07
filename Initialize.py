@@ -5,7 +5,7 @@
 #Do not let bot start until all data is retreived, and keep updating until bot starts, all arrays must be filled
 #Give data to bot
 #should i write to different files for each one? (rsi, boll,etc) or same file
-#sma,upper,etc are all filled here. then initalize appends to them.
+#sma,upper,etc are all filled here. then indictators appends to them.
 from binance.client import Client
 import config
 import sys
