@@ -74,8 +74,8 @@ def boll():
 	for x in xrange(0,172800):
 		temp=temp+ethbtc_price[x]
 	middle.append((temp/172800))
-	upper.append((temp/172800)+np.std(ethbtc_price)*2)
-	lower.append((temp/172800)-np.std(ethbtc_price)*2)
+	upper.append((temp/172800)+(np.std(ethbtc_price)*2))
+	lower.append((temp/172800)-(np.std(ethbtc_price)*2))
 	if(len(middle)>lengthTime):
 		del middle[0]
 	if(len(upper)>lengthTime):
