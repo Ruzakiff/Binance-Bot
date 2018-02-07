@@ -6,6 +6,7 @@ import numpy as np
 import time
 from indicators import *
 import matplotlib.pyplot as plt
+from initialize import *
 
 def login():
 	print "Connecting..."
@@ -18,4 +19,8 @@ def login():
 	return client
 
 #main
-client=login();
+while(canStart()):
+	print "gucci"
+	client=login();
+else:
+	print "Nop"
