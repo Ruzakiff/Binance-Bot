@@ -5,8 +5,6 @@ import sys
 import json
 import numpy as np
 import time
-from indicators import *
-import matplotlib.pyplot as plt
 #initializations
 lengthTime=172800
 ema=[0]
