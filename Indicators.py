@@ -34,10 +34,10 @@ while 1:
     	ethbtc_price.append(float(line[21:31]))
     	if(len(ethbtc_price)>lengthTime):
     		del ethbtc_price[0]
-
+#indicators assume all needed info is present
 #indicators need every second to maintain accuracy
 #not worrying about triggers for now
-def sma(seconds,check):
+def sma(seconds,check): #check is trigger logic (if check is above certain number buy or something)
 	temp=0
 	for x in xrange(0,seconds):
 		temp=temp+ethbtc_price[x]
@@ -69,3 +69,17 @@ def rsi():
 	rsi.append(100-(100/1+rs))
 	if(len(rsi)>172800):
 		del rsi[0]
+def boll():
+	temp=0
+	for x in xrange(0,172800):
+		temp=temp+ethbtc_price[x]
+	middle.append((temp/172800))
+	upper.append((temp/172800)+np.std(ethbtc_price)*2)
+	lower.append((temp/172800)-np.std(ethbtc_price)*2)
+	if(len(middle)>lengthTime):
+		del middle[0]
+	if(len(upper)>lengthTime):
+		del upper[0]
+	if(len(lower)>lengthTime):
+		del lower[0]
+	
