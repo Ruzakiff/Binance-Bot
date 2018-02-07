@@ -5,6 +5,7 @@ import sys
 import json
 import numpy as np
 import time
+from initalize import *
 #initializations
 lengthTime=172800
 ema=[0]
