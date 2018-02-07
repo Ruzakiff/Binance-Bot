@@ -23,6 +23,8 @@ def login():
 	else:
 		print "Connected"
 	return client
+def canStart():
+	return False
 
 #main
 client=login();
