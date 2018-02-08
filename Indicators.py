@@ -9,6 +9,8 @@ from initalize import *
 #initializations
 lengthTime=172800
 ema=[0]
+avgGain=0 #has to persist
+avgLoss=0 #has to persist
 def login():
 	print "Connecting..."
 	try:
