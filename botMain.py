@@ -19,8 +19,7 @@ def login():
 	return client
 
 #main
-while(canStart()):
-	print "gucci"
-	client=login();
+while(canStart):
+	print "do stuff"
 else:
 	print "Nop"
