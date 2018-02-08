@@ -1,11 +1,4 @@
 #TODO
-#Continuiously get all data that is needed for bot to start
-#(rsi,sma for middle boll, etc)
-#feed data to indicators
-#Do not let bot start until all data is retreived, and keep updating until bot starts, all arrays must be filled
-#Give data to bot
-#should i write to different files for each one? (rsi, boll,etc) or same file
-from binance.client import Client
 import config
 import sys
 import json
@@ -15,23 +8,45 @@ from indicators import *
 import matplotlib.pyplot as plt
 rsi=[0]*172800
 rsiStage=1
+gain=0
+loss=0
 rsiReady=False
 canStart=False
-def login():
-	print "Connecting..."
-	try:
-		client = Client(config.client_key, config.client_secret)
-	except:
-		sys.exit("Failed to connect") #kills entire interpreter, so if 2 scripts, both die.
-	else:
-		print "Connected"
-	return client
-#main
-client=login();
-
-
-
-
+counter=1
+change=ethbtc_price[len(ethbtc_price)-1]-ethbtc_price[len(ethbtc_price)-2]
+while 1:
+	if(counter<15):
+		if(change>0):
+			gain=gain+change
+		if(change<0):
+                	loss=loss+abs(change)
+        if(counter==15):
+		gain=gain/14
+		loss=loss/14
+	if(change>0):
+		avgg=(gain*13+change)/14
+                avgl=(gain*13+0)/14
+	if(change<0):
+                avgg=(gain*13+0)/14
+                avgl=(gain*13+abs(change))/14
+   	if(change==0):
+                avgg=(gain*13+0)/14
+                avgl=(gain*13+0)/14
+        if(counter>15):
+            if(change>0):
+                avgg=(avgg*13+change)/14
+                avgl=(avgl*13+0)/14
+            if(change<0):
+                avgg=(avgg*13+0)/14
+                avgl=(avgl*13+abs(change))/14
+            if(change==0):
+                avgg=(avgg*13+0)/14
+                avgl=(avgl*13+0)/14
+            rsi_array.append(rsi(avgg,avgl))
+            del rsi_array[0]
+	time.sleep(1)
+		
+		
 #initialize list names with correct lengths. sma, upper, rsi etc. fill size and with zeros.
 #make each indicator a boolean isReady variable. start as false
 #make each indicator a counter for how many times they were updated. when each has reached a certain amount, set true
