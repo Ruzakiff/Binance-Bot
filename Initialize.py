@@ -5,24 +5,26 @@ import json
 import numpy as np
 import time
 from indicators import *
-import matplotlib.pyplot as plt
 rsi=[0]*172800
 rsiStage=1
 gain=0
 loss=0
 rsiReady=False
 canStart=False
-counter=1
+avgg=0
+avgl=0 
+time=1
 change=ethbtc_price[len(ethbtc_price)-1]-ethbtc_price[len(ethbtc_price)-2]
 while 1:
-	if(counter<15):
+	if(time<=14):
 		if(change>0):
 			gain=gain+change
 		if(change<0):
                 	loss=loss+abs(change)
-        if(counter==15):
+        if(time==15):
 		gain=gain/14
 		loss=loss/14
+		rsi.append(
 	if(change>0):
 		avgg=(gain*13+change)/14
                 avgl=(gain*13+0)/14
@@ -32,16 +34,18 @@ while 1:
    	if(change==0):
                 avgg=(gain*13+0)/14
                 avgl=(gain*13+0)/14
-        if(counter>15):
-            if(change>0):
-                avgg=(avgg*13+change)/14
-                avgl=(avgl*13+0)/14
-            if(change<0):
-                avgg=(avgg*13+0)/14
-                avgl=(avgl*13+abs(change))/14
-            if(change==0):
-                avgg=(avgg*13+0)/14
-                avgl=(avgl*13+0)/14
+        if(time>14):
+		currentGain=0
+		currentLoss=0
+		if(change>0):
+			currentGain=change
+			currentLoss=0
+		if(change<0):
+			currentGain=0
+			currentLoss=abs(change)
+            	if(change==0):
+			currentGain=0
+			currentLoss=0
             rsi_array.append(rsi(avgg,avgl))
             del rsi_array[0]
 	time.sleep(1)
