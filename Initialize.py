@@ -13,8 +13,25 @@ import numpy as np
 import time
 from indicators import *
 import matplotlib.pyplot as plt
+rsi=[0]*172800
+rsiStage=1
+rsiReady=False
+canStart=False
+def login():
+	print "Connecting..."
+	try:
+		client = Client(config.client_key, config.client_secret)
+	except:
+		sys.exit("Failed to connect") #kills entire interpreter, so if 2 scripts, both die.
+	else:
+		print "Connected"
+	return client
+#main
+client=login();
 
-#robsayshi
+
+
+
 #initialize list names with correct lengths. sma, upper, rsi etc. fill size and with zeros.
 #make each indicator a boolean isReady variable. start as false
 #make each indicator a counter for how many times they were updated. when each has reached a certain amount, set true
@@ -60,20 +77,7 @@ import matplotlib.pyplot as plt
 
 #boll looks same as boll in indicators
 
-def login():
-	print "Connecting..."
-	try:
-		client = Client(config.client_key, config.client_secret)
-	except:
-		sys.exit("Failed to connect") #kills entire interpreter, so if 2 scripts, both die.
-	else:
-		print "Connected"
-	return client
-def canStart():
-	return False
 
-#main
-client=login();
 #Continuiously get all data that is needed for bot to start
 #(rsi,sma for middle boll, etc)
 #feed data to indicators
