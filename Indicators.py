@@ -63,7 +63,7 @@ def rsi():
         	currentGains=0
          	currentLosses=0
 	avgGain=(13*avggain + cureentgains)/14
-	avgLoss=(13*avgloss + current loss)/14
+	avgLoss=(13*avgloss + currentloss)/14
 	Rs = avggain/avgloss
 	rsi.append(100-(100/1+rs))
 	if(len(rsi)>172800):
