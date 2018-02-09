@@ -6,14 +6,17 @@ import numpy as np
 import time
 from indicators import *
 rsi_array=[0]*172800
-rsiStage=1
 firstGain=0
 firstLoss=0
 rsiReady=False
 canStart=False
+botIsOff=True
 avgGain=0
 avgLoss=0 
 time=1
+def botOn():
+	botIsOff=False
+
 while (botIsOff):
 	change=ethbtc_price[len(ethbtc_price)-1]-ethbtc_price[len(ethbtc_price)-2]
 	currentGain=0
@@ -45,6 +48,8 @@ while (botIsOff):
 		if(rsi_array>172800):
 			rsiReady=True
             		del rsi_array[0]
+	if(rsiReady):
+		canStart=True
 	time.sleep(1)
 	time=time+1
 		
