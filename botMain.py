@@ -20,6 +20,7 @@ def login():
 
 #main
 while(canStart):
+	botOn()
 	print "do stuff"
 else:
 	print "Nop"
