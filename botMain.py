@@ -22,5 +22,6 @@ def login():
 while(canStart):
 	botOn()
 	print "do stuff"
+	#do not call rsi, etc until canstart. because rsi from indicators does not have initalized 14day firstagin.
 else:
 	print "Nop"
