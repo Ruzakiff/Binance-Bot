@@ -16,7 +16,8 @@ avgLoss=0
 time=1
 def botOn():
 	botIsOff=False
-
+def botOff():
+	botIsOff=True
 while (botIsOff):
 	change=ethbtc_price[len(ethbtc_price)-1]-ethbtc_price[len(ethbtc_price)-2]
 	currentGain=0
