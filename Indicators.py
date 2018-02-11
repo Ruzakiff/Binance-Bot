@@ -10,6 +10,7 @@ import talib
 #initializations
 lengthTime=172800
 ema=[0]
+ethbtc_close=np.array([])
 #avggain and loss persists from other script, gucci
 def login():
 	print "Connecting..."
