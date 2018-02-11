@@ -35,7 +35,8 @@ while 1:
     	#update every second
     	ethbtc_close.append(float(line[21:31])) #might not be global, might need fix if main cant reference
     	if(len(ethbtc_price)>lengthTime):
-    		del ethbtc_price[0]
+    		#del ethbtc_close[0]
+		ethbtc_close=np.delete(ethbtc_close,0) #has to be numpy, talib wants numpy
 		sma=talib.SMA(ethbtc_close,timeperiod=lengthTime)
 		ema=talib.EMA(ethbtc_close,timeperiod=lengthTime)
 		rsi=talib.RSI(ethbtc_close,timeperiod=lengthTime)
