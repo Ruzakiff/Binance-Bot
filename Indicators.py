@@ -39,11 +39,7 @@ while 1:
 		sma=talib.SMA(ethbtc_close,timeperiod=lengthTime)
 		ema=talib.EMA(ethbtc_close,timeperiod=lengthTime)
 		rsi=talib.RSI(ethbtc_close,timeperiod=lengthTime)
-		tupleMacD=talib.MACD(ethbtc_close)#default intervals
-		for i in tupleMacD:
-			hMacD.append(tupleMacD[0])
-			mMacD.append(tupleMacD[1])
-			lMacD.append(tupleMacD[2])
+		hMacD,mMacD,lMacD=talib.MACD(ethbtc_close)#default intervals
 		cci=talib.CCI(ethbtc_high,ethbtc_low,ethbtc_close,timeperiod=lengthTime)
 		
 		
