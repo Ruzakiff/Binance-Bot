@@ -1,5 +1,4 @@
 from binance.client import Client
-import talib
 import numpy as np
 import time
 from indicators import *
@@ -48,7 +47,7 @@ while 1:
 	if(cci[len(cci)-2]<-100):
 		if(cci[len(cci)-1>cci[len(cci)-2]):#curve up
 		       Buy('ETHBTC',buyAmount)
-		       
+	time.sleep(1)
 					     
 	       
        
