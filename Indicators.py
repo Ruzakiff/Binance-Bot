@@ -45,6 +45,9 @@ while 1:
 			lMacD.append(tupleMacD[2])
 		cci=talib.CCI(ethbtc_high,ethbtc_low,ethbtc_close,timeperiod=lengthTime)
 		
+		
+						#CODE BELOW THIS LINE IS DUMB#
+####################################################################################################################################################################################################################################################################################
 #indicators assume all needed info is present
 #indicators need every second to maintain accuracy
 #not worrying about triggers for now
