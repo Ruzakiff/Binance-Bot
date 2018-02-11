@@ -23,7 +23,7 @@ def login():
 
 #main
 client=login();
-datafile=open("/Users/ryan/Desktop/inodawey/data.txt", "r")
+datafile=open("/Users/ryan/Desktop/inodawey/ethbtc_close.txt", "r")
 while 1:
     where = datafile.tell()
     line = datafile.readline()
