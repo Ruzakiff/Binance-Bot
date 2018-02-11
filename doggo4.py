@@ -36,12 +36,12 @@ while 1:
 		if(lMacD[len(lMacD)-2]<hMacD[len(hMacD)-2]:#second previous, small lower than big
 		   	if(lMacD[len(lMacD)-1]>=hMacD[len(hMacD)-1):#crossed over, or at line
 				Buy('ETHBTC',buyAmount)
-	#Possible sell signals:The CCI crosses above 100 and has started to curve downwards.
+	#Possible sell signals:The CCI crosses above 100 and has started to curve downwards. 
 	#Possible buy signals:The CCI crosses below -100 and has started to curve upwards.
-	#Taken from stockcharts, didnt know
-	#also, it most things refer to line/curve, but we are just checking previous point before
+	#signals buy if crosses zero line from - to +, sell vice versa
+	#also, it most things refer to line/curve, but we are just checking previous point before (this is why we would wanna use numpy if possible to apporixmate curve)
 	#which for some reason could be like really weird or outlier, so not accurate, do we care?
-	#or is that what is supposed to be good, for sniping and shit
+	#or is that what is supposed to be good, for sniping and shit (supposed to be good, stength of cci is in outliers and momentum movement)
 		if(cci[len(cci)-2]>100):
 			if(cci[len(cci)-1]<cci[len(cci)-2]):#curve down
 				Sell('ETHBTC',sellAmount)
