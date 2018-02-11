@@ -32,7 +32,7 @@ while 1:
         datafile.seek(where)
     else:
     	#update every second
-    	ethbtc_price.append(float(line[21:31])) #might not be global, might need fix if main cant reference
+    	ethbtc_close.append(float(line[21:31])) #might not be global, might need fix if main cant reference
     	if(len(ethbtc_price)>lengthTime):
     		del ethbtc_price[0]
 		sma=talib.SMA(ethbtc_close,timeperiod=lengthTime)
