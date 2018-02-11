@@ -33,14 +33,15 @@ while 1:
         datafile.seek(where)
     else:
     	#update every second
-    	ethbtc_close.append(float(line[21:31])) #might not be global, might need fix if main cant reference
+	ethbtc_close=np.append(ethbtc_close,float(line[21:31]) #np array
+    	#ethbtc_close.append(float(line[21:31]))
     	if(len(ethbtc_price)>lengthTime):
     		#del ethbtc_close[0]
 		ethbtc_close=np.delete(ethbtc_close,0) #has to be numpy, talib wants numpy
 		sma=talib.SMA(ethbtc_close,timeperiod=lengthTime)
 		ema=talib.EMA(ethbtc_close,timeperiod=lengthTime)
 		rsi=talib.RSI(ethbtc_close,timeperiod=lengthTime)
-		hMacD,mMacD,lMacD=talib.MACD(ethbtc_close)#default intervals
+		hMacD,mMacD,lMacD=talib.MACD(ethbtc_close,fastperiod=12, slowperiod=26, signalperiod=9)#default intervals
 		cci=talib.CCI(ethbtc_high,ethbtc_low,ethbtc_close,timeperiod=lengthTime)
 		
 		
