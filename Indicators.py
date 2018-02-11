@@ -6,6 +6,7 @@ import json
 import numpy as np
 import time
 from initalize import *
+import talib
 #initializations
 lengthTime=172800
 ema=[0]
@@ -31,9 +32,19 @@ while 1:
         datafile.seek(where)
     else:
     	#update every second
-    	ethbtc_price.append(float(line[21:31]))
+    	ethbtc_price.append(float(line[21:31])) #might not be global, might need fix if main cant reference
     	if(len(ethbtc_price)>lengthTime):
     		del ethbtc_price[0]
+		sma=talib.SMA(ethbtc_close,timeperiod=lengthTime)
+		ema=talib.EMA(ethbtc_close,timeperiod=lengthTime)
+		rsi=talib.RSI(ethbtc_close,timeperiod=lengthTime)
+		tupleMacD=talib.MACD(ethbtc_close)
+		for i in tupleMacD:
+			hMacD.append(tupleMacD[0])
+			mMacD.append(tupleMacD[1])
+			lMacD.append(tupleMacD[2])
+		cci=talib.CCI(ethbtc_high,ethbtc_low,ethbtc_close,timeperiod=lengthTime)
+		
 #indicators assume all needed info is present
 #indicators need every second to maintain accuracy
 #not worrying about triggers for now
