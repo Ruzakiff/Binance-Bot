@@ -47,7 +47,13 @@ while 1:
 				Sell('ETHBTC',sellAmount)
 		if(cci[len(cci)-2]<-100):
 			if(cci[len(cci)-1>cci[len(cci)-2]):#curve up
-			       Buy('ETHBTC',buyAmount)
+				Buy('ETHBTC',buyAmount)
+		if(cci[len(cci)-2]<0):
+		       if(cci[len(cci)-1]>0):
+				Buy('ETHBTC',buyAmount)
+		if(cci[len(cci)-2]>0):
+		       if(cci[len(cci)-1]<0):
+				Sell('ETHBTC',sellAmount)
 		time.sleep(1)
 	except:
 		print "holl up"
