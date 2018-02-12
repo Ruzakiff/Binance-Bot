@@ -25,6 +25,7 @@ while True:
 		symbol_ticker=symbol_ticker.replace(" ","")
 		print symbol_ticker
 		with open ("/Users/ryan/Desktop/inodawey/ethbtc_price.txt", "a") as outfile: #change filepath to filepath of data.txt
+			#bring with open to outer scope, dont open each time
 			outfile.write(symbol_ticker+"\n")
 			time.sleep(1)
 	except:
