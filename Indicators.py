@@ -10,7 +10,7 @@ import talib
 #initializations
 lengthTime=172800
 ema=[0]
-ethbtc_close=np.array([])
+ethbtc_price=np.array([])
 #avggain and loss persists from other script, gucci
 def login():
 	print "Connecting..."
@@ -24,7 +24,7 @@ def login():
 
 #main
 client=login();
-datafile=open("/Users/ryan/Desktop/inodawey/ethbtc_close.txt", "r")
+datafile=open("/Users/ryan/Desktop/inodawey/ethbtc_price.txt", "r")
 while 1:
     where = datafile.tell()
     line = datafile.readline()
@@ -33,16 +33,16 @@ while 1:
         datafile.seek(where)
     else:
     	#update every second
-	ethbtc_close=np.append(ethbtc_close,float(line[21:31]) #np array
-    	#ethbtc_close.append(float(line[21:31]))
+	ethbtc_price=np.append(ethbtc_price,float(line[21:31]) #np array
+    	#ethbtc_price.append(float(line[21:31]))
     	if(len(ethbtc_price)>lengthTime):
-    		#del ethbtc_close[0]
-		ethbtc_close=np.delete(ethbtc_close,0) #has to be numpy, talib wants numpy
-		sma=talib.SMA(ethbtc_close,timeperiod=lengthTime)
-		ema=talib.EMA(ethbtc_close,timeperiod=lengthTime)
-		rsi=talib.RSI(ethbtc_close,timeperiod=lengthTime)
-		hMacD,mMacD,lMacD=talib.MACD(ethbtc_close,fastperiod=12, slowperiod=26, signalperiod=9)#default intervals
-		cci=talib.CCI(ethbtc_high,ethbtc_low,ethbtc_close,timeperiod=lengthTime)
+    		#del ethbtc_price[0]
+		ethbtc_price=np.delete(ethbtc_price,0) #has to be numpy, talib wants numpy
+		sma=talib.SMA(ethbtc_price,timeperiod=lengthTime)
+		ema=talib.EMA(ethbtc_price,timeperiod=lengthTime)
+		rsi=talib.RSI(ethbtc_price,timeperiod=lengthTime)
+		hMacD,mMacD,lMacD=talib.MACD(ethbtc_price,fastperiod=12, slowperiod=26, signalperiod=9)#default intervals
+		cci=talib.CCI(ethbtc_high,ethbtc_low,ethbtc_price,timeperiod=lengthTime)
 		
 		
 						#CODE BELOW THIS LINE IS DUMB#
