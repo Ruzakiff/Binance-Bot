@@ -6,6 +6,7 @@ import json
 import numpy as np
 import time
 from initalize import *
+from priceParse import ethbtc_price
 import talib
 #initializations
 lengthTime=172800
