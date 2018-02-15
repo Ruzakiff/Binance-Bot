@@ -1,7 +1,8 @@
-
 import time
-ethbtc_price=np.array([])
-datafile=open("/Users/ryan/Desktop/inodawey/ethbtc_price.txt", "r")
+ethbtc_high=np.array([])
+ethbtc_low=np.array([])
+ethbtc_close=np.array([])
+datafile=open("/Users/ryan/Desktop/inodawey/ethbtc_klines.txt", "r")
 while 1:
     where = datafile.tell()
     line = datafile.readline()
