@@ -8,8 +8,8 @@ while 1:
         time.sleep(1)
         datafile.seek(where)
     else:
-		ethbtc_price=np.append(ethbtc_price,float(line[21:31]) #np array
+	ethbtc_price=np.append(ethbtc_price,float(line[21:31]) #np array
     	#ethbtc_price.append(float(line[21:31]))
     	if(len(ethbtc_price)>lengthTime):
     		#del ethbtc_price[0]
-				ethbtc_price=np.delete(ethbtc_price,0) #has to be numpy, talib wants numpy
+		ethbtc_price=np.delete(ethbtc_price,0) #has to be numpy, talib wants numpy
