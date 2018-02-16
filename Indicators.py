@@ -1,5 +1,5 @@
 #imports
-from binance.client import Client
+#from binance.client import Client
 import config
 import sys
 import json
@@ -14,18 +14,6 @@ lengthTime=172800
 #ema=[0]
 #ethbtc_price=np.array([])
 #avggain and loss persists from other script, gucci
-def login():
-	print "Connecting..."
-	try:
-		client = Client(config.client_key, config.client_secret)
-	except:
-		sys.exit("Failed to connect") #kills entire interpreter, so if 2 scripts, both die.
-	else:
-		print "Connected"
-	return client
-
-#main
-client=login();
 while 1:
 	#update every second
 	#ethbtc_price=np.append(ethbtc_price,float(line[21:31]) #np array
@@ -44,9 +32,7 @@ while 1:
 
 			       
 			       
-			       
-			       
-			       
+			      	       
 #datafile=open("/Users/ryan/Desktop/inodawey/ethbtc_price.txt", "r")
 #while 1:
  #   where = datafile.tell()
