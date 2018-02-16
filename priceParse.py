@@ -1,3 +1,5 @@
+#could be dumb, might just append in fetch. txt is dumb
+
 import time
 ethbtc_price=np.array([])
 datafile=open("/Users/ryan/Desktop/inodawey/ethbtc_price.txt", "r")
