@@ -5,13 +5,14 @@ import sys
 import json
 import numpy as np
 import time
-from initalize import *
+#from initalize import *
+from HiLoFetch import ethbtc_high,ethbtc_close,ethbtc_low
 from priceParse import ethbtc_price
 import talib
 #initializations
 lengthTime=172800
-ema=[0]
-ethbtc_price=np.array([])
+#ema=[0]
+#ethbtc_price=np.array([])
 #avggain and loss persists from other script, gucci
 def login():
 	print "Connecting..."
@@ -27,7 +28,7 @@ def login():
 client=login();
 while 1:
 	#update every second
-	ethbtc_price=np.append(ethbtc_price,float(line[21:31]) #np array
+	#ethbtc_price=np.append(ethbtc_price,float(line[21:31]) #np array
     	#ethbtc_price.append(float(line[21:31]))
     	if(len(ethbtc_price)>lengthTime):
     		#del ethbtc_price[0]
@@ -38,6 +39,7 @@ while 1:
 		hMacD,mMacD,lMacD=talib.MACD(ethbtc_price,fastperiod=12, slowperiod=26, signalperiod=9)#default intervals
 		if(len(ethbtc_high)>=1500 and len(ethbtc_low)>=1500):
 			cci=talib.CCI(ethbtc_high,ethbtc_low,ethbtc_close,timeperiod=lengthTime)
+       time.sleep(1)
 
 
 			       
@@ -45,26 +47,26 @@ while 1:
 			       
 			       
 			       
-datafile=open("/Users/ryan/Desktop/inodawey/ethbtc_price.txt", "r")
-while 1:
-    where = datafile.tell()
-    line = datafile.readline()
-    if not line:
-        time.sleep(1)
-        datafile.seek(where)
-    else:
-    	#update every second
-	ethbtc_price=np.append(ethbtc_price,float(line[21:31]) #np array
-    	#ethbtc_price.append(float(line[21:31]))
-    	if(len(ethbtc_price)>lengthTime):
-    		#del ethbtc_price[0]
-		ethbtc_price=np.delete(ethbtc_price,0) #has to be numpy, talib wants numpy
-		sma=talib.SMA(ethbtc_price,timeperiod=lengthTime)
-		ema=talib.EMA(ethbtc_price,timeperiod=lengthTime)
-		rsi=talib.RSI(ethbtc_price,timeperiod=lengthTime)
-		hMacD,mMacD,lMacD=talib.MACD(ethbtc_price,fastperiod=12, slowperiod=26, signalperiod=9)#default intervals
-		cci=talib.CCI(ethbtc_high,ethbtc_low,ethbtc_price,timeperiod=lengthTime)
-		
+#datafile=open("/Users/ryan/Desktop/inodawey/ethbtc_price.txt", "r")
+#while 1:
+ #   where = datafile.tell()
+  #  line = datafile.readline()
+   # if not line:
+    #    time.sleep(1)
+     #   datafile.seek(where)
+   # else:
+#    	#update every second
+#	ethbtc_price=np.append(ethbtc_price,float(line[21:31]) #np array
+ #   	#ethbtc_price.append(float(line[21:31]))
+  #  	if(len(ethbtc_price)>lengthTime):
+   # 		#del ethbtc_price[0]
+#		ethbtc_price=np.delete(ethbtc_price,0) #has to be numpy, talib wants numpy
+#		sma=talib.SMA(ethbtc_price,timeperiod=lengthTime)
+#		ema=talib.EMA(ethbtc_price,timeperiod=lengthTime)
+#		rsi=talib.RSI(ethbtc_price,timeperiod=lengthTime)
+#		hMacD,mMacD,lMacD=talib.MACD(ethbtc_price,fastperiod=12, slowperiod=26, signalperiod=9)#default intervals
+#		cci=talib.CCI(ethbtc_high,ethbtc_low,ethbtc_price,timeperiod=lengthTime)
+#		
 		
 						#CODE BELOW THIS LINE IS DUMB#
 ####################################################################################################################################################################################################################################################################################
