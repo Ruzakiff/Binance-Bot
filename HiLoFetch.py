@@ -1,8 +1,12 @@
 from binance.client import Client
+import numpy as np
 import config
 import sys
 import json
 import time
+ethbtc_close=np.array([])
+ethbtc_high=np.array([])
+ethbtc_low=np.array([])
 def login():
 	print "Connecting..."
 	#print config.client_key
@@ -18,52 +22,28 @@ def login():
 #main
 client=login();
 while 1:
-	#try:
-	symbol_ticker=json.dumps(client.get_klines(symbol='ETHBTC', interval=Client.KLINE_INTERVAL_1MINUTE))
-	temp=symbol_ticker.split('"')[1::2]
-	with open ("/Users/ryan/Desktop/inodawey/HighLow.txt", "a") as outfile:				
-		print temp
-		outfile.write(" ".join(temp))
-		outfile.write("\n\n")
-	time.sleep(1)
-	#except:
-		#print "holl up"
-	#else:
-		#print "gucci"
-
-
-
+	try:
+		symbol_ticker=json.dumps(client.get_klines(symbol='ETHBTC', interval=Client.KLINE_INTERVAL_1MINUTE))
+		temp=symbol_ticker.split('"')[1::2]
+		ethbtc_close=np.append(ethbtc_close,temp[3::9])
+		ethbtc_low=np.append(ethbtc_low,temp[2::9])
+		ethbtc_high=np.append(ethbtc_high,temp[1::9])
+		with open ("/Users/ryan/Desktop/inodawey/HighLow.txt", "a") as outfile:				
+			outfile.write(ethbtc_high+"\n")
+			outfile.write(ethbtc_low+"\n")
+			outfile.write(ethbtc_close+"\n")
+		while(len(ethbtc_close)>=1500):
+			np.delete(ethbtc_close,0)
+		while(len(ethbtc_low)>=1500):
+			np.delete(ethbtc_low,0)
+		while(len(ethbtc_high)>=1500):
+			np.delete(ethbtc_high,0)
+		time.sleep(60)
+	except:
+		print "holl up"
+	else:
+		print "gucci"
 
 #ethbtc_close=temp[3::9]
-
-
 #ethbtc_low=temp[2::9]
-
-
-
-
 #ethbtc_high=temp[1::9]
-
-
-
-
-
-	#with open ("/Users/ryan/Desktop/inodawey/HighLow.txt", "a") as outfile:
-	#	outfile.write(symbol_ticker+"\n\n aasdfasdf")
- # while True:
-	# try:
-	# 	symbol_ticker=json.dumps(client.get_symbol_ticker(symbol='ETHBTC'))
-	# 	symbol_ticker=symbol_ticker.replace("\"","")
-	# 	symbol_ticker=symbol_ticker.replace("\b","")
-	# 	symbol_ticker=symbol_ticker.replace(" ","")
-	# 	print symbol_ticker
-	# 	with open ("/Users/ryan/Desktop/inodawey/HighLow.txt", "a") as outfile:
-	# 	outfile.write(symbol_ticker+"\n")
-	# 	time.sleep(1)
-	# except:
-	# 	print "holl up"
-	# else:
-	# 	print "gucci"
-	#last_updated=coin[77:86]
-	#print last_updated
-	
