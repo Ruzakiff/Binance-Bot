@@ -25,6 +25,26 @@ def login():
 
 #main
 client=login();
+while 1:
+	#update every second
+	ethbtc_price=np.append(ethbtc_price,float(line[21:31]) #np array
+    	#ethbtc_price.append(float(line[21:31]))
+    	if(len(ethbtc_price)>lengthTime):
+    		#del ethbtc_price[0]
+		ethbtc_price=np.delete(ethbtc_price,0) #has to be numpy, talib wants numpy
+		sma=talib.SMA(ethbtc_price,timeperiod=lengthTime)
+		ema=talib.EMA(ethbtc_price,timeperiod=lengthTime)
+		rsi=talib.RSI(ethbtc_price,timeperiod=lengthTime)
+		hMacD,mMacD,lMacD=talib.MACD(ethbtc_price,fastperiod=12, slowperiod=26, signalperiod=9)#default intervals
+		if(len(ethbtc_high)>=1500 and len(ethbtc_low)>=1500):
+			cci=talib.CCI(ethbtc_high,ethbtc_low,ethbtc_close,timeperiod=lengthTime)
+
+
+			       
+			       
+			       
+			       
+			       
 datafile=open("/Users/ryan/Desktop/inodawey/ethbtc_price.txt", "r")
 while 1:
     where = datafile.tell()
