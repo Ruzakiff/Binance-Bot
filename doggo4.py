@@ -4,6 +4,9 @@ import time
 from indicators import *
 buyAmount=0
 sellAmount=0
+rsiBuy=0
+macBuy=0
+cciBuy=0
 def login():
 	print "Connecting..."
 	try:
@@ -27,15 +30,19 @@ def Sell(symbol,amount):
 while 1:
 	try:#catch actual exceptions, do before actual launch
 		if(rsi[len(rsi)-1]<=30):
-			Buy('ETHBTC',buyAmount)
+			rsiBuy=1
+			#Buy('ETHBTC',buyAmount)
 		if(rsi[len(rsi)-1)>=70):
-			Sell('ETHBTC',sellAmount)
+		       	rsiBuy=-1
+			#Sell('ETHBTC',sellAmount)
 		if(lMacD[len(lMacD)-2]>hMacD[len(hMacD)-2]:#second previous, small higher than big
 		   	if(lMacD[len(lMacD)-1]<=hMacD[len(hMacD)-1):#crossed over, or at line
-				Sell('ETHBTC',sellAmount)
+				macBuy=-1
+				#Sell('ETHBTC',sellAmount)
 		if(lMacD[len(lMacD)-2]<hMacD[len(hMacD)-2]:#second previous, small lower than big
 		   	if(lMacD[len(lMacD)-1]>=hMacD[len(hMacD)-1):#crossed over, or at line
-				Buy('ETHBTC',buyAmount)
+				macBuy=1
+				#Buy('ETHBTC',buyAmount)
 	#Possible sell signals:The CCI crosses above 100 and has started to curve downwards. 
 	#Possible buy signals:The CCI crosses below -100 and has started to curve upwards.
 	#signals buy if crosses zero line from - to +, sell vice versa
@@ -44,16 +51,24 @@ while 1:
 	#or is that what is supposed to be good, for sniping and shit (supposed to be good, stength of cci is in outliers and momentum movement)
 		if(cci[len(cci)-2]>100):
 			if(cci[len(cci)-1]<cci[len(cci)-2]):#curve down
-				Sell('ETHBTC',sellAmount)
+				cciBuy=-1
+			      	#Sell('ETHBTC',sellAmount)
 		if(cci[len(cci)-2]<-100):
 			if(cci[len(cci)-1>cci[len(cci)-2]):#curve up
-				Buy('ETHBTC',buyAmount)
+				cciBuy=1
+		       		#Buy('ETHBTC',buyAmount)
 		if(cci[len(cci)-2]<0):
 		       if(cci[len(cci)-1]>0):
-				Buy('ETHBTC',buyAmount)
+				cciBuy=1
+		       		#Buy('ETHBTC',buyAmount)
 		if(cci[len(cci)-2]>0):
 		       if(cci[len(cci)-1]<0):
-				Sell('ETHBTC',sellAmount)
+				cciBuy=-1
+	       			#Sell('ETHBTC',sellAmount)
+	      	if(cciBuy==1 and rsiBuy==1 and macBuy==1):
+			       Buy('ETHBTC',buyAmount)
+	       	if(cciBuy==-1 and rsiBuy==-1 and macBuy==-1):
+			       Sell('ETHBTC',sellAmount)
 		time.sleep(1)
 	except:
 		print "holl up"
