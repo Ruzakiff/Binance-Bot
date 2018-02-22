@@ -2,13 +2,20 @@ from binance.client import Client
 import numpy as np
 import time
 from indicators import *
-buyAmount=0
-sellAmount=0
+#buyAmount=0
+amount=0
+#sellAmount=buyAmount
 rsiBuy=0
 macBuy=0
 cciBuy=0
-buy=np.array([])
-sell=np.array([])
+buyValue=np.array([])
+sellValue=np.array([])
+gains=0
+losses=0
+gainCounter=0
+lossCounter=0
+avgGain=0
+avgLoss=0
 def login():
 	print "Connecting..."
 	try:
@@ -28,9 +35,12 @@ def Buy(symbol,amount):
 def Sell(symbol,amount):
 	order = client.order_market_sell(
 		symbol=symbol,
-		quantity=Amount)
+		quantity=amount)
 while 1:
 	try:#catch actual exceptions, do before actual launch
+		currentPrice=ethbtc_price[len(ethbtc_price)-1]
+		kelly=(gainCounter/lossCounter)-((1-(gainCounter/lossCounter))/(avgGain/avgLoss))
+		amount=kelly*currentPrice
 		if(rsi[len(rsi)-1]<=30):
 			rsiBuy=1
 			#Buy('ETHBTC',buyAmount)
@@ -68,9 +78,15 @@ while 1:
 				cciBuy=-1
 	       			#Sell('ETHBTC',sellAmount)
 	      	if(cciBuy==1 and rsiBuy==1 and macBuy==1):
-			       Buy('ETHBTC',buyAmount)
+		       		Buy('ETHBTC',amount)
+		       		buyValue=np.append(buyValue,currentPrice)
+		       		if(len(buyValue)>60):
+					buyValue=np.delete(buyValue,0)
 	       	if(cciBuy==-1 and rsiBuy==-1 and macBuy==-1):
-			       Sell('ETHBTC',sellAmount)
+		       		Sell('ETHBTC',amount)
+		       		sellValue=np.append(sellValue,currentPrice)
+			       	if(len(sellValue)>60):
+		       			sellValue=np.delete(sellValue,0)
 		time.sleep(1)
 	except:
 		print "holl up"
