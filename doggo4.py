@@ -7,6 +7,8 @@ sellAmount=0
 rsiBuy=0
 macBuy=0
 cciBuy=0
+buy=np.array([])
+sell=np.array([])
 def login():
 	print "Connecting..."
 	try:
@@ -74,8 +76,3 @@ while 1:
 		print "holl up"
 	else:
 		print "gucci"
-					     
-	       
-       
-    
-    
