@@ -39,7 +39,8 @@ def Sell(symbol,amount):
 while 1:
 	try:#catch actual exceptions, do before actual launch
 		currentPrice=ethbtc_price[len(ethbtc_price)-1]
-		kelly=(gainCounter/lossCounter)-((1-(gainCounter/lossCounter))/(avgGain/avgLoss))
+		if(len(buyValue)==len(sellValue)):
+			kelly=(gainCounter/lossCounter)-((1-(gainCounter/lossCounter))/(avgGain/avgLoss))
 		amount=kelly*currentPrice
 		if(rsi[len(rsi)-1]<=30):
 			rsiBuy=1
