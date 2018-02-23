@@ -42,7 +42,7 @@ while 1:
 		currentPrice=ethbtc_price[len(ethbtc_price)-1]
 		if(len(buyValue)==len(sellValue)):
 			kelly=(gainCounter/lossCounter)-((1-(gainCounter/lossCounter))/(avgGain/avgLoss))
-		amount=kelly*currentPrice
+		amount=kelly*accountBalance
 		if(rsi[len(rsi)-1]<=30):
 			rsiBuy=1
 			#Buy('ETHBTC',buyAmount)
