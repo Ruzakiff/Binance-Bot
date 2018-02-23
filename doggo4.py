@@ -16,6 +16,7 @@ gainCounter=0
 lossCounter=0
 avgGain=0
 avgLoss=0
+#TODO GET ACCOUNT BALANCE
 def login():
 	print "Connecting..."
 	try:
