@@ -1,7 +1,8 @@
 from binance.client import Client
 import numpy as np
 import time
-from indicators import *
+import talib
+#from indicators import *
 #buyAmount=0
 amount=0
 #sellAmount=buyAmount
@@ -16,6 +17,7 @@ gainCounter=0
 lossCounter=0
 avgGain=0
 avgLoss=0
+sma
 #TODO GET ACCOUNT BALANCE
 def login():
 	print "Connecting..."
@@ -37,7 +39,32 @@ def Sell(symbol,amount):
 	order = client.order_market_sell(
 		symbol=symbol,
 		quantity=amount)
+datafile=open("/Users/ryan/Desktop/inodawey/ethbtc_price.txt", "r")
 while 1:
+	#update
+	where = datafile.tell()
+	line = datafile.readline()
+	if not line:
+		#   time.sleep(1)
+		datafile.seek(where)
+    	else:
+		ethbtc_price=np.append(ethbtc_price,float(line[21:31]) #np array
+    		#ethbtc_price.append(float(line[21:31]))
+    		if(len(ethbtc_price)>lengthTime):
+    		#del ethbtc_price[0]
+			ethbtc_price=np.delete(ethbtc_price,0) #has to be numpy, talib wants numpy
+			       		       
+	#indicators
+	if(len(ethbtc_price)>lengthTime):
+    		#del ethbtc_price[0]
+		ethbtc_price=np.delete(ethbtc_price,0) #has to be numpy, talib wants numpy
+		sma=talib.SMA(ethbtc_price,timeperiod=lengthTime)
+		ema=talib.EMA(ethbtc_price,timeperiod=lengthTime)
+		rsi=talib.RSI(ethbtc_price,timeperiod=lengthTime)
+		hMacD,mMacD,lMacD=talib.MACD(ethbtc_price,fastperiod=12, slowperiod=26, signalperiod=9)#default intervals
+		if(len(ethbtc_high)>=1500 and len(ethbtc_low)>=1500):
+			cci=talib.CCI(ethbtc_high,ethbtc_low,ethbtc_close,timeperiod=lengthTime)
+	#execute
 	try:#catch actual exceptions, do before actual launch
 		currentPrice=ethbtc_price[len(ethbtc_price)-1]
 		if(len(buyValue)==len(sellValue)):
