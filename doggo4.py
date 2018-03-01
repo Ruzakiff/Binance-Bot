@@ -89,14 +89,10 @@ while 1:
 	if(len(ethbtc_close)==lengthTime and len(ethbtc_low)==lengthTime and len(ethbtc_high)==lengthTime):
 	 	#maybe infinite size closing price, reading=true only while size <lengthTime. and keep appending, no delete
 	 	#or take last sma thing and append to actual sma array
-	 	tempsma=talib.SMA(ethbtc_close,timeperiod=lengthTime)
-	 	tempema=talib.EMA(ethbtc_close,timeperiod=lengthTime)
 	 	temprsi=talib.RSI(ethbtc_close,timeperiod=14)
 	 	hMacD,mMacD,lMacD=talib.MACD(ethbtc_close,fastperiod=12, slowperiod=26, signalperiod=9)#default intervals
 	 	tempcci=talib.CCI(ethbtc_high,ethbtc_low,ethbtc_close,timeperiod=lengthTime)
 	 	#print temprsi
-	 	sma=np.append(sma,tempsma[len(tempsma)-1])
-	 	ema=np.append(ema,tempema[len(tempema)-1])
 	 	##not entire rsi, just appended last cause lazy. it should be oki
 	 	rsi=np.append(rsi,temprsi[len(temprsi)-1])
 	 	cci=np.append(cci,tempcci[len(tempcci)-1])
