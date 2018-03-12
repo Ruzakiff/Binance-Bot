@@ -7,20 +7,24 @@ import config
 rsiBuy=0
 macDBuy=0
 cciBuy=0
+atrSell=False
 
 rsi=np.array([])
 cci=np.array([])
 macD=np.array([])
 signal=np.array([])
 macDHisto=np.array([])
+atr=np.array([])
+upperStop=np.array([])
+lowerStop=0
 kellyCoeff=1
+kellyLength=60
 
 amountETH=0
 amountBTC=0
 buyValue=np.array([])
 sellValue=np.array([])
 accountBalance=3
-#accountBalance=ethBalance+btcBalance
 
 #2880
 lengthTime=28
@@ -36,11 +40,13 @@ cciReady=False
 macDReady=False
 rsiReady=False
 kellyReady=False
+atrReady=False
 
 avgGainRSI=0#needs to persist, global
 avgLossRSI=0#needs to persist, global
 counter=0
 bought=False
+buyPrice=0
 
 
 def login():
@@ -132,8 +138,6 @@ def rsiFunc():
 		rs = avgGainRSI/avgLossRSI
 		rsi=np.append(rsi,100-(100/(1+rs)))
 		rsiReady=True
-		
-
 	else:
 		rsiReady=False
 
@@ -143,6 +147,7 @@ def rsiFunc():
 	 		rsiBuy=1
 	 	if(rsi[len(rsi)-1]>=70):
 	 		rsiBuy=-1
+#TODO CHANGE MACDPERIODS TO 7,14,9 DAY MINUTE EQUIVLANTS	 		
 def macDFunc():
 	global macDBuy
 	global macDReady
@@ -192,16 +197,46 @@ def kellyFunc():
 	global kellyReady
 	global buyValue
 	global sellValue
-	if(len(buyValue)>5):
+	if(len(buyValue)>kellyLength):
 		buyValue=np.delete(buyValue,0)
-	if(len(sellValue)>5):
+	if(len(sellValue)>kellyLength):
 		sellValue=np.delete(sellValue,0)
 		
-	if(len(buyValue)==5 and len(sellValue)==5):
+	if(len(buyValue)==kellyLength and len(sellValue)==kellyLength):
 		kellyReady=True
 	else:
 		kellyReady=False
-
+def atrFunc():
+	global atrSell
+	global atrReady
+	global atr
+	global buyPrice
+	global lowerStop
+	tr=0
+	if(len(ethbtc_close)==14 and len(ethbtc_high)==14 and len(ethbtc_low)==14):
+		for x in range(0, 13):
+			if(ethbtc_high[x]-ethbtc_low[x]>0):
+				tr=tr+abs(ethbtc_high[x]-ethbtc_low[x])#no negative
+		firstAtr=tr/14
+		atr=np.append(atr,firstAtr)
+		atrReady=True
+	elif(len(ethbtc_close)>14):
+		if(ethbtc_high[len(ethbtc_high)-1]-ethbtc_low[len(ethbtc_low)-1]<0):
+			tr=0
+		else:
+			tr=ethbtc_high[len(ethbtc_high)-1]-ethbtc_low[len(ethbtc_low)-1]
+		prior=atr[len(atr)-1]
+		atr=np.append(atr,((prior*13)+tr)/14)
+		atrReady=True
+	else:
+		atrReady=False
+	if(atrReady):
+		print "ATR",atr[len(atr)-1]
+		if(ethbtc_close[len(ethbtc_close)-1]>buyPrice):
+			lowerStop=ethbtc_close[len(ethbtc_close)-1]-(2*atr[len(atr)-1])
+		else:
+			lowerStop=buyPrice-(2*atr[len(atr)-1])
+		
 #main
 client=login()
 datafile=open("/Users/ryan/Desktop/doggo4/Klines.txt", "r")
@@ -231,14 +266,15 @@ while run:
 		#macDFunc()
 		#cciFunc()
 		kellyFunc()
-		#decide stuff
-		if(rsiReady): #if(rsiReady and cciReady and macDReady):
+		atrFunc()
+		print atrSell
+
+		if(rsiReady and atrReady): #if(rsiReady and cciReady and macDReady):
 			#print "Indicators Ready"		
 			price=ethbtc_close[len(ethbtc_close)-1]
 			if(kellyCoeff<0):
 				print "urbad"
 				kellyCoeff=0.1
-
 			#if(cciBuy==0 or rsiBuy==0):
 				#print "Not Doing Anything"
 
@@ -249,6 +285,7 @@ while run:
 				rsiBuy=0
 				amountETH=kellyCoeff*0.333*accountBalance
 				amountBTC=amountETH*price
+				buyPrice=price
 				print "Buying:",price
 				print "Kelly:",kellyCoeff
 				print "Amount In BTC:",amountBTC
@@ -256,15 +293,18 @@ while run:
 				print "Account In ETH:",accountBalance
 				buyValue=np.append(buyValue,amountBTC/price)
 				bought=True
-			if(rsiBuy==-1 and bought==True):
+			if(bought==True and rsiBuy==-1):
 			#if(cciBuy==-1 and rsiBuy==-1 and macDBuy==-1):
+				bought=False
 				cciBuy=0
 				rsiBuy=0
+				#bought=False
 				print "Selling:",price
 				print "Kelly:",kellyCoeff
 				print "Amount In BTC:",amountBTC
 				accountBalance=accountBalance+(amountBTC/price)
 				print "Account In ETH:",accountBalance
+				#bought=False
 				sellValue=np.append(sellValue,amountBTC/price)
 				if(kellyReady):
 					gains=0
@@ -274,7 +314,7 @@ while run:
 					avgGainKelly=0
 					avgLossKelly=0
 					try:
-						for x in range(0,5):
+						for x in range(0,kellyLength):
 							diff=sellValue[x]-buyValue[x]
 							if(diff>0):
 								gains=gains+diff
@@ -290,10 +330,47 @@ while run:
 						sys.exit("No Gains, Divide by Zero Kelly")
 					else:
 						continue
+			if(bought==True and ethbtc_close[len(ethbtc_close)-1]<lowerStop):
 				bought=False
+				cciBuy=0
+				rsiBuy=0
+				#bought=False
+				print "Selling STOP:",price
+				print "Kelly:",kellyCoeff
+				print "Amount In BTC:",amountBTC
+				accountBalance=accountBalance+(amountBTC/price)
+				print "Account In ETH:",accountBalance
+				#bought=False
+				sellValue=np.append(sellValue,amountBTC/price)
+				if(kellyReady):
+					gains=0
+					losses=0
+					gainCount=0
+					lossCount=0
+					avgGainKelly=0
+					avgLossKelly=0
+					try:
+						for x in range(0,kellyLength):
+							diff=sellValue[x]-buyValue[x]
+							if(diff>0):
+								gains=gains+diff
+								gainCount=gainCount+1
+							if(diff<0):
+								losses=losses+abs(diff)
+								lossCount=lossCount+1
+						avgGainKelly=gains/gainCount
+						avgLossKelly=losses/lossCount
+						temp=gainCount/lossCount
+						kellyCoeff=(temp)-((1-temp)/(avgGainKelly/avgLossKelly))
+					except:
+						sys.exit("No Gains, Divide by Zero Kelly")
+					else:
+						continue
+
+				#bought=False
 		else:
 			print "Indicators Not Ready"
 	#time.sleep(0.1)
 	if(reading):
-		print "asdf"
+	#	print "asdf"
 		counter=counter+1
