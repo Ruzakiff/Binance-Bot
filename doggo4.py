@@ -9,8 +9,8 @@ reading=False
 bought=False
 run=True
 
-kellyLength=5
-lengthTime=2880
+kellyLength=12
+lengthTime=20
 
 ethbtc_close=np.array([])
 ethbtc_high=np.array([])
@@ -23,6 +23,7 @@ rsi=np.array([])
 cci=np.array([])
 macD=np.array([])
 signal=np.array([])
+atr=np.array([])
 kellyCoeff=1
 
 amountETH=0
@@ -146,7 +147,7 @@ def rsiFunc():
 	 		rsiBuy=1
 	 	if(rsi[len(rsi)-1]>=70):
 	 		rsiBuy=-1
-	 		
+
 #TODO CHANGE MACDPERIODS TO 7,14,9 DAY MINUTE EQUIVLANTS
 def macDFunc():
 	global macDBuy
@@ -207,7 +208,6 @@ def atrFunc():
 				tr=tr+abs(ethbtc_high[x]-ethbtc_low[x])#no negative
 		firstAtr=tr/14
 		atr=np.append(atr,firstAtr)
-		atrReady=True
 	elif(len(ethbtc_close)>14):
 		if(ethbtc_high[len(ethbtc_high)-1]-ethbtc_low[len(ethbtc_low)-1]<0):
 			tr=0
@@ -219,13 +219,13 @@ def atrFunc():
 	else:
 		atrReady=False
 
-	if(atrReady):
+	if(atrReady and len(buyPrice)>0):
 		print "ATR",atr[len(atr)-1]
 		if(ethbtc_close[len(ethbtc_close)-1]>buyPrice[len(buyPrice)-1]):
 			lowerStop=ethbtc_close[len(ethbtc_close)-1]-(2*atr[len(atr)-1])
 		else:
 			lowerStop=buyPrice[len(buyPrice)-1]-(2*atr[len(atr)-1])
-		if(ethbtc_close<=lowerStop):
+		if(ethbtc_close[len(ethbtc_close)-1]<=lowerStop):
 			atrBuy=-1
 
 def kellyFunc():
@@ -247,7 +247,7 @@ def kellyFunc():
 client=login()
 datafile=open("/Users/ryan/Desktop/doggo4/Klines.txt","r")
 while run:
-	print "\nLoop,"counter
+	print "\nLoop:",counter
 	#fetch
 	where=datafile.tell()
 	line=datafile.readline()
@@ -270,8 +270,8 @@ while run:
 	#update indicators
 	if(reading):
 		rsiFunc()
-		macDFunc()
-		cciFunc()
+		#macDFunc()
+		#cciFunc()
 		kellyFunc()
 		atrFunc()
 		if(rsiReady and atrReady):
@@ -315,11 +315,10 @@ while run:
 				print "Buy"
 				print "Amount Bought (BTC):",amountBTC
 				accountBalance=accountBalance-amountETH
-				print "Account Balance (ETH):",amountBalance
+				print "Account Balance (ETH):",accountBalance
 				buyValue=np.append(buyValue,amountBTC/ethbtc_close[len(ethbtc_close)-1])
 				buyPrice=np.append(buyPrice,ethbtc_close[len(ethbtc_close)-1])
 			elif(rsiBuy==-1 and bought==True):
-				print "Sell"
 				bought=False
 				atrBuy=0
 				rsiBuy=0
@@ -350,5 +349,4 @@ while run:
 						kellyCoeff=(temp)-((1-temp)/(avgGainKelly/avgLossKelly))
 					except:
 						sys.exit("No Gains, Divide by Zero Kelly")
-
 		counter=counter+1
