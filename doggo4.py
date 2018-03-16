@@ -4,6 +4,7 @@ import config
 import sys
 import time
 import talib
+import json
 
 reading=False
 bought=False
@@ -29,7 +30,8 @@ kellyCoeff=1
 amountETH=0
 amountBTC=0
 #TODO FETCH ACCOUNTBALANCE
-accountBalance=3 #eth
+accountBalance=0
+#accountBalance=3 #eth
 buyValue=np.array([])
 sellValue=np.array([])
 buyPrice=np.array([])
@@ -246,7 +248,11 @@ def kellyFunc():
 
 client=login()
 datafile=open("/Users/ryan/Desktop/doggo4/Klines.txt","r")
+accountString=json.dumps(client.get_asset_balance("ETH"))
+accountBalance=float(accountString[12:22])+float(accountString[50:60])
 while run:
+	if(accountBalance<=0):
+		sys.exit("RIP Money")
 	print "\nLoop:",counter
 	#fetch
 	where=datafile.tell()
