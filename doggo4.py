@@ -252,6 +252,7 @@ accountString=json.dumps(client.get_asset_balance("ETH"))
 accountBalance=float(accountString[12:22])+float(accountString[50:60])
 while run:
 	if(accountBalance<=0):
+		run=False
 		sys.exit("RIP Money")
 	print "\nLoop:",counter
 	#fetch
@@ -316,6 +317,9 @@ while run:
 			elif(rsiBuy==1 and bought==False):
 				bought=True
 				rsiBuy=0
+				accountString=json.dumps(client.get_asset_balance("ETH"))
+				accountBalance=float(accountString[12:22])+float(accountString[50:60])
+				v c
 				amountETH=kellyCoeff*0.333*accountBalance
 				amountBTC=amountETH*ethbtc_close[len(ethbtc_close)-1]
 				print "Buy"
