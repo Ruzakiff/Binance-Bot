@@ -10,8 +10,8 @@ reading=False
 bought=False
 run=True
 
-kellyLength=10
-lengthTime=20
+kellyLength=12 #has to be 60
+lengthTime=2880
 
 ethbtc_close=np.array([])
 ethbtc_high=np.array([])
@@ -25,16 +25,16 @@ cci=np.array([])
 macD=np.array([])
 signal=np.array([])
 atr=np.array([])
-kellyCoeff=1
+difference=np.array([])
+kellyCoeff=1.0
 
 amountETH=0
 amountBTC=0
-#TODO FETCH ACCOUNTBALANCE
+
 accountBalance=3
-#accountBalance=3 #eth
-buyValue=np.array([])
-sellValue=np.array([])
-buyPrice=np.array([])
+
+
+buyPrice=np.array([]) #ATR
 
 rsiReady=False
 cciReady=False
@@ -145,9 +145,9 @@ def rsiFunc():
 
 	if(rsiReady):
 		print "RSI",rsi[len(rsi)-1]
-		if(rsi[len(rsi)-1]<=30):
+		if(rsi[len(rsi)-1]<=25):
 	 		rsiBuy=1
-	 	if(rsi[len(rsi)-1]>=70):
+	 	if(rsi[len(rsi)-1]>=60):
 	 		rsiBuy=-1
 
 #TODO CHANGE MACDPERIODS TO 7,14,9 DAY MINUTE EQUIVLANTS
@@ -230,21 +230,6 @@ def atrFunc():
 		if(ethbtc_close[len(ethbtc_close)-1]<=lowerStop):
 			atrBuy=-1
 
-def kellyFunc():
-	global kellyReady
-	global buyValue
-	global sellValue
-	kellyReady=False
-	if(len(buyValue)>kellyLength):
-		buyValue=np.delete(buyValue,0)
-	if(len(sellValue)>kellyLength):
-		sellValue=np.delete(sellValue,0)
-	if(len(buyValue)==kellyLength and len(sellValue)==kellyLength):
-		kellyReady=True
-	else:
-		kellyReady=False
-	if(kellyReady):
-		print "Kelly:",kellyCoeff
 
 client=login()
 datafile=open("/Users/ryan/Desktop/doggo4/Klines.txt","r")
@@ -279,7 +264,6 @@ while run:
 		rsiFunc()
 		#macDFunc()
 		#cciFunc()
-		kellyFunc()
 		atrFunc()
 		if(rsiReady and atrReady):
 			if(atrBuy==-1 and bought==True):
@@ -290,43 +274,64 @@ while run:
 				print "Amount Sold (BTC):",amountBTC
 				accountBalance=accountBalance+(amountBTC/ethbtc_close[len(ethbtc_close)-1])
 				print "Account Balance (ETH):",accountBalance
-				sellValue=np.append(sellValue,amountBTC/ethbtc_close[len(ethbtc_close)-1])
-				if(kellyReady):
-					gains=0
-					losses=0
-					gainCount=0
-					lossCount=0
-					avgGainKelly=0
-					avgLossKelly=0
+				#kelly
+				sellAmount=amountBTC/ethbtc_close[len(ethbtc_close)-1]
+				difference=np.append(difference,sellAmount-buyAmount)
+				if(len(difference)>kellyLength):
+					difference=np.delete(difference,0)
+				if(len(difference)==kellyLength):
 					try:
-						for x in range(0,kellyLength):
-							diff=sellValue[x]-buyValue[x]
-							if(diff>0):
-								gains=gains+diff
+						gains=0.0
+						losses=0.0
+						gainCount=0.0
+						lossCount=0.0
+						for x in range(0,len(difference)):
+							if(difference[x]>0):
+								gains=gains+difference[x]
 								gainCount=gainCount+1
-							if(diff<0):
-								losses=losses+abs(diff)
+							if(difference[x]<0):
+								losses=losses+abs(difference[x])
 								lossCount=lossCount+1
 						avgGainKelly=gains/gainCount
 						avgLossKelly=losses/lossCount
-						temp=gainCount/lossCount
-						kellyCoeff=(temp)-((1-temp)/(avgGainKelly/avgLossKelly))
+						w=gainCount/len(difference)
+						r=avgGainKelly/avgLossKelly
+						kellyCoeff=w-((1-w)/r)
+						print "Kelly:",kellyCoeff
+						print "gains:",gains
+						print "Losses:",losses
+						print "gaincount:",gainCount
+						print "losscount:",lossCount
+						print "avgGain",avgGainKelly
+						print "losskel:",avgLossKelly
+						print "w:",w
+						print "r:",r
+						kellyReady=True
 					except:
-						sys.exit("No Gains, Divide by Zero Kelly")
+						sys.exit("Divide By 0")
+				else:
+					kellyReady=False
 
 			elif(rsiBuy==1 and bought==False):
 				bought=True
 				rsiBuy=0
-				amountETH=kellyCoeff*0.333*accountBalance
+				if(kellyReady):
+					amountETH=kellyCoeff*0.333*accountBalance
+				else:
+					amountETH=0.10*accountBalance
 				amountBTC=amountETH*ethbtc_close[len(ethbtc_close)-1]
-				if(amountETH>=accountBalance):
-					sys.exit("Buying more than we have")
+				if(amountETH>=(0.333*accountBalance)):
+					amountETH=0.333*accountBalance
+					amountBTC=amountETH*ethbtc_close[len(ethbtc_close)-1]
+					#sys.exit("Buying more than we have")
 				print "Buy"
 				print "Amount Bought (BTC):",amountBTC
 				accountBalance=accountBalance-amountETH
 				print "Account Balance (ETH):",accountBalance
-				buyValue=np.append(buyValue,amountBTC/ethbtc_close[len(ethbtc_close)-1])
-				buyPrice=np.append(buyPrice,ethbtc_close[len(ethbtc_close)-1])
+				print "Kelly:",kellyCoeff
+				buyAmount=amountETH
+
+				buyPrice=np.append(buyPrice,ethbtc_close[len(ethbtc_close)-1]) #atr
 			elif(rsiBuy==-1 and bought==True):
 				bought=False
 				atrBuy=0
@@ -335,27 +340,42 @@ while run:
 				print "Amount Sold (BTC):",amountBTC
 				accountBalance=accountBalance+(amountBTC/ethbtc_close[len(ethbtc_close)-1])
 				print "Account Balance (ETH):",accountBalance
-				sellValue=np.append(sellValue,amountBTC/ethbtc_close[len(ethbtc_close)-1])
-				if(kellyReady):
-					gains=0
-					losses=0
-					gainCount=0
-					lossCount=0
-					avgGainKelly=0
-					avgLossKelly=0
+				#kelly
+				sellAmount=amountBTC/ethbtc_close[len(ethbtc_close)-1]
+				difference=np.append(difference,sellAmount-buyAmount)
+				if(len(difference)>kellyLength):
+					difference=np.delete(difference,0)
+				if(len(difference)==kellyLength):
 					try:
-						for x in range(0,kellyLength):
-							diff=sellValue[x]-buyValue[x]
-							if(diff>0):
-								gains=gains+diff
+						gains=0.0
+						losses=0.0
+						gainCount=0.0
+						lossCount=0.0
+						for x in range(0,len(difference)):
+							if(difference[x]>0):
+								gains=gains+difference[x]
 								gainCount=gainCount+1
-							if(diff<0):
-								losses=losses+abs(diff)
+							if(difference[x]<0):
+								losses=losses+abs(difference[x])
 								lossCount=lossCount+1
 						avgGainKelly=gains/gainCount
 						avgLossKelly=losses/lossCount
-						temp=gainCount/lossCount
-						kellyCoeff=(temp)-((1-temp)/(avgGainKelly/avgLossKelly))
+						w=gainCount/len(difference)
+						r=avgGainKelly/avgLossKelly
+						kellyCoeff=w-((1-w)/r)
+						print "Kelly:",kellyCoeff
+						print "gains:",gains
+						print "Losses:",losses
+						print "gaincount:",gainCount
+						print "losscount:",lossCount
+						print "avgGain",avgGainKelly
+						print "losskel:",avgLossKelly
+						print "w:",w
+						print "r:",r
+						kellyReady=True
 					except:
-						sys.exit("No Gains, Divide by Zero Kelly")
+						sys.exit("Divide By 0")
+				else:
+					kellyReady=False
+
 		counter=counter+1
