@@ -10,7 +10,7 @@ reading=False
 bought=False
 run=True
 
-kellyLength=12
+kellyLength=10
 lengthTime=20
 
 ethbtc_close=np.array([])
@@ -30,7 +30,7 @@ kellyCoeff=1
 amountETH=0
 amountBTC=0
 #TODO FETCH ACCOUNTBALANCE
-accountBalance=0
+accountBalance=3
 #accountBalance=3 #eth
 buyValue=np.array([])
 sellValue=np.array([])
@@ -249,11 +249,11 @@ def kellyFunc():
 client=login()
 datafile=open("/Users/ryan/Desktop/doggo4/Klines.txt","r")
 accountString=json.dumps(client.get_asset_balance("ETH"))
-accountBalance=float(accountString[12:22])+float(accountString[50:60])
+#accountBalance=float(accountString[12:22])+float(accountString[50:60])
+accountBalance=3
 while run:
-	if(accountBalance<=0):
-		run=False
-		sys.exit("RIP Money")
+	#if(accountBalance<=0):
+	#	sys.exit("RIP Money")
 	print "\nLoop:",counter
 	#fetch
 	where=datafile.tell()
@@ -317,11 +317,10 @@ while run:
 			elif(rsiBuy==1 and bought==False):
 				bought=True
 				rsiBuy=0
-				accountString=json.dumps(client.get_asset_balance("ETH"))
-				accountBalance=float(accountString[12:22])+float(accountString[50:60])
-				v c
 				amountETH=kellyCoeff*0.333*accountBalance
 				amountBTC=amountETH*ethbtc_close[len(ethbtc_close)-1]
+				if(amountETH>=accountBalance):
+					sys.exit("Buying more than we have")
 				print "Buy"
 				print "Amount Bought (BTC):",amountBTC
 				accountBalance=accountBalance-amountETH
