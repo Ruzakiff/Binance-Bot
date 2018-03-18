@@ -309,6 +309,8 @@ while run:
 			elif(rsiBuy==1 and macDBuy==1 and cciBuy==1 and bought==False):
 				bought=True
 				rsiBuy=0
+				macDBuy=0
+				cciBuy=0
 				if(kellyReady):
 					amountETH=kellyCoeff*0.333*accountBalance
 				else:
@@ -330,6 +332,8 @@ while run:
 				bought=False
 				atrBuy=0
 				rsiBuy=0
+				cciBuy=0
+				macDBuy=0
 				print "Sell"
 				Sell(amountBTC)
 				print "Amount Sold (BTC):",amountBTC
