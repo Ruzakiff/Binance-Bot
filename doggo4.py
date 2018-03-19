@@ -24,6 +24,7 @@ rsi=np.array([])
 cci=np.array([])
 macD=np.array([])
 signal=np.array([])
+macDHisto=np.array([])
 atr=np.array([])
 difference=np.array([])
 kellyCoeff=1.0
@@ -84,7 +85,8 @@ def cciFunc():
 		cciReady=False
 	##maybe place this first? no lag behind	
 	if(cciReady):
-		print "CCI",cci[len(cci)-1]
+		cciBuy=0
+		#print "CCI",cci[len(cci)-1]
 		if(cci[len(cci)-2]>100):
 	 		if(cci[len(cci)-1]<cci[len(cci)-2]):#curve down
 				cciBuy=-1
@@ -144,7 +146,8 @@ def rsiFunc():
 		rsiReady=False
 
 	if(rsiReady):
-		print "RSI",rsi[len(rsi)-1]
+		rsiBuy=0
+		#print "RSI",rsi[len(rsi)-1]
 		if(rsi[len(rsi)-1]<=25):
 	 		rsiBuy=1
 	 	if(rsi[len(rsi)-1]>=60):
@@ -159,26 +162,27 @@ def macDFunc():
 	macDBuy=0
 
 	tempArray=np.array([])
-	temp7=np.array([])
+	temp3=np.array([])
+	temp6=np.array([])
 	temp9=np.array([])
-	temp14=np.array([])
 
 	if(len(ethbtc_close)>=12960):
-		tempArray=ethbtc_close[len(ethbtc_close)-8:len(ethbtc_close)]
-		temp7=talib.EMA(tempArray,timeperiod=4320)
+		tempArray=ethbtc_close[len(ethbtc_close)-4321:len(ethbtc_close)]
+		temp3=talib.EMA(tempArray,timeperiod=4320)
 
-		tempArray=ethbtc_close[len(ethbtc_close)-10:len(ethbtc_close)]
-		temp9=talib.EMA(ethbtc_close,timeperiod=8640)
+		tempArray=ethbtc_close[len(ethbtc_close)-8641:len(ethbtc_close)]
+		temp6=talib.EMA(ethbtc_close,timeperiod=8640)
+#ethbc close? or temp array wut
+#tempa
+		tempArray=ethbtc_close[len(ethbtc_close)-12961:len(ethbtc_close)]
+		temp9=talib.EMA(tempArray,timeperiod=12960)
 
-		tempArray=ethbtc_close[len(ethbtc_close)-15:len(ethbtc_close)]
-		temp14=talib.EMA(ethbtc_close,timeperiod=12960)
+		ema3=temp3[len(temp7)-1]
+		ema6=temp6[len(temp9)-1]
+		ema9=temp9[len(temp14)-1]
 
-		ema7=temp7[len(temp7)-1]
-		ema9=temp9[len(temp9)-1]
-		ema14=temp14[len(temp14)-1]
-
-		macD=np.append(macD,ema7-ema14)
-		signal=np.append(signal,ema9)
+		macD=np.append(macD,ema3-ema9)
+		signal=np.append(signal,ema6)
 		macDHisto=np.append(macDHisto,macD[len(macD)-1]-signal[len(signal)-1])
 		if(len(macDHisto)>=2 and len(macD)>=2):		
 			macDReady=True
@@ -186,9 +190,10 @@ def macDFunc():
 		macDReady=False
 
 	if(macDReady):
-		print "macD", macD[len(macD)-1]
-		print "Signal",signal[len(signal)-1]
-		print "Histo",macDHisto[len(macDHisto)-1]
+		macDBuy=0
+		#print "macD", macD[len(macD)-1]
+		#print "Signal",signal[len(signal)-1]
+		#print "Histo",macDHisto[len(macDHisto)-1]
 		if(macDHisto[len(macDHisto)-2]>macD[len(macD)-2]):
 			if(macDHisto[len(macDHisto)-1]<=macD[len(macD)-1]):
 				macDBuy=-1
@@ -222,7 +227,7 @@ def atrFunc():
 		atrReady=False
 
 	if(atrReady and len(buyPrice)>0):
-		print "ATR",atr[len(atr)-1]
+		#print "ATR",atr[len(atr)-1]
 		if(ethbtc_close[len(ethbtc_close)-1]>buyPrice[len(buyPrice)-1]):
 			lowerStop=ethbtc_close[len(ethbtc_close)-1]-(2*atr[len(atr)-1])
 		else:
@@ -238,7 +243,7 @@ accountBalance=float(accountString[12:22])+float(accountString[50:60])
 while run:
 	if(accountBalance<=0):
 		sys.exit("RIP Money")
-	print "\nLoop:",counter
+	#print "\nLoop:",counter
 	#fetch
 	where=datafile.tell()
 	line=datafile.readline()
@@ -271,6 +276,10 @@ while run:
 				atrBuy=0
 				rsiBuy=0
 				print "STOP"
+				print "ATR:",atr[len(atr)-1]
+				print "Price:",ethbtc_close[len(ethbtc_close)-1]
+				print "Buy Price:",buyPrice[len(buyPrice)-1]
+				print "Lower Limit:",lowerStop
 				Sell(amountBTC)
 				print "Amount Sold (BTC):",amountBTC
 				accountString=json.dumps(client.get_asset_balance("ETH"))
@@ -319,6 +328,11 @@ while run:
 					amountETH=0.1*accountBalance
 				amountBTC=amountETH*ethbtc_close[len(ethbtc_close)-1]
 				print "Buy"
+				print "RSI:",rsi[len(rsi)-1]
+				print "CCI:",cci[len(cci)-1]
+				print "macD:",macD[len(macD)-1]
+				print "Histo:"macDHisto[len(macDHisto)-1]
+				print "Kelly:",kellyCoeff
 				Buy(amountBTC)
 				print "Amount Bought (BTC):",amountBTC
 				accountString=json.dumps(client.get_asset_balance("ETH"))
@@ -335,6 +349,11 @@ while run:
 				cciBuy=0
 				macDBuy=0
 				print "Sell"
+				print "RSI:",rsi[len(rsi)-1]
+				print "CCI:",cci[len(cci)-1]
+				print "macD:",macD[len(macD)-1]
+				print "Histo:"macDHisto[len(macDHisto)-1]
+				print "Kelly:",kellyCoeff
 				Sell(amountBTC)
 				print "Amount Sold (BTC):",amountBTC
 				accountString=json.dumps(client.get_asset_balance("ETH"))
@@ -372,5 +391,4 @@ while run:
 					kellyReady=False
 		else:
 			print "Not Ready. We Need ",lengthTime-len(ethbtc_close)," More Data Points"
-
-		counter=counter+1
+		#counter=counter+1
