@@ -5,6 +5,7 @@ import sys
 import time
 import talib
 import json
+import datetime
 
 reading=False
 bought=False
@@ -28,6 +29,7 @@ macDHisto=np.array([])
 atr=np.array([])
 difference=np.array([])
 kellyCoeff=1.0
+orderNumber=0
 
 amountETH=0
 amountBTC=0
@@ -48,7 +50,6 @@ cciBuy=0
 macDBuy=0
 atrBuy=0
 
-counter=1
 
 def login():
 	print "Connecting..."
@@ -60,15 +61,19 @@ def login():
 		print "Connected"
 	return client
 
-def Buy(amount):
+def Buy(amount,oID):
 	order = client.order_market_buy(
-		symbol="BTC",
-		quantity=amount)
+		symbol='ETHBTC',
+		quantity=amount,
+		newClientOrderId=str(oID),
+		recvWindow=1000)
 
-def Sell(amount):
+def Sell(amount,id):
 	order = client.order_market_sell(
-		symbol="BTC",
-		quantity=amount)
+		symbol='ETHBTC',
+		quantity=amount,
+		newClientOrderId=str(oID),
+		recvWindow=1000)
 
 def cciFunc():
 	global cciBuy
@@ -167,19 +172,19 @@ def macDFunc():
 	temp9=np.array([])
 
 	if(len(ethbtc_close)>=12960):
+		#update timeperiod AND len(etbtcclose)+1
 		tempArray=ethbtc_close[len(ethbtc_close)-4321:len(ethbtc_close)]
 		temp3=talib.EMA(tempArray,timeperiod=4320)
 
 		tempArray=ethbtc_close[len(ethbtc_close)-8641:len(ethbtc_close)]
 		temp6=talib.EMA(ethbtc_close,timeperiod=8640)
-#ethbc close? or temp array wut
-#tempa
+
 		tempArray=ethbtc_close[len(ethbtc_close)-12961:len(ethbtc_close)]
 		temp9=talib.EMA(tempArray,timeperiod=12960)
 
-		ema3=temp3[len(temp7)-1]
-		ema6=temp6[len(temp9)-1]
-		ema9=temp9[len(temp14)-1]
+		ema3=temp3[len(temp3)-1]
+		ema6=temp6[len(temp6)-1]
+		ema9=temp9[len(temp9)-1]
 
 		macD=np.append(macD,ema3-ema9)
 		signal=np.append(signal,ema6)
@@ -243,7 +248,6 @@ accountBalance=float(accountString[12:22])+float(accountString[50:60])
 while run:
 	if(accountBalance<=0):
 		sys.exit("RIP Money")
-	#print "\nLoop:",counter
 	#fetch
 	where=datafile.tell()
 	line=datafile.readline()
@@ -269,18 +273,21 @@ while run:
 		macDFunc()
 		cciFunc()
 		atrFunc()
-		print "Kelly:",kellyCoeff
 		if(rsiReady and atrReady and cciReady and macDReady):
 			if(atrBuy==-1 and bought==True):
 				bought=False
 				atrBuy=0
 				rsiBuy=0
-				print "STOP"
+				print "Stoploss"
 				print "ATR:",atr[len(atr)-1]
 				print "Price:",ethbtc_close[len(ethbtc_close)-1]
 				print "Buy Price:",buyPrice[len(buyPrice)-1]
 				print "Lower Limit:",lowerStop
-				Sell(amountBTC)
+				try:
+				 	Sell(amountBTC)
+				except Exception as e:
+				 	print "Error Occured While Selling:",e
+				 	sys.exit("Error Occured While Selling")
 				print "Amount Sold (BTC):",amountBTC
 				accountString=json.dumps(client.get_asset_balance("ETH"))
 				accountBalance=float(accountString[12:22])+float(accountString[50:60])
@@ -331,15 +338,18 @@ while run:
 				print "RSI:",rsi[len(rsi)-1]
 				print "CCI:",cci[len(cci)-1]
 				print "macD:",macD[len(macD)-1]
-				print "Histo:"macDHisto[len(macDHisto)-1]
+				print "Histo:",macDHisto[len(macDHisto)-1]
 				print "Kelly:",kellyCoeff
-				Buy(amountBTC)
+				try:
+				 	Buy(amountBTC)
+				except Exception as e:
+				 	print "Error Occured While Buying:",e
+				 	sys.exit("Error Occured While Buying")
 				print "Amount Bought (BTC):",amountBTC
 				accountString=json.dumps(client.get_asset_balance("ETH"))
 				accountBalance=float(accountString[12:22])+float(accountString[50:60])
 				#accountBalance=accountBalance-amountETH
 				print "Account Balance (ETH):",accountBalance
-				#print "Kelly:",kellyCoeff
 				buyAmount=amountETH
 				buyPrice=np.append(buyPrice,ethbtc_close[len(ethbtc_close)-1]) #atr
 			elif(rsiBuy==-1 and bought==True):
@@ -352,9 +362,13 @@ while run:
 				print "RSI:",rsi[len(rsi)-1]
 				print "CCI:",cci[len(cci)-1]
 				print "macD:",macD[len(macD)-1]
-				print "Histo:"macDHisto[len(macDHisto)-1]
+				print "Histo:",macDHisto[len(macDHisto)-1]
 				print "Kelly:",kellyCoeff
-				Sell(amountBTC)
+				try:
+				 	Sell(amountBTC)
+				 except Exception as e:
+				 	print "Error Occured While Selling:",e
+				 	sys.exit("Error Occured While Selling")
 				print "Amount Sold (BTC):",amountBTC
 				accountString=json.dumps(client.get_asset_balance("ETH"))
 				accountBalance=float(accountString[12:22])+float(accountString[50:60])
@@ -383,7 +397,6 @@ while run:
 						w=gainCount/len(difference)
 						r=avgGainKelly/avgLossKelly
 						kellyCoeff=w-((1-w)/r)
-					#	print "Kelly:",kellyCoeff
 						kellyReady=True
 					except:
 						sys.exit("Divide By 0")
@@ -391,4 +404,6 @@ while run:
 					kellyReady=False
 		else:
 			print "Not Ready. We Need ",lengthTime-len(ethbtc_close)," More Data Points"
-		#counter=counter+1
+		if(len(ethbtc_close)>=lengthTime):
+			if(reading):
+				print "Info Updated:",datetime.datetime.now().strftime("%a, %d %B %Y %I:%M:%S")
