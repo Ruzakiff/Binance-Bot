@@ -366,7 +366,7 @@ while run:
 				print "Kelly:",kellyCoeff
 				try:
 				 	Sell(amountBTC)
-				 except Exception as e:
+				except Exception as e:
 				 	print "Error Occured While Selling:",e
 				 	sys.exit("Error Occured While Selling")
 				print "Amount Sold (BTC):",amountBTC
