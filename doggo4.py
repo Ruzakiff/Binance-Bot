@@ -7,22 +7,33 @@ import talib
 import json
 import datetime
 import os
+import smtplib
 
 reading=False
 bought=False
 run=True
 
+##Settings
+pair='ETHBTC'
+base="BTC"
+quote="ETH"
 kellyLength=60 #has to be 60
-lengthTime=12960
-rsiPeriod=14
-atrPeriod=14
-macDFastLength=4320
+lengthTime=20160
+timeCancel=10
+rsiPeriod=5
+atrPeriod=5
+macDFastLength=10080
 macDSlowLength=lengthTime
-macDSignalLength=8640
+macDSignalLength=12960
 file="/Users/ryan/Desktop/doggo4/Klines"
-maxPercent=0.333
+resultFile="/Users/ryan/Desktop/doggo4/trades"
+maxPercent=1
 minPercent=0.1
+minAmount=0.001
 stopPercent=0.1
+gmail_user = 'doggo4notification@gmail.com'  
+gmail_password = 'doggo4notify'
+send_list=['crstradingbot@gmail.com','ryanchenyang@gmail.com','maxpol191999@gmail.com','robxu09@gmail.com']
 
 ethbtc_close=np.array([])
 ethbtc_high=np.array([])
@@ -39,13 +50,16 @@ macDHisto=np.array([])
 atr=np.array([])
 difference=np.array([])
 kellyCoeff=1.0
-orderNumber=0
+#orderNumber=0
 
-amountETH=0
-amountBTC=0
+amountQuote=0
+amountBase=0
 
 accountBalance=0 #ETH
 accountBalanceBTC=0
+
+tradeID=np.array([])
+tradeTime=0
 
 buyAmount=0 #Kelly
 sellAmount=0 #Kelly
@@ -71,20 +85,36 @@ def login():
 	else:
 		print "Connected"
 	return client
-
-def Buy(amount,oID):
+def sendNotification(subject,mesg):
+	try:
+		sent_from = gmail_user   
+		msg='Subject:{}\n\n'+mesg
+		msg=msg.format(subject)
+		server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+		server.ehlo()
+		server.login(gmail_user, gmail_password)
+		server.sendmail(gmail_user, send_list, msg)
+		server.close()
+		print 'Email sent!'
+	except:
+		print 'Email Send Failure'
+def Buy(amount):
 	order = client.order_market_buy(
-		symbol='ETHBTC',
+		symbol=pair,
 		quantity=amount,
-		newClientOrderId=str(oID),
+		#newClientOrderId=str(oID),
+		newOrderRespType="FULL",
 		recvWindow=1000)
+	return order
 
-def Sell(amount,id):
+def Sell(amount):
 	order = client.order_market_sell(
-		symbol='ETHBTC',
+		symbol=pair,
 		quantity=amount,
-		newClientOrderId=str(oID),
+		#newClientOrderId=str(oID),
+		newOrderRespType="FULL",
 		recvWindow=1000)
+	return order
 
 def cciFunc():
 	global cciBuy
@@ -114,7 +144,6 @@ def cciFunc():
 		if(cci[len(cci)-2]>0):
 			if(cci[len(cci)-1]<0):
 				cciBuy=-1
-
 def rsiFunc():
 	global rsiBuy
 	global avgGainRSI
@@ -256,7 +285,7 @@ def kellyFunc():
 	global difference
 	global sellAmount
 	kellyReady=False
-	sellAmount=amountBTC/ethbtc_close[len(ethbtc_close)-1]
+	sellAmount=amountBase/ethbtc_close[len(ethbtc_close)-1]
 	difference=np.append(difference,sellAmount-buyAmount)
 	if(len(difference)>kellyLength):
 		difference=np.delete(difference,0)
@@ -280,13 +309,14 @@ def kellyFunc():
 			kellyCoeff=w-((1-w)/r)
 			kellyReady=True
 		except:
+			sendNotification("Stopped","Error\nBot Stopped:Kelly Divide By 0")
 			sys.exit("Divide By 0")
 	else:
 		kellyReady=False
 
 with open(file+".txt","r") as f, open(file+"tmp.txt","w") as out:
 	data=f.readlines()
-	print len(data)
+	print "Datapoints:",len(data)
 	if((len(data)-lengthTime)>0):
 		with open(file+"tmp.txt","w") as out:
 			newData=np.array([])
@@ -296,13 +326,35 @@ with open(file+".txt","r") as f, open(file+"tmp.txt","w") as out:
 			os.rename(file+"tmp.txt", file+".txt")
 client=login()
 datafile=open(file+".txt","r")    
-accountStringETH=json.dumps(client.get_asset_balance("ETH"))
-accountBalance=float(accountStringETH[12:22])+float(accountStringETH[50:60])
-accountStringBTC=json.dumps(client.get_asset_balance("BTC"))
-accountBalanceBTC=float(accountStringBTC[12:22])+float(accountStringBTC[50:60])
-stopPercent=stopPercent*accountBalance
+tradefile=open(resultFile+".txt","a")
+accountStringQuote=json.dumps(client.get_asset_balance(quote))
+accountBalanceQuote=float(accountStringQuote[12:22])+float(accountStringQuote[50:60])
+accountStringBase=json.dumps(client.get_asset_balance(base))
+accountBalanceBase=float(accountStringBase[12:22])+float(accountStringBase[50:60])
+stopPercent=stopPercent*accountBalanceQuote
+sendNotification("Started","Bot Started:May The Odds Be Ever In Your Favor")
 while run:
-	if(accountBalance<=stopPercent):
+	if(time.Time()-tradeTime>=timeCancel*60 and len(tradeID)>0):
+		try:
+			status=client.get_order(
+				symbol=pair,
+				orderId=tradeID[len(tradeID)-1])
+			checkStat=json.dumps(status)
+		except Exception as e:
+			sendNotification("Stopped","Error\nBot Stopped:Order Status Failed\n"+str(e))
+			print "Error Occured While Checking:",str(e)
+			sys.exit("Error Occured While Checking")
+		if(checkStat[188]!="F"):
+			try:
+				client.cancel_order(
+				symbol=pair,
+				orderId=tradeID[len(trade)-1])
+			except Exception as e:
+				sendNotification("Stopped","Error\nBot Stopped:Cancel Failed\n"+str(e))
+				   print "Error Occured While Canceling:",str(e)
+				   sys.exit("Error Occured While Canceling")
+	if(accountBalanceQuote<=minAmount or accountBalanceQuote<=stopPercent):
+		sendNotification("Stopped","Error\nBot Stopped:RIP Money")
 		sys.exit("RIP Money")
 	#fetch
 	where=datafile.tell()
@@ -326,97 +378,140 @@ while run:
 	#update indicators
 	if(reading):
 		rsiFunc()
-		macDFunc()
-		cciFunc()
+		#macDFunc()
+		#cciFunc()
 		atrFunc()
-		if(rsiReady and atrReady and cciReady and macDReady):
+		if(rsiReady and atrReady and len(ethbtc_close)>=lengthTime):
 			if(atrBuy==-1 and bought==True):
+				#TODO what if buying/selling less than min amount. DO we cancel?
 				bought=False
 				atrBuy=0
 				rsiBuy=0
+				print "\n\n"
 				print "Stoploss"
-				print "ATR:",atr[len(atr)-1]
-				print "Price:",ethbtc_close[len(ethbtc_close)-1]
-				print "Buy Price:",buyPrice[len(buyPrice)-1]
-				print "Lower Limit:",lowerStop
-				try:
-				  	Sell(amountBTC)
-				except Exception as e:
-				  	print "Error Occured While Selling:",e
-				  	sys.exit("Error Occured While Selling")
-				print "Amount Sold (BTC):",amountBTC
-				accountStringETH=json.dumps(client.get_asset_balance("ETH"))
-				accountBalance=float(accountStringETH[12:22])+float(accountStringETH[50:60])
-				accountStringBTC=json.dumps(client.get_asset_balance("BTC"))
-				accountBalanceBTC=float(accountStringBTC[12:22])+float(accountStringBTC[50:60])
+				amountBase=accountBalanceBase
+				amountQuote=accountBalanceBase/ethbtc_close[len(ethbtc_close)-1]
+				if(amountQuote<minAmount):
+					amountQuote=minAmount
+					continue
+					#if less than min amount, we can't sell.
+				#try:
+					#tradeResult=json.dumps(Buy(amountQuote))
+					#tradeTime=time.time()
+					#tradefile.write(tradeResult+"\n")
+					#tradeID=np.append(tradeID,int(tradeResult[12:20]))
+				#except Exception as e:
+				# 	sendNotification("Stopped","Error\nBot Stopped:Sell Failed\n"+str(e))
+				#   print "Error Occured While Selling:",str(e)
+				#   sys.exit("Error Occured While Selling")
+				accountStringQuote=json.dumps(client.get_asset_balance(quote))
+				accountBalanceQuote=float(accountStringQuote[12:22])+float(accountStringQuote[50:60])
+				accountStringBase=json.dumps(client.get_asset_balance(base))
+				accountBalanceBase=float(accountStringBase[12:22])+float(accountStringBase[50:60])
 				#accountBalance=accountBalance+(amountBTC/ethbtc_close[len(ethbtc_close)-1])
-				print "Account Balance (ETH):",accountBalance
-				print "Account Balance (BTC):",accountBalanceBTC
+				msg="\nATR:"+str(atr[len(atr)-1]) + \
+   	 			"\nPrice:"+str(ethbtc_close[len(ethbtc_close)-1]) + \
+   	 			"\nBuy Price:"+str(buyPrice[len(buyPrice)-1]) + \
+     			"\nLower Limit:"+str(lowerStop) + \
+     			"\nAmount Sold (Base):"+str(amountBase) + \
+     			"\nAccount Balance (Quote):"+str(accountBalanceQuote) + \
+     			"\nAccount Balance (Base):"+str(accountBalanceBase)
+				print msg
+				print "\n\n"
 				kellyFunc()
-
-			elif(rsiBuy==1 and macDBuy==1 and cciBuy==1 and bought==False):
+				sendNotification("Selling Stoploss",msg)
+			elif(rsiBuy==1 and bought==False):
 				bought=True
+				atrBuy=0
 				rsiBuy=0
-				macDBuy=0
-				cciBuy=0
+				#macDBuy=0
+				#cciBuy=0
 				if(kellyReady):
-					amountETH=kellyCoeff*maxPercent*accountBalance
+					amountQuote=kellyCoeff*maxPercent*accountBalanceQuote
 				else:
-					amountETH=minPercent*accountBalance
-				if(amountETH<0):
-					amountETH=minPercent*accountBalance
-				if(amountETH>=(maxPercent*accountBalance)):
-					amountETH=maxPercent*accountBalance
-				amountBTC=amountETH*ethbtc_close[len(ethbtc_close)-1]
-				print "Buy"
-				print "RSI:",rsi[len(rsi)-1]
-				print "CCI:",cci[len(cci)-1]
-				print "macD:",macD[len(macD)-1]
-				print "Histo:",macDHisto[len(macDHisto)-1]
-				print "Kelly:",kellyCoeff
-				try:
-				  	Buy(amountBTC)
-				except Exception as e:
-				  	print "Error Occured While Buying:",e
-				  	sys.exit("Error Occured While Buying")
-				print "Amount Bought (BTC):",amountBTC
-				accountStringETH=json.dumps(client.get_asset_balance("ETH"))
-				accountBalance=float(accountStringETH[12:22])+float(accountStringETH[50:60])
-				accountStringBTC=json.dumps(client.get_asset_balance("BTC"))
-				accountBalanceBTC=float(accountStringBTC[12:22])+float(accountStringBTC[50:60])
-				#accountBalance=accountBalance-amountETH
-				print "Account Balance (ETH):",accountBalance
-				print "Account Balance (BTC):",accountBalanceBTC
-				buyAmount=amountETH
+					amountQuote=minPercent*accountBalanceQuote
+				if(amountQuote<minAmount):
+					amountQuote=minPercent*accountBalanceQuote
+				if(amountQuote>=(maxPercent*accountBalanceQuote)):
+					amountQuote=maxPercent*accountBalanceQuote
+				print "\n\n"
+				print "Buy Base"
+				# try:
+						#tradeResult=json.dumps(Sell(amountQuote))
+						#tradeTime=time.time()
+						#tradefile.write(tradeResult+"\n")
+						#tradeID=np.append(tradeID,int(tradeResult[12:20]))
+
+				# except Exception as e:
+				# 	sendNotification("Stopped","Error\nBot Stopped:Buy Failed\n"+str(e))
+				#   	print "Error Occured While Buying:",str(e)
+				#   	sys.exit("Error Occured While Buying")
+				accountStringQuote=json.dumps(client.get_asset_balance(quote))
+				accountBalanceQuote=float(accountStringQuote[12:22])+float(accountStringQuote[50:60])
+				accountStringBase=json.dumps(client.get_asset_balance(base))
+				accountBalanceBase=float(accountStringBase[12:22])+float(accountStringBase[50:60])
+				msg="\nRSI:"+str(rsi[len(rsi)-1]) + \
+   	 			"\nPrice:"+str(ethbtc_close[len(ethbtc_close)-1]) + \
+     			"\nKelly:"+str(kellyCoeff) + \
+     			"\nAmount Bought (BTC):"+str(accountBalanceBase) + \
+     			"\nAccount Balance (ETH):"+str(accountBalanceQuote) + \
+     			"\nAccount Balance (BTC):"+str(accountBalanceBase)
+				# print "RSI:",rsi[len(rsi)-1]
+				# print "CCI:",cci[len(cci)-1]
+				# print "macD:",macD[len(macD)-1]
+				# print "Histo:",macDHisto[len(macDHisto)-1]
+				# print "Kelly:",kellyCoeff
+				print msg
+				print "\n\n"
+				buyAmount=amountQuote
 				buyPrice=np.append(buyPrice,ethbtc_close[len(ethbtc_close)-1]) #atr
+				sendNotification("Buying",msg)
 			elif(rsiBuy==-1 and bought==True):
 				bought=False
 				atrBuy=0
 				rsiBuy=0
-				cciBuy=0
-				macDBuy=0
-				print "Sell"
-				print "RSI:",rsi[len(rsi)-1]
-				print "CCI:",cci[len(cci)-1]
-				print "macD:",macD[len(macD)-1]
-				print "Histo:",macDHisto[len(macDHisto)-1]
-				print "Kelly:",kellyCoeff
-				try:
-				 	Sell(amountBTC)
-				except Exception as e:
-				 	print "Error Occured While Selling:",e
-					sys.exit("Error Occured While Selling")
-				print "Amount Sold (BTC):",amountBTC
-				accountStringETH=json.dumps(client.get_asset_balance("ETH"))
-				accountBalance=float(accountStringETH[12:22])+float(accountStringETH[50:60])
-				accountStringBTC=json.dumps(client.get_asset_balance("BTC"))
-				accountBalanceBTC=float(accountStringBTC[12:22])+float(accountStringBTC[50:60])
+				#cciBuy=0
+				#macDBuy=0
+				amountBase=accountBalanceBase
+				amountQuote=accountBalanceBase/ethbtc_close[len(ethbtc_close)-1]
+				print "\n\n"
+				print "Sell Base"
+				# try:
+					#tradeResult=json.dumps(Buy(amountQuote))
+					#tradeTime=time.time()
+					#tradefile.write(tradeResult+"\n")
+					#tradeID=np.append(tradeID,int(tradeResult[12:20]))
+				# except Exception as e:
+				# 	sendNotification("Stopped","Error\nBot Stopped:Sell Failed\n"+str(e))
+				#  	print "Error Occured While Selling:",str(e)
+				# 	sys.exit("Error Occured While Selling")
+				accountStringQuote=json.dumps(client.get_asset_balance(quote))
+				accountBalanceQuote=float(accountStringQuote[12:22])+float(accountStringQuote[50:60])
+				accountStringBase=json.dumps(client.get_asset_balance(base))
+				accountBalanceBase=float(accountStringBase[12:22])+float(accountStringBase[50:60])
 				#accountBalance=accountBalance+(amountBTC/ethbtc_close[len(ethbtc_close)-1])
-				print "Account Balance (ETH):",accountBalance
-				print "Account Balance (BTC):",accountBalanceBTC
+				msg="\nRSI:"+str(rsi[len(rsi)-1]) + \
+   	 			"\nPrice:"+str(ethbtc_close[len(ethbtc_close)-1]) + \
+     			"\nKelly:"+str(kellyCoeff) + \
+     			"\nAmount Sold (BTC):"+str(amountBase) + \
+     			"\nAccount Balance (ETH):"+str(accountBalanceQuote) + \
+     			"\nAccount Balance (BTC):"+str(accountBalanceBase)
+				# print "RSI:",rsi[len(rsi)-1]
+				# print "CCI:",cci[len(cci)-1]
+				# print "macD:",macD[len(macD)-1]
+				# print "Histo:",macDHisto[len(macDHisto)-1]
+				# print "Kelly:",kellyCoeff
+				print msg
+				print "\n\n"
 				kellyFunc()
+				sendNotification("Selling",msg)
 		else:
 			print "Not Ready. We Need ",lengthTime-len(ethbtc_close)," More Data Points"
 		if(len(ethbtc_close)>=lengthTime):
 			if(reading):
 				print "Info Updated:",datetime.datetime.now().strftime("%a, %d %B %Y %I:%M:%S")
+				print "RSI:",rsi[len(rsi)-1]
+				#print "CCI:",cci[len(cci)-1]
+				#print "macD:",macD[len(macD)-1]
+				#print "Histo:",macDHisto[len(macDHisto)-1]
+				print "Kelly:",kellyCoeff
