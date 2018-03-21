@@ -6,6 +6,7 @@ import time
 import talib
 import json
 import datetime
+import os
 
 reading=False
 bought=False
@@ -13,6 +14,15 @@ run=True
 
 kellyLength=60 #has to be 60
 lengthTime=12960
+rsiPeriod=14
+atrPeriod=14
+macDFastLength=4320
+macDSlowLength=lengthTime
+macDSignalLength=8640
+file="/Users/ryan/Desktop/doggo4/Klines"
+maxPercent=0.333
+minPercent=0.1
+stopPercent=0.1
 
 ethbtc_close=np.array([])
 ethbtc_high=np.array([])
@@ -24,7 +34,7 @@ avgLossRSI=0
 rsi=np.array([])
 cci=np.array([])
 macD=np.array([])
-signal=np.array([])
+macDSignal=np.array([])
 macDHisto=np.array([])
 atr=np.array([])
 difference=np.array([])
@@ -34,9 +44,11 @@ orderNumber=0
 amountETH=0
 amountBTC=0
 
-accountBalance=3
+accountBalance=0 #ETH
+accountBalanceBTC=0
 
-
+buyAmount=0 #Kelly
+sellAmount=0 #Kelly
 buyPrice=np.array([]) #ATR
 
 rsiReady=False
@@ -49,7 +61,6 @@ rsiBuy=0
 cciBuy=0
 macDBuy=0
 atrBuy=0
-
 
 def login():
 	print "Connecting..."
@@ -88,7 +99,6 @@ def cciFunc():
 			cciReady=True
 	else:
 		cciReady=False
-	##maybe place this first? no lag behind	
 	if(cciReady):
 		cciBuy=0
 		#print "CCI",cci[len(cci)-1]
@@ -117,21 +127,21 @@ def rsiFunc():
 	change=0
 	currentGains=0
 	currentLosses=0
-	if(len(ethbtc_close)==14):
+	if(len(ethbtc_close)==rsiPeriod):
 		tempGain=0
 		tempLoss=0
-		for x in range(0, 12):
+		for x in range(0, rsiPeriod-2):
 		 	change=ethbtc_close[x+1]-ethbtc_close[x]
 		 	if(change>0):
 		 		tempGain=tempGain+change
 		 	elif(change<0):
 		 		tempLoss=tempLoss+abs(change)
-		avgGainRSI=tempGain/14
-		avgLossRSI=tempLoss/14
+		avgGainRSI=tempGain/rsiPeriod
+		avgLossRSI=tempLoss/rsiPeriod
 	 	rs = avgGainRSI/avgLossRSI
 		rsi=np.append(rsi,100-(100/(1+rs)))
 		rsiReady=True
-	elif(len(ethbtc_close)>14):
+	elif(len(ethbtc_close)>rsiPeriod):
 		change=ethbtc_close[len(ethbtc_close)-1]-ethbtc_close[len(ethbtc_close)-2]
 		if(change>0):
 			currentGains=change
@@ -142,8 +152,8 @@ def rsiFunc():
 		else:
 			currentGains=0
 			currentLosses=0
-		avgGainRSI=(13*avgGainRSI + currentGains)/14 #this is setting avggain and loss that is from intialize. values persist
-		avgLossRSI=(13*avgLossRSI + currentLosses)/14
+		avgGainRSI=((rsiPeriod-1)*avgGainRSI + currentGains)/rsiPeriod #this is setting avggain and loss that is from intialize. values persist
+		avgLossRSI=((rsiPeriod-1)*avgLossRSI + currentLosses)/rsiPeriod
 		rs = avgGainRSI/avgLossRSI
 		rsi=np.append(rsi,100-(100/(1+rs)))
 		rsiReady=True
@@ -153,16 +163,16 @@ def rsiFunc():
 	if(rsiReady):
 		rsiBuy=0
 		#print "RSI",rsi[len(rsi)-1]
-		if(rsi[len(rsi)-1]<=25):
+		if(rsi[len(rsi)-1]<=30):
 	 		rsiBuy=1
-	 	if(rsi[len(rsi)-1]>=60):
+	 	if(rsi[len(rsi)-1]>=70):
 	 		rsiBuy=-1
 
 #TODO CHANGE MACDPERIODS TO 7,14,9 DAY MINUTE EQUIVLANTS
 def macDFunc():
 	global macDBuy
 	global macDReady
-	global macD,signal,macDHisto
+	global macD,macDSignal,macDHisto
 	macDReady=False
 	macDBuy=0
 
@@ -171,24 +181,24 @@ def macDFunc():
 	temp6=np.array([])
 	temp9=np.array([])
 
-	if(len(ethbtc_close)>=12960):
+	if(len(ethbtc_close)>=lengthTime):
 		#update timeperiod AND len(etbtcclose)+1
-		tempArray=ethbtc_close[len(ethbtc_close)-4321:len(ethbtc_close)]
-		temp3=talib.EMA(tempArray,timeperiod=4320)
+		tempArray=ethbtc_close[len(ethbtc_close)-macDFastLength:len(ethbtc_close)]
+		tempFast=talib.EMA(tempArray,timeperiod=macDFastLength)
 
-		tempArray=ethbtc_close[len(ethbtc_close)-8641:len(ethbtc_close)]
-		temp6=talib.EMA(ethbtc_close,timeperiod=8640)
+		tempArray=ethbtc_close[len(ethbtc_close)-macDSignalLength:len(ethbtc_close)]
+		tempSignal=talib.EMA(tempArray,timeperiod=macDSignalLength)
 
-		tempArray=ethbtc_close[len(ethbtc_close)-12961:len(ethbtc_close)]
-		temp9=talib.EMA(tempArray,timeperiod=12960)
+		tempArray=ethbtc_close[len(ethbtc_close)-macDSlowLength:len(ethbtc_close)]
+		tempSlow=talib.EMA(tempArray,timeperiod=macDSlowLength)
 
-		ema3=temp3[len(temp3)-1]
-		ema6=temp6[len(temp6)-1]
-		ema9=temp9[len(temp9)-1]
+		emaFast=tempFast[len(tempFast)-1]
+		emaSignal=tempSignal[len(tempSignal)-1]
+		emaSlow=tempSlow[len(tempSlow)-1]
 
-		macD=np.append(macD,ema3-ema9)
-		signal=np.append(signal,ema6)
-		macDHisto=np.append(macDHisto,macD[len(macD)-1]-signal[len(signal)-1])
+		macD=np.append(macD,emaFast-emaSlow)
+		macDSignal=np.append(macDSignal,emaSignal)
+		macDHisto=np.append(macDHisto,macD[len(macD)-1]-macDSignal[len(macDSignal)-1])
 		if(len(macDHisto)>=2 and len(macD)>=2):		
 			macDReady=True
 	else:
@@ -197,7 +207,7 @@ def macDFunc():
 	if(macDReady):
 		macDBuy=0
 		#print "macD", macD[len(macD)-1]
-		#print "Signal",signal[len(signal)-1]
+		#print "Signal",macDSignal[len(macDSignal)-1]
 		#print "Histo",macDHisto[len(macDHisto)-1]
 		if(macDHisto[len(macDHisto)-2]>macD[len(macD)-2]):
 			if(macDHisto[len(macDHisto)-1]<=macD[len(macD)-1]):
@@ -214,19 +224,20 @@ def atrFunc():
 	atrReady=False
 	atrBuy=0
 	tr=0
-	if(len(ethbtc_close)==14 and len(ethbtc_high)==14 and len(ethbtc_low)==14):
-		for x in range(0, 13):
+	if(len(ethbtc_close)==atrPeriod and len(ethbtc_high)==atrPeriod and len(ethbtc_low)==atrPeriod):
+		for x in range(0, atrPeriod-1):
 			if(ethbtc_high[x]-ethbtc_low[x]>0):
-				tr=tr+abs(ethbtc_high[x]-ethbtc_low[x])#no negative
-		firstAtr=tr/14
+				tr=tr+abs(ethbtc_high[x]-ethbtc_low[x])
+		firstAtr=tr/atrPeriod
 		atr=np.append(atr,firstAtr)
-	elif(len(ethbtc_close)>14):
+		atrReady=True
+	elif(len(ethbtc_close)>atrPeriod):
 		if(ethbtc_high[len(ethbtc_high)-1]-ethbtc_low[len(ethbtc_low)-1]<0):
 			tr=0
 		else:
 			tr=ethbtc_high[len(ethbtc_high)-1]-ethbtc_low[len(ethbtc_low)-1]
 		prior=atr[len(atr)-1]
-		atr=np.append(atr,((prior*13)+tr)/14)
+		atr=np.append(atr,((prior*(atrPeriod-1))+tr)/atrPeriod) #13 14, atrperiod -1?
 		atrReady=True
 	else:
 		atrReady=False
@@ -239,14 +250,59 @@ def atrFunc():
 			lowerStop=buyPrice[len(buyPrice)-1]-(2*atr[len(atr)-1])
 		if(ethbtc_close[len(ethbtc_close)-1]<=lowerStop):
 			atrBuy=-1
+def kellyFunc():
+	global kellyReady
+	global kellyCoeff
+	global difference
+	global sellAmount
+	kellyReady=False
+	sellAmount=amountBTC/ethbtc_close[len(ethbtc_close)-1]
+	difference=np.append(difference,sellAmount-buyAmount)
+	if(len(difference)>kellyLength):
+		difference=np.delete(difference,0)
+	if(len(difference)==kellyLength):
+		try:
+			gains=0.0
+			losses=0.0
+			gainCount=0.0
+			lossCount=0.0
+			for x in range(0,len(difference)):
+				if(difference[x]>0):
+					gains=gains+difference[x]
+					gainCount=gainCount+1
+				if(difference[x]<0):
+					losses=losses+abs(difference[x])
+					lossCount=lossCount+1
+			avgGainKelly=gains/gainCount
+			avgLossKelly=losses/lossCount
+			w=gainCount/len(difference)
+			r=avgGainKelly/avgLossKelly
+			kellyCoeff=w-((1-w)/r)
+			kellyReady=True
+		except:
+			sys.exit("Divide By 0")
+	else:
+		kellyReady=False
 
-
+with open(file+".txt","r") as f, open(file+"tmp.txt","w") as out:
+	data=f.readlines()
+	print len(data)
+	if((len(data)-lengthTime)>0):
+		with open(file+"tmp.txt","w") as out:
+			newData=np.array([])
+			for x in range(len(data)-lengthTime,len(data)):
+				out.write(data[x])
+			os.remove(file+".txt")
+			os.rename(file+"tmp.txt", file+".txt")
 client=login()
-datafile=open("/Users/ryan/Desktop/doggo4/Klines.txt","r")
-accountString=json.dumps(client.get_asset_balance("ETH"))
-accountBalance=float(accountString[12:22])+float(accountString[50:60])
+datafile=open(file+".txt","r")    
+accountStringETH=json.dumps(client.get_asset_balance("ETH"))
+accountBalance=float(accountStringETH[12:22])+float(accountStringETH[50:60])
+accountStringBTC=json.dumps(client.get_asset_balance("BTC"))
+accountBalanceBTC=float(accountStringBTC[12:22])+float(accountStringBTC[50:60])
+stopPercent=stopPercent*accountBalance
 while run:
-	if(accountBalance<=0):
+	if(accountBalance<=stopPercent):
 		sys.exit("RIP Money")
 	#fetch
 	where=datafile.tell()
@@ -284,43 +340,19 @@ while run:
 				print "Buy Price:",buyPrice[len(buyPrice)-1]
 				print "Lower Limit:",lowerStop
 				try:
-				 	Sell(amountBTC)
+				  	Sell(amountBTC)
 				except Exception as e:
-				 	print "Error Occured While Selling:",e
-				 	sys.exit("Error Occured While Selling")
+				  	print "Error Occured While Selling:",e
+				  	sys.exit("Error Occured While Selling")
 				print "Amount Sold (BTC):",amountBTC
-				accountString=json.dumps(client.get_asset_balance("ETH"))
-				accountBalance=float(accountString[12:22])+float(accountString[50:60])
+				accountStringETH=json.dumps(client.get_asset_balance("ETH"))
+				accountBalance=float(accountStringETH[12:22])+float(accountStringETH[50:60])
+				accountStringBTC=json.dumps(client.get_asset_balance("BTC"))
+				accountBalanceBTC=float(accountStringBTC[12:22])+float(accountStringBTC[50:60])
 				#accountBalance=accountBalance+(amountBTC/ethbtc_close[len(ethbtc_close)-1])
 				print "Account Balance (ETH):",accountBalance
-				#kelly
-				sellAmount=amountBTC/ethbtc_close[len(ethbtc_close)-1]
-				difference=np.append(difference,sellAmount-buyAmount)
-				if(len(difference)>kellyLength):
-					difference=np.delete(difference,0)
-				if(len(difference)==kellyLength):
-					try:
-						gains=0.0
-						losses=0.0
-						gainCount=0.0
-						lossCount=0.0
-						for x in range(0,len(difference)):
-							if(difference[x]>0):
-								gains=gains+difference[x]
-								gainCount=gainCount+1
-							if(difference[x]<0):
-								losses=losses+abs(difference[x])
-								lossCount=lossCount+1
-						avgGainKelly=gains/gainCount
-						avgLossKelly=losses/lossCount
-						w=gainCount/len(difference)
-						r=avgGainKelly/avgLossKelly
-						kellyCoeff=w-((1-w)/r)
-						kellyReady=True
-					except:
-						sys.exit("Divide By 0")
-				else:
-					kellyReady=False
+				print "Account Balance (BTC):",accountBalanceBTC
+				kellyFunc()
 
 			elif(rsiBuy==1 and macDBuy==1 and cciBuy==1 and bought==False):
 				bought=True
@@ -328,11 +360,13 @@ while run:
 				macDBuy=0
 				cciBuy=0
 				if(kellyReady):
-					amountETH=kellyCoeff*0.333*accountBalance
+					amountETH=kellyCoeff*maxPercent*accountBalance
 				else:
-					amountETH=0.10*accountBalance
-				if(amountETH>=(0.333*accountBalance)or amountETH<0):
-					amountETH=0.1*accountBalance
+					amountETH=minPercent*accountBalance
+				if(amountETH<0):
+					amountETH=minPercent*accountBalance
+				if(amountETH>=(maxPercent*accountBalance)):
+					amountETH=maxPercent*accountBalance
 				amountBTC=amountETH*ethbtc_close[len(ethbtc_close)-1]
 				print "Buy"
 				print "RSI:",rsi[len(rsi)-1]
@@ -341,15 +375,18 @@ while run:
 				print "Histo:",macDHisto[len(macDHisto)-1]
 				print "Kelly:",kellyCoeff
 				try:
-				 	Buy(amountBTC)
+				  	Buy(amountBTC)
 				except Exception as e:
-				 	print "Error Occured While Buying:",e
-				 	sys.exit("Error Occured While Buying")
+				  	print "Error Occured While Buying:",e
+				  	sys.exit("Error Occured While Buying")
 				print "Amount Bought (BTC):",amountBTC
-				accountString=json.dumps(client.get_asset_balance("ETH"))
-				accountBalance=float(accountString[12:22])+float(accountString[50:60])
+				accountStringETH=json.dumps(client.get_asset_balance("ETH"))
+				accountBalance=float(accountStringETH[12:22])+float(accountStringETH[50:60])
+				accountStringBTC=json.dumps(client.get_asset_balance("BTC"))
+				accountBalanceBTC=float(accountStringBTC[12:22])+float(accountStringBTC[50:60])
 				#accountBalance=accountBalance-amountETH
 				print "Account Balance (ETH):",accountBalance
+				print "Account Balance (BTC):",accountBalanceBTC
 				buyAmount=amountETH
 				buyPrice=np.append(buyPrice,ethbtc_close[len(ethbtc_close)-1]) #atr
 			elif(rsiBuy==-1 and bought==True):
@@ -368,40 +405,16 @@ while run:
 				 	Sell(amountBTC)
 				except Exception as e:
 				 	print "Error Occured While Selling:",e
-				 	sys.exit("Error Occured While Selling")
+					sys.exit("Error Occured While Selling")
 				print "Amount Sold (BTC):",amountBTC
-				accountString=json.dumps(client.get_asset_balance("ETH"))
-				accountBalance=float(accountString[12:22])+float(accountString[50:60])
+				accountStringETH=json.dumps(client.get_asset_balance("ETH"))
+				accountBalance=float(accountStringETH[12:22])+float(accountStringETH[50:60])
+				accountStringBTC=json.dumps(client.get_asset_balance("BTC"))
+				accountBalanceBTC=float(accountStringBTC[12:22])+float(accountStringBTC[50:60])
 				#accountBalance=accountBalance+(amountBTC/ethbtc_close[len(ethbtc_close)-1])
 				print "Account Balance (ETH):",accountBalance
-				#kelly
-				sellAmount=amountBTC/ethbtc_close[len(ethbtc_close)-1]
-				difference=np.append(difference,sellAmount-buyAmount)
-				if(len(difference)>kellyLength):
-					difference=np.delete(difference,0)
-				if(len(difference)==kellyLength):
-					try:
-						gains=0.0
-						losses=0.0
-						gainCount=0.0
-						lossCount=0.0
-						for x in range(0,len(difference)):
-							if(difference[x]>0):
-								gains=gains+difference[x]
-								gainCount=gainCount+1
-							if(difference[x]<0):
-								losses=losses+abs(difference[x])
-								lossCount=lossCount+1
-						avgGainKelly=gains/gainCount
-						avgLossKelly=losses/lossCount
-						w=gainCount/len(difference)
-						r=avgGainKelly/avgLossKelly
-						kellyCoeff=w-((1-w)/r)
-						kellyReady=True
-					except:
-						sys.exit("Divide By 0")
-				else:
-					kellyReady=False
+				print "Account Balance (BTC):",accountBalanceBTC
+				kellyFunc()
 		else:
 			print "Not Ready. We Need ",lengthTime-len(ethbtc_close)," More Data Points"
 		if(len(ethbtc_close)>=lengthTime):
