@@ -88,8 +88,7 @@ def login():
 def sendNotification(subject,mesg):
 	try:
 		sent_from = gmail_user   
-		msg='Subject:{}\n\n'+mesg
-		msg=msg.format(subject)
+		msg='Subject:'+subject+'\n\n'+mesg.format(subject)
 		server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
 		server.ehlo()
 		server.login(gmail_user, gmail_password)
@@ -102,8 +101,6 @@ def Buy(amount):
 	order = client.order_market_buy(
 		symbol=pair,
 		quantity=amount,
-		#newClientOrderId=str(oID),
-		newOrderRespType="FULL",
 		recvWindow=1000)
 	return order
 
@@ -111,8 +108,6 @@ def Sell(amount):
 	order = client.order_market_sell(
 		symbol=pair,
 		quantity=amount,
-		#newClientOrderId=str(oID),
-		newOrderRespType="FULL",
 		recvWindow=1000)
 	return order
 
@@ -353,7 +348,7 @@ while run:
 				sendNotification("Stopped","Error\nBot Stopped:Cancel Failed\n"+str(e))
 				   print "Error Occured While Canceling:",str(e)
 				   sys.exit("Error Occured While Canceling")
-	if(accountBalanceQuote<=minAmount or accountBalanceQuote<=stopPercent):
+	if(accountBalanceQuote+accountBalanceBase<=minAmount or accountBalanceQuote+accountBalanceBase<=stopPercent):
 		sendNotification("Stopped","Error\nBot Stopped:RIP Money")
 		sys.exit("RIP Money")
 	#fetch
