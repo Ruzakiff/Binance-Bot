@@ -386,24 +386,21 @@ while run:
 				print "Stoploss"
 				amountBase=accountBalanceBase
 				amountQuote=accountBalanceBase/ethbtc_close[len(ethbtc_close)-1]
-				if(amountQuote<minAmount):
-					amountQuote=minAmount
-					continue
-					#if less than min amount, we can't sell.
-				#try:
-					#tradeResult=json.dumps(Buy(amountQuote))
-					#tradeTime=time.time()
-					#tradefile.write(tradeResult+"\n")
-					#tradeID=np.append(tradeID,int(tradeResult[12:20]))
-				#except Exception as e:
-				# 	sendNotification("Stopped","Error\nBot Stopped:Sell Failed\n"+str(e))
-				#   print "Error Occured While Selling:",str(e)
-				#   sys.exit("Error Occured While Selling")
+				if(amountQuote<=minAmount):
+					sendNotification("Stopped","Selling Less Than Min Amount")
+				try:
+					tradeResult=json.dumps(Buy(amountQuote))
+					tradeTime=time.time()
+					tradefile.write(tradeResult+"\n")
+					tradeID=np.append(tradeID,int(tradeResult[12:20]))
+				except Exception as e:
+					sendNotification("Stopped","Error\nBot Stopped:Sell Failed\n"+str(e))
+				   	print "Error Occured While Selling:",str(e)
+					sys.exit("Error Occured While Selling")
 				accountStringQuote=json.dumps(client.get_asset_balance(quote))
 				accountBalanceQuote=float(accountStringQuote[12:22])+float(accountStringQuote[50:60])
 				accountStringBase=json.dumps(client.get_asset_balance(base))
 				accountBalanceBase=float(accountStringBase[12:22])+float(accountStringBase[50:60])
-				#accountBalance=accountBalance+(amountBTC/ethbtc_close[len(ethbtc_close)-1])
 				msg="\nATR:"+str(atr[len(atr)-1]) + \
    	 			"\nPrice:"+str(ethbtc_close[len(ethbtc_close)-1]) + \
    	 			"\nBuy Price:"+str(buyPrice[len(buyPrice)-1]) + \
