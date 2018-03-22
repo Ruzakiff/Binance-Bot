@@ -26,7 +26,7 @@ macDFastLength=5
 macDSlowLength=lengthTime
 macDSignalLength=15
 fileRead="C:\Users\maxpo\Desktop\ADAETH"
-resultFile="C:\Users\maxpo\Desktop\trades"
+resultFile="C:\Users\maxpo\Desktop\\trades"
 maxPercent=0.3
 minPercent=0.1
 minAmount=0.1
@@ -99,14 +99,14 @@ def Buy(amount):
 	order = client.order_market_buy(
 		symbol=pair,
 		quantity=amount,
-		recvWindow=1000)
+		recvWindow=5000)
 	return order
 
 def Sell(amount):
 	order = client.order_market_sell(
 		symbol=pair,
 		quantity=amount,
-		recvWindow=1000)
+		recvWindow=5000)
 	return order
 
 def cciFunc():
@@ -307,16 +307,18 @@ def kellyFunc():
 	else:
 		kellyReady=False
 
-with open(fileRead+".txt","r") as f, open(fileRead+"tmp.txt","w") as out:
-	data=f.readlines()
-	print "Datapoints:",len(data)
-	if((len(data)-lengthTime)>0):
-		with open(fileRead+"tmp.txt","w") as out:
-			newData=np.array([])
-			for x in range(len(data)-lengthTime,len(data)):
-				out.write(data[x])
-			os.remove(fileRead+".txt")
-			os.rename(fileRead+"tmp.txt", fileRead+".txt")
+f=open(fileRead+".txt","r")
+out=open(fileRead+"tmp.txt","w")
+data=f.readlines()
+print "Datapoints:",len(data)
+if((len(data)-lengthTime)>0):
+	newData=np.array([])
+	for x in range(len(data)-lengthTime,len(data)):
+		out.write(data[x])
+	f.close()
+	out.close()
+	os.remove(fileRead+".txt")
+	os.rename(fileRead+"tmp.txt", fileRead+".txt")
 client=login()
 datafile=open(fileRead+".txt","r")    
 tradefile=open(resultFile+".txt","a")
@@ -324,10 +326,10 @@ accountStringQuote=json.dumps(client.get_asset_balance(quote))
 accountBalanceQuote=float(accountStringQuote[12:22])+float(accountStringQuote[50:60])
 accountStringBase=json.dumps(client.get_asset_balance(base))
 accountBalanceBase=float(accountStringBase[12:22])+float(accountStringBase[50:60])
-stopPercent=stopPercent*accountBalanceQuote
+#stopPercent=stopPercent*((accountBalanceBase/quoteBase_close[len(quoteBase_close)-1])+accountBalanceQuote)
 sendNotification("Started","Bot Started:May The Odds Be Ever In Your Favor")
 while run:
-	if(time.Time()-tradeTime>=timeCancel*60 and len(tradeID)>0):
+	if(time.time()-tradeTime>=timeCancel*60 and len(tradeID)>0):
 		try:
 			status=client.get_order(
 				symbol=pair,
@@ -344,11 +346,9 @@ while run:
 				orderId=tradeID[len(trade)-1])
 			except Exception as e:
 				sendNotification("Stopped","Error\nBot Stopped:Cancel Failed\n"+str(e))
-				   print "Error Occured While Canceling:",str(e)
-				   sys.exit("Error Occured While Canceling")
-	if(accountBalanceQuote+accountBalanceBase<=minAmount or accountBalanceQuote+accountBalanceBase<=stopPercent):
-		sendNotification("Stopped","Error\nBot Stopped:RIP Money")
-		sys.exit("RIP Money")
+				print "Error Occured While Canceling:",str(e)
+				sys.exit("Error Occured While Canceling")
+	
 	#fetch
 	where=datafile.tell()
 	line=datafile.readline()
@@ -425,7 +425,7 @@ while run:
 				if(amountQuote>=(maxPercent*accountBalanceQuote)):
 					amountQuote=maxPercent*(accountBalanceBase/quoteBase_close[len(quoteBase_close)-1])
 				print "\n\n"
-				print "Buy Base"
+				print "Buy Quote"
 				try:
 					tradeResult=json.dumps(Buy(amountQuote))
 					tradeTime=time.time()
@@ -502,3 +502,6 @@ while run:
 				#print "macD:",macD[len(macD)-1]
 				#print "Histo:",macDHisto[len(macDHisto)-1]
 				print "Kelly:",kellyCoeff
+#	if((accountBalanceBase/quoteBase_close[len(quoteBase_close)-1])+accountBalanceQuote<=minAmount or (accountBalanceBase/quoteBase_close[len(quoteBase_close)-1])+accountBalanceQuote<=stopPercent):
+	#	sendNotification("Stopped","Error\nBot Stopped:RIP Money")
+		#sys.exit("RIP Money")
