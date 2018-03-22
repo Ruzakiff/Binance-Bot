@@ -14,30 +14,30 @@ bought=False
 run=True
 
 ##Settings
-pair='ETHBTC'
-base="BTC"
-quote="ETH"
+pair='ADAETH'
+base="ETH"
+quote="ADA"
 kellyLength=60 #has to be 60
-lengthTime=20160
-timeCancel=10
+lengthTime=20
+timeCancel=1
 rsiPeriod=5
 atrPeriod=5
-macDFastLength=10080
+macDFastLength=5
 macDSlowLength=lengthTime
-macDSignalLength=12960
-file="/Users/ryan/Desktop/doggo4/Klines"
-resultFile="/Users/ryan/Desktop/doggo4/trades"
-maxPercent=1
+macDSignalLength=15
+file="C:\Users\maxpo\Desktop\ADAETH"
+resultFile="C:\Users\maxpo\Desktop\trades"
+maxPercent=0.3
 minPercent=0.1
-minAmount=0.001
+minAmount=0.1
 stopPercent=0.1
 gmail_user = 'doggo4notification@gmail.com'  
 gmail_password = 'doggo4notify'
 send_list=['crstradingbot@gmail.com','ryanchenyang@gmail.com','maxpol191999@gmail.com','robxu09@gmail.com']
 
-ethbtc_close=np.array([])
-ethbtc_high=np.array([])
-ethbtc_low=np.array([])
+quoteBase_close=np.array([])
+quoteBase_high=np.array([])
+quoteBase_low=np.array([])
 
 avgGainRSI=0#needs to persist, global
 avgLossRSI=0
@@ -50,18 +50,17 @@ macDHisto=np.array([])
 atr=np.array([])
 difference=np.array([])
 kellyCoeff=1.0
-#orderNumber=0
 
 amountQuote=0
 amountBase=0
 
-accountBalance=0 #ETH
-accountBalanceBTC=0
+accountBalanceQuote=0 #ADA
+accountBalanceBase=0 #ETH
 
 tradeID=np.array([])
 tradeTime=0
 
-buyAmount=0 #Kelly
+buyAmount=0 #Kelly #might need fix
 sellAmount=0 #Kelly
 buyPrice=np.array([]) #ATR
 
