@@ -200,9 +200,9 @@ def macDFunc():
 	macDBuy=0
 
 	tempArray=np.array([])
-	temp3=np.array([])
-	temp6=np.array([])
-	temp9=np.array([])
+	tempFast=np.array([])
+	tempSignal=np.array([])
+	tempSlow=np.array([])
 
 	if(len(quoteBase_close)>=lengthTime):
 		#update timeperiod AND len(etbtcclose)+1
@@ -218,7 +218,7 @@ def macDFunc():
 		emaFast=tempFast[len(tempFast)-1]
 		emaSignal=tempSignal[len(tempSignal)-1]
 		emaSlow=tempSlow[len(tempSlow)-1]
-
+		
 		macD=np.append(macD,emaFast-emaSlow)
 		macDSignal=np.append(macDSignal,emaSignal)
 		macDHisto=np.append(macDHisto,macD[len(macD)-1]-macDSignal[len(macDSignal)-1])
@@ -444,9 +444,9 @@ while run:
 				msg="\nRSI:"+str(rsi[len(rsi)-1]) + \
    	 			"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
      			"\nKelly:"+str(kellyCoeff) + \
-     			"\nAmount Bought (BTC):"+str(accountBalanceBase) + \
-     			"\nAccount Balance (ETH):"+str(accountBalanceQuote) + \
-     			"\nAccount Balance (BTC):"+str(accountBalanceBase)
+     			"\nAmount Bought (Base):"+str(accountBalanceBase) + \
+     			"\nAccount Balance (Quote):"+str(accountBalanceQuote) + \
+     			"\nAccount Balance (Base):"+str(accountBalanceBase)
 				# print "RSI:",rsi[len(rsi)-1]
 				# print "CCI:",cci[len(cci)-1]
 				# print "macD:",macD[len(macD)-1]
@@ -484,9 +484,9 @@ while run:
 				msg="\nRSI:"+str(rsi[len(rsi)-1]) + \
    	 			"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
      			"\nKelly:"+str(kellyCoeff) + \
-     			"\nAmount Sold (BTC):"+str(amountBase) + \
-     			"\nAccount Balance (ETH):"+str(accountBalanceQuote) + \
-     			"\nAccount Balance (BTC):"+str(accountBalanceBase)
+     			"\nAmount Sold (Base):"+str(amountBase) + \
+     			"\nAccount Balance (Quote):"+str(accountBalanceQuote) + \
+     			"\nAccount Balance (Base):"+str(accountBalanceBase)
 				# print "RSI:",rsi[len(rsi)-1]
 				# print "CCI:",cci[len(cci)-1]
 				# print "macD:",macD[len(macD)-1]
