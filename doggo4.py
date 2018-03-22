@@ -116,8 +116,8 @@ def cciFunc():
 	global cci
 	cciBuy=0
 	cciReady=False
-	if(len(ethbtc_close)==lengthTime and len(ethbtc_high)==lengthTime and len(ethbtc_low)==lengthTime):
-		tempcci=talib.CCI(ethbtc_high,ethbtc_low,ethbtc_close,timeperiod=lengthTime)
+	if(len(quoteBase_close)==lengthTime and len(quoteBase_high)==lengthTime and len(quoteBase_low)==lengthTime):
+		tempcci=talib.CCI(quoteBase_high,quoteBase_low,quoteBase_close,timeperiod=lengthTime)
 		cci=np.append(cci,tempcci[len(tempcci)-1])
 		if(len(cci)>=2):
 			cciReady=True
@@ -150,11 +150,11 @@ def rsiFunc():
 	change=0
 	currentGains=0
 	currentLosses=0
-	if(len(ethbtc_close)==rsiPeriod):
+	if(len(quoteBase_close)==rsiPeriod):
 		tempGain=0
 		tempLoss=0
 		for x in range(0, rsiPeriod-2):
-		 	change=ethbtc_close[x+1]-ethbtc_close[x]
+		 	change=quoteBase_close[x+1]-quoteBase_close[x]
 		 	if(change>0):
 		 		tempGain=tempGain+change
 		 	elif(change<0):
@@ -164,8 +164,8 @@ def rsiFunc():
 	 	rs = avgGainRSI/avgLossRSI
 		rsi=np.append(rsi,100-(100/(1+rs)))
 		rsiReady=True
-	elif(len(ethbtc_close)>rsiPeriod):
-		change=ethbtc_close[len(ethbtc_close)-1]-ethbtc_close[len(ethbtc_close)-2]
+	elif(len(quoteBase_close)>rsiPeriod):
+		change=quoteBase_close[len(quoteBase_close)-1]-quoteBase_close[len(quoteBase_close)-2]
 		if(change>0):
 			currentGains=change
 			currentLosses=0
@@ -204,15 +204,15 @@ def macDFunc():
 	temp6=np.array([])
 	temp9=np.array([])
 
-	if(len(ethbtc_close)>=lengthTime):
+	if(len(quoteBase_close)>=lengthTime):
 		#update timeperiod AND len(etbtcclose)+1
-		tempArray=ethbtc_close[len(ethbtc_close)-macDFastLength:len(ethbtc_close)]
+		tempArray=quoteBase_close[len(quoteBase_close)-macDFastLength:len(quoteBase_close)]
 		tempFast=talib.EMA(tempArray,timeperiod=macDFastLength)
 
-		tempArray=ethbtc_close[len(ethbtc_close)-macDSignalLength:len(ethbtc_close)]
+		tempArray=quoteBase_close[len(quoteBase_close)-macDSignalLength:len(quoteBase_close)]
 		tempSignal=talib.EMA(tempArray,timeperiod=macDSignalLength)
 
-		tempArray=ethbtc_close[len(ethbtc_close)-macDSlowLength:len(ethbtc_close)]
+		tempArray=quoteBase_close[len(quoteBase_close)-macDSlowLength:len(quoteBase_close)]
 		tempSlow=talib.EMA(tempArray,timeperiod=macDSlowLength)
 
 		emaFast=tempFast[len(tempFast)-1]
@@ -247,18 +247,18 @@ def atrFunc():
 	atrReady=False
 	atrBuy=0
 	tr=0
-	if(len(ethbtc_close)==atrPeriod and len(ethbtc_high)==atrPeriod and len(ethbtc_low)==atrPeriod):
+	if(len(quoteBase_close)==atrPeriod and len(quoteBase_high)==atrPeriod and len(quoteBase_low)==atrPeriod):
 		for x in range(0, atrPeriod-1):
-			if(ethbtc_high[x]-ethbtc_low[x]>0):
-				tr=tr+abs(ethbtc_high[x]-ethbtc_low[x])
+			if(quoteBase_high[x]-quoteBase_low[x]>0):
+				tr=tr+abs(quoteBase_high[x]-quoteBase_low[x])
 		firstAtr=tr/atrPeriod
 		atr=np.append(atr,firstAtr)
 		atrReady=True
-	elif(len(ethbtc_close)>atrPeriod):
-		if(ethbtc_high[len(ethbtc_high)-1]-ethbtc_low[len(ethbtc_low)-1]<0):
+	elif(len(quoteBase_close)>atrPeriod):
+		if(quoteBase_high[len(quoteBase_high)-1]-quoteBase_low[len(quoteBase_low)-1]<0):
 			tr=0
 		else:
-			tr=ethbtc_high[len(ethbtc_high)-1]-ethbtc_low[len(ethbtc_low)-1]
+			tr=quoteBase_high[len(quoteBase_high)-1]-quoteBase_low[len(quoteBase_low)-1]
 		prior=atr[len(atr)-1]
 		atr=np.append(atr,((prior*(atrPeriod-1))+tr)/atrPeriod) #13 14, atrperiod -1?
 		atrReady=True
@@ -267,11 +267,11 @@ def atrFunc():
 
 	if(atrReady and len(buyPrice)>0):
 		#print "ATR",atr[len(atr)-1]
-		if(ethbtc_close[len(ethbtc_close)-1]>buyPrice[len(buyPrice)-1]):
-			lowerStop=ethbtc_close[len(ethbtc_close)-1]-(2*atr[len(atr)-1])
+		if(quoteBase_close[len(quoteBase_close)-1]>buyPrice[len(buyPrice)-1]):
+			lowerStop=quoteBase_close[len(quoteBase_close)-1]-(2*atr[len(atr)-1])
 		else:
 			lowerStop=buyPrice[len(buyPrice)-1]-(2*atr[len(atr)-1])
-		if(ethbtc_close[len(ethbtc_close)-1]<=lowerStop):
+		if(quoteBase_close[len(quoteBase_close)-1]<=lowerStop):
 			atrBuy=-1
 def kellyFunc():
 	global kellyReady
@@ -279,7 +279,7 @@ def kellyFunc():
 	global difference
 	global sellAmount
 	kellyReady=False
-	sellAmount=amountBase/ethbtc_close[len(ethbtc_close)-1]
+	sellAmount=amountBase/quoteBase_close[len(quoteBase_close)-1]
 	difference=np.append(difference,sellAmount-buyAmount)
 	if(len(difference)>kellyLength):
 		difference=np.delete(difference,0)
@@ -359,15 +359,15 @@ while run:
 		datafile.seek(where)
 	else:
 		reading=True
-		ethbtc_high=np.append(ethbtc_high,float(line[32:42]))
-		ethbtc_low=np.append(ethbtc_low,float(line[46:56]))
-		ethbtc_close=np.append(ethbtc_close,float(line[60:70]))
-		if(len(ethbtc_close)>lengthTime):
-			ethbtc_close=np.delete(ethbtc_close,0) #has to be numpy, talib wants numpy
-		if(len(ethbtc_high)>lengthTime):
-			ethbtc_high=np.delete(ethbtc_high,0) #has to be numpy, talib wants numpy
-		if(len(ethbtc_low)>lengthTime):
-			ethbtc_low=np.delete(ethbtc_low,0) #has to be numpy, talib wants numpy
+		quoteBase_high=np.append(quoteBase_high,float(line[32:42]))
+		quoteBase_low=np.append(quoteBase_low,float(line[46:56]))
+		quoteBase_close=np.append(quoteBase_close,float(line[60:70]))
+		if(len(quoteBase_close)>lengthTime):
+			quoteBase_close=np.delete(quoteBase_close,0) #has to be numpy, talib wants numpy
+		if(len(quoteBase_high)>lengthTime):
+			quoteBase_high=np.delete(quoteBase_high,0) #has to be numpy, talib wants numpy
+		if(len(quoteBase_low)>lengthTime):
+			quoteBase_low=np.delete(quoteBase_low,0) #has to be numpy, talib wants numpy
 
 	#update indicators
 	if(reading):
@@ -375,7 +375,7 @@ while run:
 		#macDFunc()
 		#cciFunc()
 		atrFunc()
-		if(rsiReady and atrReady and len(ethbtc_close)>=lengthTime):
+		if(rsiReady and atrReady and len(quoteBase_close)>=lengthTime):
 			if(atrBuy==-1 and bought==True):
 				#TODO what if buying/selling less than min amount. DO we cancel?
 				bought=False
@@ -384,7 +384,7 @@ while run:
 				print "\n\n"
 				print "Stoploss"
 				amountBase=accountBalanceBase
-				amountQuote=accountBalanceBase/ethbtc_close[len(ethbtc_close)-1]
+				amountQuote=accountBalanceBase/quoteBase_close[len(quoteBase_close)-1]
 				if(amountQuote<=minAmount):
 					sendNotification("Stopped","Selling Less Than Min Amount")
 				try:
@@ -401,7 +401,7 @@ while run:
 				accountStringBase=json.dumps(client.get_asset_balance(base))
 				accountBalanceBase=float(accountStringBase[12:22])+float(accountStringBase[50:60])
 				msg="\nATR:"+str(atr[len(atr)-1]) + \
-   	 			"\nPrice:"+str(ethbtc_close[len(ethbtc_close)-1]) + \
+   	 			"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
    	 			"\nBuy Price:"+str(buyPrice[len(buyPrice)-1]) + \
      			"\nLower Limit:"+str(lowerStop) + \
      			"\nAmount Sold (Base):"+str(amountBase) + \
@@ -442,7 +442,7 @@ while run:
 				accountStringBase=json.dumps(client.get_asset_balance(base))
 				accountBalanceBase=float(accountStringBase[12:22])+float(accountStringBase[50:60])
 				msg="\nRSI:"+str(rsi[len(rsi)-1]) + \
-   	 			"\nPrice:"+str(ethbtc_close[len(ethbtc_close)-1]) + \
+   	 			"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
      			"\nKelly:"+str(kellyCoeff) + \
      			"\nAmount Bought (BTC):"+str(accountBalanceBase) + \
      			"\nAccount Balance (ETH):"+str(accountBalanceQuote) + \
@@ -455,7 +455,7 @@ while run:
 				print msg
 				print "\n\n"
 				buyAmount=amountQuote
-				buyPrice=np.append(buyPrice,ethbtc_close[len(ethbtc_close)-1]) #atr
+				buyPrice=np.append(buyPrice,quoteBase_close[len(quoteBase_close)-1]) #atr
 				sendNotification("Buying",msg)
 			elif(rsiBuy==-1 and bought==True):
 				bought=False
@@ -464,7 +464,7 @@ while run:
 				#cciBuy=0
 				#macDBuy=0
 				amountBase=accountBalanceBase
-				amountQuote=accountBalanceBase/ethbtc_close[len(ethbtc_close)-1]
+				amountQuote=accountBalanceBase/quoteBase_close[len(quoteBase_close)-1]
 				print "\n\n"
 				print "Sell Base"
 				# try:
@@ -480,9 +480,9 @@ while run:
 				accountBalanceQuote=float(accountStringQuote[12:22])+float(accountStringQuote[50:60])
 				accountStringBase=json.dumps(client.get_asset_balance(base))
 				accountBalanceBase=float(accountStringBase[12:22])+float(accountStringBase[50:60])
-				#accountBalance=accountBalance+(amountBTC/ethbtc_close[len(ethbtc_close)-1])
+				#accountBalance=accountBalance+(amountBTC/quoteBase_close[len(quoteBase_close)-1])
 				msg="\nRSI:"+str(rsi[len(rsi)-1]) + \
-   	 			"\nPrice:"+str(ethbtc_close[len(ethbtc_close)-1]) + \
+   	 			"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
      			"\nKelly:"+str(kellyCoeff) + \
      			"\nAmount Sold (BTC):"+str(amountBase) + \
      			"\nAccount Balance (ETH):"+str(accountBalanceQuote) + \
@@ -497,8 +497,8 @@ while run:
 				kellyFunc()
 				sendNotification("Selling",msg)
 		else:
-			print "Not Ready. We Need ",lengthTime-len(ethbtc_close)," More Data Points"
-		if(len(ethbtc_close)>=lengthTime):
+			print "Not Ready. We Need ",lengthTime-len(quoteBase_close)," More Data Points"
+		if(len(quoteBase_close)>=lengthTime):
 			if(reading):
 				print "Info Updated:",datetime.datetime.now().strftime("%a, %d %B %Y %I:%M:%S")
 				print "RSI:",rsi[len(rsi)-1]
