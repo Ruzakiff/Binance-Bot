@@ -20,12 +20,12 @@ quote="ADA"
 kellyLength=60 #has to be 60
 lengthTime=20
 timeCancel=1
-rsiPeriod=5
-atrPeriod=5
+rsiPeriod=14
+atrPeriod=14
 macDFastLength=5
 macDSlowLength=lengthTime
 macDSignalLength=15
-file="C:\Users\maxpo\Desktop\ADAETH"
+fileRead="C:\Users\maxpo\Desktop\ADAETH"
 resultFile="C:\Users\maxpo\Desktop\trades"
 maxPercent=0.3
 minPercent=0.1
@@ -52,7 +52,6 @@ difference=np.array([])
 kellyCoeff=1.0
 
 amountQuote=0
-amountBase=0
 
 accountBalanceQuote=0 #ADA
 accountBalanceBase=0 #ETH
@@ -279,7 +278,7 @@ def kellyFunc():
 	global difference
 	global sellAmount
 	kellyReady=False
-	sellAmount=amountBase/quoteBase_close[len(quoteBase_close)-1]
+	sellAmount=amountQuote
 	difference=np.append(difference,sellAmount-buyAmount)
 	if(len(difference)>kellyLength):
 		difference=np.delete(difference,0)
@@ -308,18 +307,18 @@ def kellyFunc():
 	else:
 		kellyReady=False
 
-with open(file+".txt","r") as f, open(file+"tmp.txt","w") as out:
+with open(fileRead+".txt","r") as f, open(fileRead+"tmp.txt","w") as out:
 	data=f.readlines()
 	print "Datapoints:",len(data)
 	if((len(data)-lengthTime)>0):
-		with open(file+"tmp.txt","w") as out:
+		with open(fileRead+"tmp.txt","w") as out:
 			newData=np.array([])
 			for x in range(len(data)-lengthTime,len(data)):
 				out.write(data[x])
-			os.remove(file+".txt")
-			os.rename(file+"tmp.txt", file+".txt")
+			os.remove(fileRead+".txt")
+			os.rename(fileRead+"tmp.txt", fileRead+".txt")
 client=login()
-datafile=open(file+".txt","r")    
+datafile=open(fileRead+".txt","r")    
 tradefile=open(resultFile+".txt","a")
 accountStringQuote=json.dumps(client.get_asset_balance(quote))
 accountBalanceQuote=float(accountStringQuote[12:22])+float(accountStringQuote[50:60])
@@ -383,12 +382,12 @@ while run:
 				rsiBuy=0
 				print "\n\n"
 				print "Stoploss"
-				amountBase=accountBalanceBase
-				amountQuote=accountBalanceBase/quoteBase_close[len(quoteBase_close)-1]
+				amountQuote=accountBalanceQuote
 				if(amountQuote<=minAmount):
 					sendNotification("Stopped","Selling Less Than Min Amount")
+					sys.exit("Selling Less Than Min Amount")
 				try:
-					tradeResult=json.dumps(Buy(amountQuote))
+					tradeResult=json.dumps(Sell(amountQuote))
 					tradeTime=time.time()
 					tradefile.write(tradeResult+"\n")
 					tradeID=np.append(tradeID,int(tradeResult[12:20]))
@@ -404,7 +403,7 @@ while run:
    	 			"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
    	 			"\nBuy Price:"+str(buyPrice[len(buyPrice)-1]) + \
      			"\nLower Limit:"+str(lowerStop) + \
-     			"\nAmount Sold (Base):"+str(amountBase) + \
+     			"\nAmount Sold (Base):"+str(amountQuote) + \
      			"\nAccount Balance (Quote):"+str(accountBalanceQuote) + \
      			"\nAccount Balance (Base):"+str(accountBalanceBase)
 				print msg
@@ -418,25 +417,24 @@ while run:
 				#macDBuy=0
 				#cciBuy=0
 				if(kellyReady):
-					amountQuote=kellyCoeff*maxPercent*accountBalanceQuote
+					amountQuote=kellyCoeff*maxPercent*(accountBalanceBase/quoteBase_close[len(quoteBase_close)-1])
 				else:
-					amountQuote=minPercent*accountBalanceQuote
+					amountQuote=minPercent*(accountBalanceBase/quoteBase_close[len(quoteBase_close)-1])
 				if(amountQuote<minAmount):
-					amountQuote=minPercent*accountBalanceQuote
+					amountQuote=minAmount
 				if(amountQuote>=(maxPercent*accountBalanceQuote)):
-					amountQuote=maxPercent*accountBalanceQuote
+					amountQuote=maxPercent*(accountBalanceBase/quoteBase_close[len(quoteBase_close)-1])
 				print "\n\n"
 				print "Buy Base"
-				# try:
-						#tradeResult=json.dumps(Sell(amountQuote))
-						#tradeTime=time.time()
-						#tradefile.write(tradeResult+"\n")
-						#tradeID=np.append(tradeID,int(tradeResult[12:20]))
-
-				# except Exception as e:
-				# 	sendNotification("Stopped","Error\nBot Stopped:Buy Failed\n"+str(e))
-				#   	print "Error Occured While Buying:",str(e)
-				#   	sys.exit("Error Occured While Buying")
+				try:
+					tradeResult=json.dumps(Buy(amountQuote))
+					tradeTime=time.time()
+					tradefile.write(tradeResult+"\n")
+					tradeID=np.append(tradeID,int(tradeResult[12:20]))
+				except Exception as e:
+				 	sendNotification("Stopped","Error\nBot Stopped:Buy Failed\n"+str(e))
+				   	print "Error Occured While Buying:",str(e)
+				   	sys.exit("Error Occured While Buying")
 				accountStringQuote=json.dumps(client.get_asset_balance(quote))
 				accountBalanceQuote=float(accountStringQuote[12:22])+float(accountStringQuote[50:60])
 				accountStringBase=json.dumps(client.get_asset_balance(base))
@@ -463,28 +461,26 @@ while run:
 				rsiBuy=0
 				#cciBuy=0
 				#macDBuy=0
-				amountBase=accountBalanceBase
-				amountQuote=accountBalanceBase/quoteBase_close[len(quoteBase_close)-1]
+				amountQuote=accountBalanceQuote
 				print "\n\n"
-				print "Sell Base"
-				# try:
-					#tradeResult=json.dumps(Buy(amountQuote))
-					#tradeTime=time.time()
-					#tradefile.write(tradeResult+"\n")
-					#tradeID=np.append(tradeID,int(tradeResult[12:20]))
-				# except Exception as e:
-				# 	sendNotification("Stopped","Error\nBot Stopped:Sell Failed\n"+str(e))
-				#  	print "Error Occured While Selling:",str(e)
-				# 	sys.exit("Error Occured While Selling")
+				print "Sell Quote"
+				try:
+					tradeResult=json.dumps(Sell(amountQuote))
+					tradeTime=time.time()
+					tradefile.write(tradeResult+"\n")
+					tradeID=np.append(tradeID,int(tradeResult[12:20]))
+				except Exception as e:
+				 	sendNotification("Stopped","Error\nBot Stopped:Sell Failed\n"+str(e))
+				  	print "Error Occured While Selling:",str(e)
+				 	sys.exit("Error Occured While Selling")
 				accountStringQuote=json.dumps(client.get_asset_balance(quote))
 				accountBalanceQuote=float(accountStringQuote[12:22])+float(accountStringQuote[50:60])
 				accountStringBase=json.dumps(client.get_asset_balance(base))
 				accountBalanceBase=float(accountStringBase[12:22])+float(accountStringBase[50:60])
-				#accountBalance=accountBalance+(amountBTC/quoteBase_close[len(quoteBase_close)-1])
 				msg="\nRSI:"+str(rsi[len(rsi)-1]) + \
    	 			"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
      			"\nKelly:"+str(kellyCoeff) + \
-     			"\nAmount Sold (Base):"+str(amountBase) + \
+     			"\nAmount Sold (Base):"+str(amountQuote) + \
      			"\nAccount Balance (Quote):"+str(accountBalanceQuote) + \
      			"\nAccount Balance (Base):"+str(accountBalanceBase)
 				# print "RSI:",rsi[len(rsi)-1]
