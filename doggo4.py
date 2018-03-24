@@ -8,10 +8,15 @@ import json
 import datetime
 import os
 import smtplib
+from decimal import *
+import math
+#TODO instead of bought, just check if we have any quote?!
 
 reading=False
 bought=False
 run=True
+statusChecked=False
+
 
 ##Settings
 pair='ADAETH'
@@ -25,11 +30,12 @@ atrPeriod=14
 macDFastLength=5
 macDSlowLength=lengthTime
 macDSignalLength=15
-fileRead="C:\Users\maxpo\Desktop\ADAETH"
-resultFile="C:\Users\maxpo\Desktop\\trades"
+fileRead="/Users/ryan/Desktop/Doggo4/ADAETH"
+resultFile="/Users/ryan/Desktop/Doggo4/trades"
 maxPercent=0.3
 minPercent=0.1
-minAmount=0.1
+minAmount=1
+precision=0
 stopPercent=0.1
 gmail_user = 'doggo4notification@gmail.com'  
 gmail_password = 'doggo4notify'
@@ -190,7 +196,6 @@ def rsiFunc():
 	 	if(rsi[len(rsi)-1]>=70):
 	 		rsiBuy=-1
 
-#TODO CHANGE MACDPERIODS TO 7,14,9 DAY MINUTE EQUIVLANTS
 def macDFunc():
 	global macDBuy
 	global macDReady
@@ -326,28 +331,40 @@ accountStringQuote=json.dumps(client.get_asset_balance(quote))
 accountBalanceQuote=float(accountStringQuote[12:22])+float(accountStringQuote[50:60])
 accountStringBase=json.dumps(client.get_asset_balance(base))
 accountBalanceBase=float(accountStringBase[12:22])+float(accountStringBase[50:60])
-#stopPercent=stopPercent*((accountBalanceBase/quoteBase_close[len(quoteBase_close)-1])+accountBalanceQuote)
 sendNotification("Started","Bot Started:May The Odds Be Ever In Your Favor")
 while run:
-	if(time.time()-tradeTime>=timeCancel*60 and len(tradeID)>0):
+	#if(accountBalanceQuote>=minAmount):
+		#bought=True
+	if(len(quoteBase_close)==1):
+		stopPercent=stopPercent*((accountBalanceBase/quoteBase_close[len(quoteBase_close)-1])+accountBalanceQuote)
+	if(len(quoteBase_close)>0):
+		if((accountBalanceBase/quoteBase_close[len(quoteBase_close)-1])+accountBalanceQuote<=minAmount or (accountBalanceBase/quoteBase_close[len(quoteBase_close)-1])+accountBalanceQuote<=stopPercent):
+			sendNotification("Stopped","Error\nBot Stopped:RIP Money")
+			sys.exit("RIP Money")
+	if(time.time()-tradeTime>=timeCancel*60 and len(tradeID)>0 and statusChecked==False):
+		print "Checking Status"
 		try:
 			status=client.get_order(
 				symbol=pair,
-				orderId=tradeID[len(tradeID)-1])
-			checkStat=json.dumps(status)
+				orderId=int(tradeID[len(tradeID)-1]))
+			tempStat=json.dumps(status)
+			print tempStat
+			checkStat=tempStat[tempStat.find("status")+10]
+			print checkStat
 		except Exception as e:
 			sendNotification("Stopped","Error\nBot Stopped:Order Status Failed\n"+str(e))
 			print "Error Occured While Checking:",str(e)
 			sys.exit("Error Occured While Checking")
-		if(checkStat[188]!="F"):
+		if(checkStat!="F"):
 			try:
 				client.cancel_order(
 				symbol=pair,
-				orderId=tradeID[len(trade)-1])
+				orderId=int(tradeID[len(tradeID)-1]))
 			except Exception as e:
 				sendNotification("Stopped","Error\nBot Stopped:Cancel Failed\n"+str(e))
 				print "Error Occured While Canceling:",str(e)
 				sys.exit("Error Occured While Canceling")
+		statusChecked=True
 	
 	#fetch
 	where=datafile.tell()
@@ -383,12 +400,14 @@ while run:
 				print "\n\n"
 				print "Stoploss"
 				amountQuote=accountBalanceQuote
+				print math.trunc(amountQuote)
 				if(amountQuote<=minAmount):
 					sendNotification("Stopped","Selling Less Than Min Amount")
 					sys.exit("Selling Less Than Min Amount")
 				try:
-					tradeResult=json.dumps(Sell(amountQuote))
+					tradeResult=json.dumps(Sell(math.trunc(amountQuote)))
 					tradeTime=time.time()
+					statusChecked=False
 					tradefile.write(tradeResult+"\n")
 					tradeID=np.append(tradeID,int(tradeResult[12:20]))
 				except Exception as e:
@@ -426,9 +445,12 @@ while run:
 					amountQuote=maxPercent*(accountBalanceBase/quoteBase_close[len(quoteBase_close)-1])
 				print "\n\n"
 				print "Buy Quote"
+				#print round(Decimal(amountQuote),precision)
+				print math.trunc(amountQuote)
 				try:
-					tradeResult=json.dumps(Buy(amountQuote))
+					tradeResult=json.dumps(Buy(math.trunc(amountQuote)))
 					tradeTime=time.time()
+					statusChecked=False
 					tradefile.write(tradeResult+"\n")
 					tradeID=np.append(tradeID,int(tradeResult[12:20]))
 				except Exception as e:
@@ -462,11 +484,13 @@ while run:
 				#cciBuy=0
 				#macDBuy=0
 				amountQuote=accountBalanceQuote
+				print math.trunc(amountQuote)
 				print "\n\n"
 				print "Sell Quote"
 				try:
-					tradeResult=json.dumps(Sell(amountQuote))
+					tradeResult=json.dumps(Sell(math.trunc(amountQuote)))
 					tradeTime=time.time()
+					statusChecked=False
 					tradefile.write(tradeResult+"\n")
 					tradeID=np.append(tradeID,int(tradeResult[12:20]))
 				except Exception as e:
@@ -502,6 +526,3 @@ while run:
 				#print "macD:",macD[len(macD)-1]
 				#print "Histo:",macDHisto[len(macDHisto)-1]
 				print "Kelly:",kellyCoeff
-#	if((accountBalanceBase/quoteBase_close[len(quoteBase_close)-1])+accountBalanceQuote<=minAmount or (accountBalanceBase/quoteBase_close[len(quoteBase_close)-1])+accountBalanceQuote<=stopPercent):
-	#	sendNotification("Stopped","Error\nBot Stopped:RIP Money")
-		#sys.exit("RIP Money")
