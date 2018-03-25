@@ -1,0 +1,60 @@
+Last login: Fri Mar 23 19:16:55 on ttys001
+MacBook-Pro:~ ryan$ python /Users/ryan/Desktop/Doggo4/asdf.py 
+Datapoints: 23
+Connecting...
+Connected
+Email sent!
+Not Ready. We Need  19  More Data Points
+Not Ready. We Need  18  More Data Points
+Not Ready. We Need  17  More Data Points
+Not Ready. We Need  16  More Data Points
+Not Ready. We Need  15  More Data Points
+Not Ready. We Need  14  More Data Points
+Not Ready. We Need  13  More Data Points
+Not Ready. We Need  12  More Data Points
+Not Ready. We Need  11  More Data Points
+Not Ready. We Need  10  More Data Points
+Not Ready. We Need  9  More Data Points
+Not Ready. We Need  8  More Data Points
+Not Ready. We Need  7  More Data Points
+Not Ready. We Need  6  More Data Points
+Not Ready. We Need  5  More Data Points
+Not Ready. We Need  4  More Data Points
+Not Ready. We Need  3  More Data Points
+Not Ready. We Need  2  More Data Points
+Not Ready. We Need  1  More Data Points
+Info Updated: Fri, 23 March 2018 07:18:07
+RSI: 48.9500376815
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:18:48
+RSI: 44.4860043978
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:19:48
+RSI: 44.8594797402
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:20:49
+RSI: 44.2978311886
+Kelly: 1.0
+
+
+
+Buy Quote
+24.0
+
+RSI:29.03162677625592
+Price:0.00033771
+Kelly:1.0
+Amount Bought (Base):0.01843291
+Account Balance (Quote):30.95
+Account Balance (Base):0.01843291
+
+
+
+Email sent!
+Info Updated: Fri, 23 March 2018 07:21:51
+RSI: 29.0316267763
+Kelly: 1.0
+Email Send Failure
+Error Occured While Checking: APIError(code=-1100): Illegal characters found in parameter 'orderId'; legal range is '^[0-9]{1,20}$'.
+Error Occured While Checking
+MacBook-Pro:~ ryan$ 

@@ -1,0 +1,43 @@
+Last login: Thu Mar 22 21:12:13 on ttys001
+MacBook-Pro:~ ryan$ python /Users/ryan/Desktop/Doggo4/asdf\ copy.py 
+Connecting...
+Connected
+Traceback (most recent call last):
+  File "/Users/ryan/Desktop/Doggo4/asdf copy.py", line 311, in <module>
+    accountStringQuote=json.dumps(client.get_asset_balance(quote))
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/binance/client.py", line 1383, in get_asset_balance
+    res = self.get_account(**params)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/binance/client.py", line 1358, in get_account
+    return self._get('account', True, data=params)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/binance/client.py", line 197, in _get
+    return self._request_api('get', path, signed, version, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/binance/client.py", line 171, in _request_api
+    return self._request(method, uri, signed, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/binance/client.py", line 166, in _request
+    return self._handle_response(response)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/binance/client.py", line 190, in _handle_response
+    raise BinanceAPIException(response)
+binance.exceptions.BinanceAPIException: APIError(code=-1021): Timestamp for this request was 1000ms ahead of the server's time.
+MacBook-Pro:~ ryan$ python /Users/ryan/Desktop/Doggo4/asdf\ copy.py 
+Connecting...
+Connected
+Email sent!
+Email sent!
+Error Occured While Selling: APIError(code=-1021): Timestamp for this request was 1000ms ahead of the server's time.
+Error Occured While Selling
+MacBook-Pro:~ ryan$ python /Users/ryan/Desktop/Doggo4/asdf\ copy.py 
+Connecting...
+Connected
+Email sent!
+Email sent!
+Error Occured While Buying: name 'tradefile' is not defined
+Error Occured While Buying
+MacBook-Pro:~ ryan$ python /Users/ryan/Desktop/Doggo4/asdf\ copy.py 
+Connecting...
+Connected
+Email sent!
+MacBook-Pro:~ ryan$ python /Users/ryan/Desktop/Doggo4/asdf\ copy.py 
+Connecting...
+Connected
+Email sent!
+MacBook-Pro:~ ryan$ 

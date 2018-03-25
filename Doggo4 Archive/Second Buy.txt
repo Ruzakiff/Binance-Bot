@@ -1,0 +1,410 @@
+Last login: Fri Mar 23 19:24:11 on ttys001
+MacBook-Pro:~ ryan$ python /Users/ryan/Desktop/Doggo4/asfd.py
+/Library/Frameworks/Python.framework/Versions/2.7/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/ryan/Desktop/Doggo4/asfd.py': [Errno 2] No such file or directory
+MacBook-Pro:~ ryan$ python /Users/ryan/Desktop/Doggo4/asdf.py
+Datapoints: 26
+Connecting...
+Connected
+Email sent!
+Not Ready. We Need  19  More Data Points
+Not Ready. We Need  18  More Data Points
+Not Ready. We Need  17  More Data Points
+Not Ready. We Need  16  More Data Points
+Not Ready. We Need  15  More Data Points
+Not Ready. We Need  14  More Data Points
+Not Ready. We Need  13  More Data Points
+Not Ready. We Need  12  More Data Points
+Not Ready. We Need  11  More Data Points
+Not Ready. We Need  10  More Data Points
+Not Ready. We Need  9  More Data Points
+Not Ready. We Need  8  More Data Points
+Not Ready. We Need  7  More Data Points
+Not Ready. We Need  6  More Data Points
+Not Ready. We Need  5  More Data Points
+Not Ready. We Need  4  More Data Points
+Not Ready. We Need  3  More Data Points
+Not Ready. We Need  2  More Data Points
+Not Ready. We Need  1  More Data Points
+Info Updated: Fri, 23 March 2018 07:24:39
+RSI: 43.5053826498
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:24:50
+RSI: 52.8426137128
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:25:51
+RSI: 55.3655267144
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:26:51
+RSI: 52.3494042212
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:27:52
+RSI: 43.274575047
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:28:52
+RSI: 43.3375398058
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:29:53
+RSI: 38.0600029389
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:30:53
+RSI: 45.2413283996
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:31:54
+RSI: 48.9759288361
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:32:54
+RSI: 40.4552124834
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:33:55
+RSI: 48.5607524936
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:34:55
+RSI: 46.4038220717
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:35:55
+RSI: 47.8431658822
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:36:56
+RSI: 49.5455656031
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:37:56
+RSI: 46.2478241034
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:38:57
+RSI: 49.7483822194
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:39:57
+RSI: 43.9420662888
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:40:58
+RSI: 46.9672990138
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:41:58
+RSI: 45.8825892839
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:42:59
+RSI: 47.1959082337
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:43:59
+RSI: 54.2675387677
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:44:59
+RSI: 56.9356044399
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:46:00
+RSI: 61.9517634123
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:47:00
+RSI: 62.3575504885
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:48:01
+RSI: 64.6808563622
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:49:01
+RSI: 61.1944466737
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:50:01
+RSI: 64.408269781
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:51:02
+RSI: 62.355821671
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:52:02
+RSI: 60.222471742
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:53:03
+RSI: 58.1470370131
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:54:03
+RSI: 62.6619232389
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:55:04
+RSI: 64.3042530509
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:56:04
+RSI: 67.2160166232
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:57:05
+RSI: 62.528718703
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:58:05
+RSI: 59.326429586
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 07:59:06
+RSI: 65.3502967141
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:00:06
+RSI: 65.502083034
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:01:07
+RSI: 62.5511906233
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:02:07
+RSI: 55.0702224105
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:03:08
+RSI: 49.1875166626
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:04:08
+RSI: 46.512161145
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:05:09
+RSI: 46.512161145
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:06:09
+RSI: 47.0898238703
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:07:09
+RSI: 48.6814714212
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:08:10
+RSI: 39.2934413429
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:09:10
+RSI: 42.5301491846
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:10:11
+RSI: 45.6508037297
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:11:11
+RSI: 41.1399818661
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:12:12
+RSI: 51.3738401424
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:13:12
+RSI: 50.1087868592
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:14:12
+RSI: 46.4161087239
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:15:13
+RSI: 46.533974481
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:16:13
+RSI: 48.8367408966
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:17:14
+RSI: 47.1116091575
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:18:14
+RSI: 47.1116091575
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:19:15
+RSI: 41.4510510734
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:20:15
+RSI: 34.0131618427
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:21:16
+RSI: 32.1737305828
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:22:16
+RSI: 30.1705966378
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:23:17
+RSI: 35.4128009028
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:24:17
+RSI: 39.4562796153
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:25:18
+RSI: 49.44287353
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:26:18
+RSI: 49.3903373501
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:27:18
+RSI: 43.1665173069
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:28:19
+RSI: 62.7728929719
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:29:20
+RSI: 71.6967605357
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:30:20
+RSI: 61.1910092812
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:31:20
+RSI: 60.1253400635
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:32:21
+RSI: 51.4954302976
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:33:21
+RSI: 56.1451314237
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:34:21
+RSI: 54.7180610141
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:35:22
+RSI: 61.2765944666
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:36:22
+RSI: 62.2867179374
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:37:23
+RSI: 64.1620664581
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:38:23
+RSI: 64.9523227658
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:39:23
+RSI: 62.8985470876
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:40:24
+RSI: 63.3523388136
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:41:24
+RSI: 59.9564408011
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:42:24
+RSI: 59.9564408011
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:43:25
+RSI: 60.0142501586
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:44:25
+RSI: 60.0142501586
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:45:26
+RSI: 54.4528367315
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:46:26
+RSI: 54.4528367315
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:47:26
+RSI: 52.91457724
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:48:27
+RSI: 53.7251251522
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:49:27
+RSI: 58.5391513408
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:50:28
+RSI: 60.4741704352
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:51:28
+RSI: 62.6066031543
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:52:29
+RSI: 62.7167474633
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:53:29
+RSI: 61.545365763
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:54:29
+RSI: 61.545365763
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:55:30
+RSI: 60.5973646249
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:56:30
+RSI: 65.6776676183
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:57:30
+RSI: 58.7822109774
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:58:31
+RSI: 58.7822109774
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 08:59:31
+RSI: 61.0106095849
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:00:32
+RSI: 67.3707027734
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:01:32
+RSI: 60.5965502244
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:02:32
+RSI: 61.0697261564
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:03:32
+RSI: 64.3013644158
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:04:33
+RSI: 64.9923065224
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:05:33
+RSI: 64.9923065224
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:06:34
+RSI: 64.4814528122
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:07:34
+RSI: 56.9314343419
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:08:34
+RSI: 52.8875533853
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:09:35
+RSI: 52.7459820128
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:10:35
+RSI: 57.8493849118
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:11:35
+RSI: 51.8221113891
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:12:36
+RSI: 51.8221113891
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:13:36
+RSI: 37.2479514266
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:14:36
+RSI: 37.5953843136
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:15:37
+RSI: 36.2551251108
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:16:37
+RSI: 43.2796385614
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:17:37
+RSI: 40.8554011865
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:18:38
+RSI: 40.8554011865
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:19:38
+RSI: 38.363239812
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:20:38
+RSI: 38.363239812
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:21:39
+RSI: 38.3090363194
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:22:39
+RSI: 35.0553147696
+Kelly: 1.0
+
+
+
+Buy Quote
+5.0
+
+RSI:24.329770366754005
+Price:0.00034194
+Kelly:1.0
+Amount Bought (Base):0.02635854
+Account Balance (Quote):7.945
+Account Balance (Base):0.02635854
+
+
+
+Email sent!
+Info Updated: Fri, 23 March 2018 09:23:42
+RSI: 24.3297703668
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 09:24:40
+RSI: 36.6780476221
+Kelly: 1.0
+Email sent!
+Error Occured While Canceling: name 'trade' is not defined
+Error Occured While Canceling
+MacBook-Pro:~ ryan$ 

@@ -1,0 +1,425 @@
+
+Buying: 0.084761
+Kelly: 1
+Amount: 0.1
+Account: 99.9915239
+
+
+Selling: 0.085
+Kelly: 1
+Amount: 0.1
+Account: 100.0085
+
+
+Buying: 0.084652
+Kelly: 1
+Amount: 0.1
+Account: 99.9915348
+
+
+Selling: 0.085049
+Kelly: 1
+Amount: 0.1
+Account: 100.0085049
+
+
+Buying: 0.08463
+Kelly: 1
+Amount: 0.1
+Account: 99.991537
+
+
+Selling: 0.0848
+Kelly: 1
+Amount: 0.1
+Account: 100.00848
+
+
+Buying: 0.08498
+Kelly: 1
+Amount: 0.1
+Account: 99.991502
+
+
+Selling: 0.08521
+Kelly: 1
+Amount: 0.1
+Account: 100.008521
+
+
+Buying: 0.085026
+Kelly: 1
+Amount: 0.1
+Account: 99.9914974
+
+
+Selling: 0.082755
+Kelly: 1
+Amount: 0.1
+Account: 100.0082755
+
+
+Buying: 0.082399
+Kelly: 1
+Amount: 0.1
+Account: 99.9917601
+
+
+Selling: 0.082283
+Kelly: 1
+Amount: 0.1
+Account: 100.0082283
+
+
+Buying: 0.082302
+Kelly: 1
+Amount: 0.1
+Account: 99.9917698
+
+
+Selling: 0.082603
+Kelly: 1
+Amount: 0.1
+Account: 100.0082603
+
+
+Buying: 0.082223
+Kelly: 1
+Amount: 0.1
+Account: 99.9917777
+
+
+Selling: 0.082358
+Kelly: 1
+Amount: 0.1
+Account: 100.0082358
+
+
+Buying: 0.082031
+Kelly: 1
+Amount: 0.1
+Account: 99.9917969
+
+
+Selling: 0.082326
+Kelly: 1
+Amount: 0.1
+Account: 100.0082326
+
+
+Buying: 0.082295
+Kelly: 1
+Amount: 0.1
+Account: 99.9917705
+
+
+Selling: 0.082091
+Kelly: 1
+Amount: 0.1
+Account: 100.0082091
+
+
+Buying: 0.082301
+Kelly: 1
+Amount: 0.1
+Account: 99.9917699
+
+
+Selling: 0.081269
+Kelly: 1
+Amount: 0.1
+Account: 100.0081269
+
+
+Buying: 0.08099
+Kelly: 1
+Amount: 0.1
+Account: 99.991901
+
+
+Selling: 0.08078
+Kelly: 1
+Amount: 0.1
+Account: 100.008078
+
+
+Buying: 0.081684
+Kelly: 1
+Amount: 0.1
+Account: 99.9918316
+
+
+Selling: 0.081969
+Kelly: 1
+Amount: 0.1
+Account: 100.0081969
+
+
+Buying: 0.082516
+Kelly: 1
+Amount: 0.1
+Account: 99.9917484
+
+
+Selling: 0.08286
+Kelly: 1
+Amount: 0.1
+Account: 100.008286
+
+
+Buying: 0.082787
+Kelly: 1
+Amount: 0.1
+Account: 99.9917213
+
+
+Selling: 0.082047
+Kelly: 1
+Amount: 0.1
+Account: 100.0082047
+
+
+Buying: 0.081691
+Kelly: 1
+Amount: 0.1
+Account: 99.9918309
+
+
+Selling: 0.082034
+Kelly: 1
+Amount: 0.1
+Account: 100.0082034
+
+
+Buying: 0.082405
+Kelly: 1
+Amount: 0.1
+Account: 99.9917595
+
+
+Selling: 0.082859
+Kelly: 1
+Amount: 0.1
+Account: 100.0082859
+
+
+Buying: 0.082486
+Kelly: 1
+Amount: 0.1
+Account: 99.9917514
+
+
+Selling: 0.082672
+Kelly: 1
+Amount: 0.1
+Account: 100.0082672
+
+
+Buying: 0.082556
+Kelly: 1
+Amount: 0.1
+Account: 99.9917444
+
+
+Selling: 0.082737
+Kelly: 1
+Amount: 0.1
+Account: 100.0082737
+
+
+Buying: 0.08237
+Kelly: 1
+Amount: 0.1
+Account: 99.991763
+
+
+Selling: 0.082557
+Kelly: 1
+Amount: 0.1
+Account: 100.0082557
+
+
+Buying: 0.082313
+Kelly: 1
+Amount: 0.1
+Account: 99.9917687
+
+
+Selling: 0.082481
+Kelly: 1
+Amount: 0.1
+Account: 100.0082481
+
+
+Buying: 0.082561
+Kelly: 3.35106843153
+Amount: 2.8882261852e+29
+Account: -2.38454842077e+28
+
+
+Selling: 0.081896
+Kelly: 3.35106843153
+Amount: 1.22187254688e+105
+Account: 1.000664741e+104
+
+
+Buying: 0.081565
+Kelly: 1.0
+Amount: 1.22187254688e+105
+Account: -9.96620342865e+103
+
+
+Selling: 0.081342
+Kelly: 1.0
+Amount: 1.22187254688e+105
+Account: 9.93895567086e+103
+
+
+Buying: 0.081061
+Kelly: 1.0
+Amount: 1.22187254688e+105
+Account: -9.90462105229e+103
+
+
+Selling: 0.08084
+Kelly: 1.0
+Amount: 1.22187254688e+105
+Account: 9.87761766901e+103
+
+
+Buying: 0.080794
+Kelly: 2.0
+Amount: 1.03945420582e+143
+Account: -8.39816631053e+141
+
+
+Selling: 0.079733
+Kelly: 2.0
+Amount: 2.46498455877e+223
+Account: 1.96540613825e+222
+
+
+Buying: 0.079748
+Kelly: 1.0
+Amount: 2.46498455877e+223
+Account: -1.96577588593e+222
+
+
+Selling: 0.07892
+Kelly: 1.0
+Amount: 2.46498455877e+223
+Account: 1.94536581378e+222
+
+
+Buying: 0.078608
+Kelly: 1.0
+Amount: 2.46498455877e+223
+Account: -1.93767506196e+222
+
+
+Selling: 0.07861
+Kelly: 1.0
+Amount: 2.46498455877e+223
+Account: 1.93772436165e+222
+
+
+Buying: 0.07857
+Kelly: 1.0
+Amount: 2.46498455877e+223
+Account: -1.93673836783e+222
+
+
+Selling: 0.078736
+Kelly: 1.0
+Amount: 2.46498455877e+223
+Account: 1.94083024219e+222
+
+
+Buying: 0.079164
+Kelly: 1.0
+Amount: 2.46498455877e+223
+Account: -1.95138037611e+222
+
+
+Selling: 0.078506
+Kelly: 1.0
+Amount: 2.46498455877e+223
+Account: 1.93516077771e+222
+
+
+Buying: 0.078352
+Kelly: 1.0
+Amount: 2.46498455877e+223
+Account: -1.93136470149e+222
+
+
+Selling: 0.078578
+Kelly: 1.0
+Amount: 2.46498455877e+223
+Account: 1.93693556659e+222
+
+
+Buying: 0.078859
+Kelly: 1.0
+Amount: 2.46498455877e+223
+Account: -1.9438621732e+222
+
+
+Selling: 0.07926
+Kelly: 1.0
+Amount: 2.46498455877e+223
+Account: 1.95374676128e+222
+
+
+Buying: 0.07907
+Kelly: 1.0
+Amount: 2.46498455877e+223
+Account: -1.94906329062e+222
+
+
+Selling: 0.079184
+Kelly: 1.0
+Amount: 2.46498455877e+223
+Account: 1.95187337302e+222
+
+
+Buying: 0.078905
+Kelly: 1.0
+Amount: 2.46498455877e+223
+Account: -1.9449960661e+222
+
+
+Selling: 0.07873
+Kelly: 1.0
+Amount: 2.46498455877e+223
+Account: 1.94068234312e+222
+
+
+Buying: 0.078534
+Kelly: 1.0
+Amount: 2.46498455877e+223
+Account: -1.93585097339e+222
+
+
+Selling: 0.078711
+Kelly: 1.0
+Amount: 2.46498455877e+223
+Account: 1.94021399605e+222
+
+
+Buying: 0.078728
+Kelly: 3.44264161685
+Amount: 9.87751341858e+253
+Account: -7.77636876418e+252
+
+
+Selling: 0.078993
+Kelly: 3.44264161685
+Amount: 1.30006916034e+292
+Account: 1.02696363183e+291
+
+
+Buying: 0.078886
+Kelly: 1.0
+Amount: 1.30006916034e+292
+Account: -1.02557255783e+291

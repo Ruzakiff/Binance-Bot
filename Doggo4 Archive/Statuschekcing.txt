@@ -1,0 +1,544 @@
+Last login: Fri Mar 23 22:15:15 on ttys000
+MacBook-Pro:~ ryan$ python /Users/ryan/Desktop/Doggo4/asdf.py 
+Datapoints: 149
+Connecting...
+Connected
+Email sent!
+Not Ready. We Need  19  More Data Points
+Not Ready. We Need  18  More Data Points
+Not Ready. We Need  17  More Data Points
+Not Ready. We Need  16  More Data Points
+Not Ready. We Need  15  More Data Points
+Not Ready. We Need  14  More Data Points
+Not Ready. We Need  13  More Data Points
+Not Ready. We Need  12  More Data Points
+Not Ready. We Need  11  More Data Points
+Not Ready. We Need  10  More Data Points
+Not Ready. We Need  9  More Data Points
+Not Ready. We Need  8  More Data Points
+Not Ready. We Need  7  More Data Points
+Not Ready. We Need  6  More Data Points
+Not Ready. We Need  5  More Data Points
+Not Ready. We Need  4  More Data Points
+Not Ready. We Need  3  More Data Points
+Not Ready. We Need  2  More Data Points
+Not Ready. We Need  1  More Data Points
+Info Updated: Fri, 23 March 2018 10:15:44
+RSI: 47.7251462782
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 10:15:59
+RSI: 41.3381026444
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 10:17:00
+RSI: 39.7515639574
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 10:18:00
+RSI: 35.1508709815
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 10:19:00
+RSI: 33.7487355417
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 10:20:01
+RSI: 35.5696333536
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 10:21:01
+RSI: 35.5696333536
+Kelly: 1.0
+
+
+
+Buy Quote
+23.0
+
+RSI:29.17204753848128
+Price:0.00034003
+Kelly:1.0
+Amount Bought (Base):0.01851232
+Account Balance (Quote):30.922
+Account Balance (Base):0.01851232
+
+
+
+Email sent!
+Info Updated: Fri, 23 March 2018 10:22:04
+RSI: 29.1720475385
+Kelly: 1.0
+Info Updated: Fri, 23 March 2018 10:23:02
+RSI: 36.5976495024
+Kelly: 1.0
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+{"orderId": 13520480, "clientOrderId": "BHxZ6cg7ZxGYGTTFAIF6R2", "origQty": "23.00000000", "icebergQty": "0.00000000", "symbol": "ADAETH", "side": "BUY", "timeInForce": "GTC", "status": "FILLED", "stopPrice": "0.00000000", "time": 1521858122838, "isWorking": true, "type": "MARKET", "price": "0.00000000", "executedQty": "23.00000000"}
+F
+Checking Status
+^CTraceback (most recent call last):
+  File "/Users/ryan/Desktop/Doggo4/asdf.py", line 346, in <module>
+    orderId=int(tradeID[len(tradeID)-1]))
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/binance/client.py", line 1208, in get_order
+    return self._get('order', True, data=params)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/binance/client.py", line 197, in _get
+    return self._request_api('get', path, signed, version, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/binance/client.py", line 171, in _request_api
+    return self._request(method, uri, signed, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/binance/client.py", line 165, in _request
+    response = getattr(self.session, method)(uri, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/requests/sessions.py", line 521, in get
+    return self.request('GET', url, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/requests/sessions.py", line 508, in request
+    resp = self.send(prep, **send_kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/requests/sessions.py", line 618, in send
+    r = adapter.send(request, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/requests/adapters.py", line 440, in send
+    timeout=timeout
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/urllib3/connectionpool.py", line 601, in urlopen
+    chunked=chunked)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/urllib3/connectionpool.py", line 380, in _make_request
+    httplib_response = conn.getresponse(buffering=True)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/httplib.py", line 1121, in getresponse
+    response.begin()
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/httplib.py", line 438, in begin
+    version, status, reason = self._read_status()
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/httplib.py", line 394, in _read_status
+    line = self.fp.readline(_MAXLINE + 1)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/socket.py", line 480, in readline
+    data = self._sock.recv(self._rbufsize)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/urllib3/contrib/pyopenssl.py", line 270, in recv
+    rd = util.wait_for_read(self.socket, self.socket.gettimeout())
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/urllib3/util/wait.py", line 33, in wait_for_read
+    return _wait_for_io_events(socks, EVENT_READ, timeout)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/urllib3/util/wait.py", line 26, in _wait_for_io_events
+    selector.select(timeout) if key[1] & events]
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/urllib3/util/selectors.py", line 513, in select
+    None, max_events, timeout)
+  File "/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/urllib3/util/selectors.py", line 94, in _syscall_wrapper
+    result = func(*args, **kwargs)
+KeyboardInterrupt
+MacBook-Pro:~ ryan$ 
