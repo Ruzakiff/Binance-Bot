@@ -422,7 +422,7 @@ while run:
    	 			"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
    	 			"\nBuy Price:"+str(buyPrice[len(buyPrice)-1]) + \
      			"\nLower Limit:"+str(lowerStop) + \
-     			"\nAmount Sold (Base):"+str(amountQuote) + \
+     			"\nAmount Sold (Quote):"+str(amountQuote) + \
      			"\nAccount Balance (Quote):"+str(accountBalanceQuote) + \
      			"\nAccount Balance (Base):"+str(accountBalanceBase)
 				print msg
@@ -504,7 +504,7 @@ while run:
 				msg="\nRSI:"+str(rsi[len(rsi)-1]) + \
    	 			"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
      			"\nKelly:"+str(kellyCoeff) + \
-     			"\nAmount Sold (Base):"+str(amountQuote) + \
+     			"\nAmount Sold (Quote):"+str(amountQuote) + \
      			"\nAccount Balance (Quote):"+str(accountBalanceQuote) + \
      			"\nAccount Balance (Base):"+str(accountBalanceBase)
 				# print "RSI:",rsi[len(rsi)-1]
