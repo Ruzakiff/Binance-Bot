@@ -22,7 +22,6 @@ avgLossRSI=0
 rsi=np.array([])
 
 
-
 #files
 klineRead="/Users/ryan/Desktop/Doggo4/klines"
 tickerRead="/Users/ryan/Desktop/Doggo4/ticker"
@@ -32,12 +31,12 @@ send_list=['crstradingbot@gmail.com','ryanchenyang@gmail.com','maxpol191999@gmai
 #currency settings
 pair='ADAETH'
 base="ETH"
-
 quote="ADA"
 
+#Time seconds
+actionPeriod=15
+lengthTime=1000
 
-
-actionPeriod=15 #seconds
 
 quoteBase_close=np.array([])
 quoteBase_high=np.array([])
@@ -115,9 +114,23 @@ def rsiListen():
 	#if not stoploss
 	#check marketdireciton
 	#checkShout buy/sell
-
-
-
+client=login()
+tickerData=open(tickerRead+".txt","r")
+klineData=open(klineRead+".txt","r")
+while 1:
+	whereTick=tickerData.tell()
+	lineTick=tickerData.readline()
+	if not lineTick:
+		tickerData.seek(whereTick)
+	else:
+		quoteBase_close=np.append(quoteBase_close,float(lineTick[]))
+	whereKline=klineData.tell()
+	lineKline=klineData.readline()
+	if not lineTick:
+		klineData.seek(whereKline)
+	else:
+		quoteBase_high=np.append(quoteBase_high,float(lineKline[32:42]))
+		quoteBase_low=np.append(quoteBase_low,float(lineKline[46:56]))
 
 
 
