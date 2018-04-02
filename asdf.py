@@ -43,11 +43,15 @@ quoteBase_high=np.array([])
 quoteBase_low=np.array([])
 
 rsiValue=np.array([])
+atrValue=np.array([])
+marketTypeValue=np.array([])
 #other indicators as well
 #include bull/bear
 #stoploss
 
 rsiShout=np.array([])
+atrShout=np.array([])
+marketTypeShout=np.array([])
 #other indicators
 #for buying selling determine
 #bull/bear
@@ -59,6 +63,9 @@ kellyLength=60
 maxPercent=0.3
 minPercent=0.1
 minAmount=1
+
+
+amount=0
 
 
 #defining functions
@@ -93,27 +100,41 @@ def sendNotification(subject,mesg):
 		print 'Email sent!'
 	except:
 		print 'Email Send Failure'
-def Buy(amount):
+def Buy():
+	global amount
+	#kelly update
 	order = client.order_market_buy(
 		symbol=pair,
 		quantity=amount,
 		recvWindow=5000)
+
 	return order
 
-def Sell(amount):
+def Sell():
+	global amount
+	#if we have content to sell (not first sell/buy) then sell logic
 	order = client.order_market_sell(
 		symbol=pair,
 		quantity=amount,
 		recvWindow=5000)
+	#kelly logic
 	return order
 def rsiUpdate():
+	
 	print "asdf"
 def rsiListen():
-
 	#update values
 	#if not stoploss
 	#check marketdireciton
 	#checkShout buy/sell
+def atrUpdate():
+
+def atrListen():
+	
+def marketTypeUpdate():
+
+def marketTypeListen():
+	
 client=login()
 tickerData=open(tickerRead+".txt","r")
 klineData=open(klineRead+".txt","r")
@@ -126,11 +147,58 @@ while 1:
 		quoteBase_close=np.append(quoteBase_close,float(lineTick[]))
 	whereKline=klineData.tell()
 	lineKline=klineData.readline()
-	if not lineTick:
+	if not lineKline:
 		klineData.seek(whereKline)
 	else:
 		quoteBase_high=np.append(quoteBase_high,float(lineKline[32:42]))
 		quoteBase_low=np.append(quoteBase_low,float(lineKline[46:56]))
+	rsiValue=np.append(rsiValue,rsiUpdate())
+	atrValue=np.append(atrValue,atrUpdate())
+	marketTypeValue=np.append(marketTypeValue,marketTypeUpdate())
+	if(len(rsiValue)>actionPeriod):
+		rsiValue=np.delete(rsiValue,0)
+	if(len(atrValue)>actionPeriod):
+		atrValue=np.delete(atrValue,0)
+	if(len(marketTypeValue)>actionPeriod):
+		marketTypeValue=np.delete(marketTypeValue,0)
+	
+	rsiShout=np.append(rsiShout,rsiListen())
+	atrShout=np.append(atrShout,atrListen())
+	marketTypeShout=np.append(marketTypeShout,marketTypeListen())
+
+	
+	#stoploss
+	if(atrShout[0]==-1):
+		Sell()
+	else:
+		#bull=1
+		#side=0
+		#bear=-1
+		if(marketTypeShout[0]==1):
+			#bull
+			if(len(quoteBase_close)%actionPeriod==0):
+				#for each indiactors we care about particular to market
+				#based off those, buy, sell or nothing
+		elif(marketTypeShout[0]==0):
+			#side
+			if(len(quoteBase_close)%actionPeriod==0):
+				if(rsiShout[0]==1):
+					Buy()
+				elif(rsiShout[0]==-1):
+					Sell()
+				#for each indiactors we care about particular to market
+				#based off those, buy, sell or nothing		
+		elif(marketTypeShout[0]==-1):
+			#bear
+			if(len(quoteBase_close)%actionPeriod==0):
+				#for each indiactors we care about particular to market
+				#based off those, buy, sell or nothing
+				
+	
+				
+	
+	
+	
 
 
 
