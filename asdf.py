@@ -11,16 +11,10 @@ import smtplib
 from decimal import *
 import math
 
-
-
-
-
-
-avgGainRSI=0
-avgLossRSI=0
-
-rsi=np.array([])
-
+#bot assumptions
+#We can buy as much we want
+#But we sell everything
+#LAST index is latest value
 
 #files
 klineRead="/Users/ryan/Desktop/Doggo4/klines"
@@ -34,8 +28,37 @@ base="ETH"
 quote="ADA"
 
 #Time seconds
-actionPeriod=15
+actionPeriod=30
 lengthTime=1000
+
+
+maxPercent=0.3
+minPercent=0.1
+minAmount=1
+
+#rsi
+rsiPeriod=14
+avgGainRSI=0
+avgLossRSI=0
+
+#atr
+atrPeriod=14
+
+quoteTransactionAmount=0
+#amountQuote
+
+#kelly
+kellyLength=60
+kellyCoeff=1
+amountBuyBase=np.array([])
+amountBuyQuote=np.array([])
+buyPrice=np.array([])
+sellPrice=np.array([])
+amountSellBase=np.array([])
+amountSellQuote=np.array([])
+difference=np.array([])
+
+
 
 
 quoteBase_close=np.array([])
@@ -59,18 +82,12 @@ marketTypeShout=np.array([])
 
 #price/portion sizing
 #kelly
-kellyLength=60
-maxPercent=0.3
-minPercent=0.1
-minAmount=1
 
-
-amount=0
 
 
 #defining functions
 #rsi
-#rsishout
+#rsiShout
 #kelly
 #bullbear value
 #bull bear shout
@@ -102,8 +119,19 @@ def sendNotification(subject,mesg):
 		print 'Email Send Failure'
 def Buy():
 	#truncate floor
-	global amount
-	#kelly update
+	global quoteTransactionAmount
+	global amountBuyBase
+	global amountBuyQuote
+	global buyPrice
+	global sellPrice
+	global amountSellBase
+	global amountSellQuote
+	global difference
+	buyPrice=np.append(buyPrice,quoteBase_close[len(quoteBase_close)-1])
+	quoteAmount=quoteTransactionAmount*kellyCoeff*maxPercent
+	#kellyReady?...urg
+	#rounding, truncate
+	amountBuyBase=np.append(amountBuyBase,quoteBase_close[len()])
 	order = client.order_market_buy(
 		symbol=pair,
 		quantity=amount,
@@ -113,7 +141,14 @@ def Buy():
 
 def Sell():
 	#truncate amount
-	global amount
+	global quoteTransactionAmount
+	global amountBuyBase
+	global amountBuyQuote
+	global buyPrice
+	global sellPrice
+	global amountSellBase
+	global amountSellQuote
+	global difference
 	#if we have content to sell (not first sell/buy) then sell logic
 	order = client.order_market_sell(
 		symbol=pair,
@@ -122,14 +157,49 @@ def Sell():
 	#kelly logic
 	return order
 def rsiUpdate():
-	
-	print "asdf"
+	global rsiValue
+	global avgGainRSI
+	global avgLossRSI
+	rs=0
+	change=0
+	currentGains=0
+	currentLosses=0
+	if(len(quoteBase_close)==rsiPeriod):
+		tempGain=0
+		tempLoss=0
+		for x in range(0, rsiPeriod-2):
+		 	change=quoteBase_close[x+1]-quoteBase_close[x]
+		 	if(change>0):
+		 		tempGain=tempGain+change
+		 	elif(change<0):
+		 		tempLoss=tempLoss+abs(change)
+		avgGainRSI=tempGain/rsiPeriod
+		avgLossRSI=tempLoss/rsiPeriod
+	 	rs = avgGainRSI/avgLossRSI
+		rsiValue=np.append(rsiValue,100-(100/(1+rs)))
+	elif(len(quoteBase_close)>rsiPeriod):
+		change=quoteBase_close[len(quoteBase_close)-1]-quoteBase_close[len(quoteBase_close)-2]
+		if(change>0):
+			currentGains=change
+			currentLosses=0
+		elif(change<0):
+			currentGains=0
+			currentLosses=abs(change)
+		else:
+			currentGains=0
+			currentLosses=0
+		avgGainRSI=((rsiPeriod-1)*avgGainRSI + currentGains)/rsiPeriod #this is setting avggain and loss that is from intialize. values persist
+		avgLossRSI=((rsiPeriod-1)*avgLossRSI + currentLosses)/rsiPeriod
+		rs = avgGainRSI/avgLossRSI
+		rsiValye=np.append(rsiValue,100-(100/(1+rs)))
 def rsiListen():
+	global rsiShout
 	if(len(rsiValue)>=actionPeriod):
 		temp=0
 		for x in range(0,len(rsiValue)):
 			temp=temp+rsiValue[x]
-		return temp/len(rsiValue)
+		rsiShout=np.append(rsiShout,temp/len(rsiValue))
+
 
 	#update values
 	#if not stoploss
@@ -163,43 +233,49 @@ while 1:
 		quoteBase_high=np.append(quoteBase_high,float(lineKline[32:42]))
 		quoteBase_low=np.append(quoteBase_low,float(lineKline[46:56]))
 
-	rsiValue=np.append(rsiValue,rsiUpdate())
-	atrValue=np.append(atrValue,atrUpdate())
-	marketTypeValue=np.append(marketTypeValue,marketTypeUpdate())
-	if(len(rsiValue)>actionPeriod):
+	rsiUpdate()
+	atrUpdate()
+	marketTypeValue()
+	#rsiValue=np.append(rsiValue,rsiUpdate())
+	#atrValue=np.append(atrValue,atrUpdate())
+	#marketTypeValue=np.append(marketTypeValue,marketTypeUpdate())
+	while(len(rsiValue)>actionPeriod):
 		rsiValue=np.delete(rsiValue,0)
-	if(len(atrValue)>actionPeriod):
+	while(len(atrValue)>actionPeriod):
 		atrValue=np.delete(atrValue,0)
-	if(len(marketTypeValue)>actionPeriod):
+	while(len(marketTypeValue)>actionPeriod):
 		marketTypeValue=np.delete(marketTypeValue,0)
+	rsiListen()
+	atrListen()
+	marketTypeListen()
 	
-	rsiShout=np.append(rsiShout,rsiListen())
-	atrShout=np.append(atrShout,atrListen())
-	marketTypeShout=np.append(marketTypeShout,marketTypeListen())
+	#rsiShout=np.append(rsiShout,rsiListen())
+#	atrShout=np.append(atrShout,atrListen())
+	#marketTypeShout=np.append(marketTypeShout,marketTypeListen())
 
 	
 	#stoploss
-	if(atrShout[0]==-1):
+	if(atrShout[len(atrShout)-1]==-1):
 		Sell()
 	else:
 		#bull=1
 		#side=0
 		#bear=-1
-		if(marketTypeShout[0]==1):
+		if(marketTypeShout[len(marketTypeShout)-1]==1):
 			#bulls
 			if(len(quoteBase_close)%actionPeriod==0):
 				#for each indiactors we care about particular to market
 				#based off those, buy, sell or nothing
-		elif(marketTypeShout[0]==0):
+		elif(marketTypeShout[len(marketTypeShout)-1]==0):
 			#side
 			if(len(quoteBase_close)%actionPeriod==0):
-				if(rsiShout[0]==1):
+				if(rsiShout[len(rsiShout)-1]==1):
 					Buy()
-				elif(rsiShout[0]==-1):
+				elif(rsiShout[len(rsiShout)-1]==-1):
 					Sell()
 				#for each indiactors we care about particular to market
 				#based off those, buy, sell or nothing		
-		elif(marketTypeShout[0]==-1):
+		elif(marketTypeShout[len(marketTypeShout)-1]==-1):
 			#bear
 			if(len(quoteBase_close)%actionPeriod==0):
 				#for each indiactors we care about particular to market
@@ -207,5 +283,3 @@ while 1:
 				
 	
 				
-	
-	
