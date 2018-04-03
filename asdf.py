@@ -101,6 +101,7 @@ def sendNotification(subject,mesg):
 	except:
 		print 'Email Send Failure'
 def Buy():
+	#truncate floor
 	global amount
 	#kelly update
 	order = client.order_market_buy(
@@ -111,6 +112,7 @@ def Buy():
 	return order
 
 def Sell():
+	#truncate amount
 	global amount
 	#if we have content to sell (not first sell/buy) then sell logic
 	order = client.order_market_sell(
@@ -123,6 +125,12 @@ def rsiUpdate():
 	
 	print "asdf"
 def rsiListen():
+	if(len(rsiValue)>=actionPeriod):
+		temp=0
+		for x in range(0,len(rsiValue)):
+			temp=temp+rsiValue[x]
+		return temp/len(rsiValue)
+
 	#update values
 	#if not stoploss
 	#check marketdireciton
@@ -130,6 +138,8 @@ def rsiListen():
 def atrUpdate():
 
 def atrListen():
+
+	return 1
 	
 def marketTypeUpdate():
 
@@ -152,6 +162,7 @@ while 1:
 	else:
 		quoteBase_high=np.append(quoteBase_high,float(lineKline[32:42]))
 		quoteBase_low=np.append(quoteBase_low,float(lineKline[46:56]))
+
 	rsiValue=np.append(rsiValue,rsiUpdate())
 	atrValue=np.append(atrValue,atrUpdate())
 	marketTypeValue=np.append(marketTypeValue,marketTypeUpdate())
@@ -175,7 +186,7 @@ while 1:
 		#side=0
 		#bear=-1
 		if(marketTypeShout[0]==1):
-			#bull
+			#bulls
 			if(len(quoteBase_close)%actionPeriod==0):
 				#for each indiactors we care about particular to market
 				#based off those, buy, sell or nothing
@@ -198,34 +209,3 @@ while 1:
 				
 	
 	
-	
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
