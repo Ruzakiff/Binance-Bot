@@ -15,6 +15,7 @@ import math
 #We can buy as much we want
 #But we sell everything
 #LAST index is latest value
+#everything is done in base, unless for binanace api
 
 #files
 klineRead="/Users/ryan/Desktop/Doggo4/klines"
@@ -57,7 +58,10 @@ sellPrice=np.array([])
 amountSellBase=np.array([])
 amountSellQuote=np.array([])
 difference=np.array([])
+kellyReady=False
 
+accountBalanceBase=0
+accountBalanceQuote=0
 
 
 
@@ -119,7 +123,6 @@ def sendNotification(subject,mesg):
 		print 'Email Send Failure'
 def Buy():
 	#truncate floor
-	global quoteTransactionAmount
 	global amountBuyBase
 	global amountBuyQuote
 	global buyPrice
@@ -128,20 +131,27 @@ def Buy():
 	global amountSellQuote
 	global difference
 	buyPrice=np.append(buyPrice,quoteBase_close[len(quoteBase_close)-1])
-	quoteAmount=quoteTransactionAmount*kellyCoeff*maxPercent
+	if(kellyReady):
+		amountBuyBase=np.append(amountBuyQuote,accountBalanceBase*kellyCoeff*maxPercent)
+	else:
+		amountBuyBase=np.append(amountBuyQuote,accountBalanceBase*minPercent)
+	#quote*price=base
+	#fix rounding truncate
+	temp=amountBuyBase[len(amountBuyBase)-1]/buyPrice[len(buyPrice)-1]
+	amountBuyQuote=np.append(amountBuyBase,math.floor(temp))
 	#kellyReady?...urg
 	#rounding, truncate
-	amountBuyBase=np.append(amountBuyBase,quoteBase_close[len()])
 	order = client.order_market_buy(
 		symbol=pair,
-		quantity=amount,
+		quantity=amountBuyQuote[len(amountBuyQuote)-1],
 		recvWindow=5000)
 
 	return order
 
 def Sell():
 	#truncate amount
-	global quoteTransactionAmount
+	global kellyReady
+	global kellyCoeff
 	global amountBuyBase
 	global amountBuyQuote
 	global buyPrice
@@ -149,12 +159,52 @@ def Sell():
 	global amountSellBase
 	global amountSellQuote
 	global difference
+	kellyReady=False
+	sellPrice=np.append(sellPrice,quoteBase_close[len(quoteBase_close)])
+	for x in range(0,len(amountBuyQuote)):
+		amountSellQuote=np.append(amountSellQuote,amountBuyQuote[x])
+		amountSellBase=np.append(amountSellBase,amountSellQuote[x]*sellPrice[len(sellPrice)-1])
+		difference=np.append(difference,amountSellBase[x]-amountBuyBase[x])
+
+	while(len(difference)>kellyLength):
+		difference=np.delete(difference,0)
+	if(len(difference)==kellyLength):
+		try:
+			gains=0.0
+			losses=0.0
+			gainCount=0.0
+			lossCount=0.0
+			for x in range(0,len(difference)):
+				if(difference[x]>0):
+					gains=gains+difference[x]
+					gainCount=gainCount+1
+				if(difference[x]<0):
+					losses=losses+abs(difference[x])
+					lossCount=lossCount+1
+			avgGainKelly=gains/gainCount
+			avgLossKelly=losses/lossCount
+			w=gainCount/len(difference)
+			r=avgGainKelly/avgLossKelly
+			kellyCoeff=w-((1-w)/r)
+			kellyReady=True
+		except:
+			sendNotification("Stopped","Error\nBot Stopped:Kelly Divide By 0")
+			sys.exit("Divide By 0")
+	else:
+		kellyReady=False
+	amountSell=0
+	for x in range(0,len(amountSellQuote)):
+		amountSell=amountSell+amountSellQuote[x]
 	#if we have content to sell (not first sell/buy) then sell logic
 	order = client.order_market_sell(
 		symbol=pair,
-		quantity=amount,
+		quantity=amountSell,
 		recvWindow=5000)
-	#kelly logic
+	#wipe
+	amountSellQuote=np.array([])
+	amountSellBase=np.array([])
+	amountBuyQuote=np.array([])
+	amountBuyBase=np.array([])
 	return order
 def rsiUpdate():
 	global rsiValue
