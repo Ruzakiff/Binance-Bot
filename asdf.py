@@ -277,6 +277,31 @@ def rsiListen():
 	#check marketdireciton
 	#checkShout buy/sell
 def atrUpdate():
+	global atrValue
+	tr=0
+	if(len(quoteBase_open)==atrPeriod and len(quoteBase_high)==atrPeriod and len(quoteBase_low)==atrPeriod):
+	   temp=0
+	   tr=0
+	   for x in range(0,atrPeriod):
+	   	tr=0
+	   	if(quoteBase_high[x]-quoteBase_low[x]>tr):
+	   		tr=quoteBase_high[x]-quoteBase_low[x]
+	   	elif(math.abs(quoteBase_high[x]-quoteBase_open[x)>tr):
+	   		tr=math.abs(quoteBase_high[x]-quoteBase_open[x])
+		elif(math.abs(quoteBase_low[x]-quoteBase_open[x])>tr):
+	   		tr=math.abs(quoteBase_low[x]-quoteBase_open[x]
+		temp=temp+tr
+	    atrValue=np.append(atrValue,temp/atrPeriod)
+	elif(len(quoteBase_open>atrPeriod and len(quoteBase_high>atrPeriod and len(quoteBase_low)>atrPeriod):
+		tr=0
+	   	if(quoteBase_high[x]-quoteBase_low[x]>tr):
+	   		tr=quoteBase_high[x]-quoteBase_low[x]
+	   	elif(math.abs(quoteBase_high[x]-quoteBase_open[x)>tr):
+	   		tr=math.abs(quoteBase_high[x]-quoteBase_open[x])
+		elif(math.abs(quoteBase_low[x]-quoteBase_open[x])>tr):
+	   		tr=math.abs(quoteBase_low[x]-quoteBase_open[x]
+		atrValue=np.append(atrValue,((atrValue[len(atrValue)-2]*atrPeriod-1)+tr)/atrPeriod)
+				    	
 	#open high low
 	#high-low abs
 	#high-open abs
