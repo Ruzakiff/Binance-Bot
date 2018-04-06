@@ -44,7 +44,7 @@ close100=np.array([])
 close50=np.array([])
 
 #bollinger
-closeBoll=np.array([])
+bollLength=60000
 highBoll=np.array([])
 midBoll=np.array([])
 lowBoll=np.array([])
@@ -282,21 +282,21 @@ def atrListen():
 	return 1
 
 def bollUpdate():
-	global closeBoll
 	global lowBoll
 	global midBoll
 	global highBoll
-	if(len(closeBoll)==60000):
-		std=np.std(closeBoll)
-		avg=talib.SMA(closeBoll,timeperiod=len(closeBoll))
+	if(len(quoteBase_close)==bollLength):
+		std=np.std(quoteBase_close)
+		avg=talib.SMA(quoteBase_close,timeperiod=len(quoteBase_close))
+		avg=avg[len(avg)-1]
 		highBoll=np.append(highBoll,avg+(2*std))
 		lowBoll=np.append(lowBoll,avg-(2*std))
 		midBoll=np.append(midBoll,avg)
 def bollListen():
-	if(len(lowBoll)and len(midBoll) and len(highBoll)>=1):
+	if(len(lowBoll)>=1 and len(midBoll)>=1 and len(highBoll)>=1):
 		if(quoteBase_close[len(quoteBase_close)-1]<lowBoll[len(lowBoll)-1]):
 			bollShout=np.append(bollShout,1)
-		elif(quoteBase_close[len(quoteBase_close)-1]>highBoll[len])
+		elif(quoteBase_close[len(quoteBase_close)-1]>highBoll[len(highBoll)-1])
 			bollShout=np.append(bollShout,-1)
 		else:
 			bollShout=np.append(bollShout,0)
@@ -315,7 +315,9 @@ def marketTypeUpdate():
 		close150=np.append(close150,temp[len(temp)-1])
 
 def marketTypeListen():
-	if(len(close50)andlen(close100)and len(close150)>=1):
+	global marketTypeShout
+	
+	if(len(close50)>=1 and len(close100)>=1 and len(close150)>=1):
 		if(close150[len(close150)-1]>close50[len(close50)-1]):
 			marketTypeShout=np.append(marketTypeShout,-1)
 		elif(quoteBase_close[len(quoteBase_close)-1]<close150[len(close150)-1]):
@@ -345,11 +347,8 @@ while 1:
 		tickerData.seek(whereTick)
 	else:
 		quoteBase_close=np.append(quoteBase_close,float(lineTick[31:40]))
-		closeBoll=np.append(closeBoll,float(lineTick[31:40]))
-		while(len(quoteBase_close)>actionPeriod):
+		while(len(quoteBase_close)>bollLength):
 			quoteBase_close=np.delete(quoteBase_close,0)
-		while(len(closeBoll)>60000):
-			closeBoll=np.delete(closeBoll,0)
 	whereKline=klineData.tell()
 	lineKline=klineData.readline()
 	if not lineKline:
