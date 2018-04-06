@@ -38,6 +38,7 @@ minPercent=0.1
 minAmount=1
 
 #sma
+#day
 close200=np.array([])
 close150=np.array([])
 close100=np.array([])
@@ -276,6 +277,18 @@ def rsiListen():
 	#check marketdireciton
 	#checkShout buy/sell
 def atrUpdate():
+	#open high low
+	#high-low abs
+	#high-open abs
+	#low-open abs
+	#choose biggest range
+	#tr=biggest
+	#14 periods(minutes)
+	#first atr=avg 14 tr's
+	#next atr's
+	#previous atr*13+currentTR
+	#divide 14
+	#guccigang
 
 def atrListen():
 
