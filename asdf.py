@@ -49,15 +49,20 @@ bollLength=60000
 highBoll=np.array([])
 midBoll=np.array([])
 lowBoll=np.array([])
+bollShout=np.array([])
 
 
 #rsi
 rsiPeriod=14
+rsiValue=np.array([])
+rsiShout=np.array([])
 avgGainRSI=0
 avgLossRSI=0
 
 #atr
 atrPeriod=14
+atrValue=np.array([])
+atrShout=np.array([])
 
 quoteTransactionAmount=0
 #amountQuote
@@ -83,24 +88,18 @@ quoteBase_close=np.array([])
 quoteBase_high=np.array([])
 quoteBase_low=np.array([])
 
-rsiValue=np.array([])
-atrValue=np.array([])
 marketTypeValue=np.array([])
-#other indicators as well
-#include bull/bear
-#stoploss
-
-rsiShout=np.array([])
-atrShout=np.array([])
-bollShout=np.array([])
 marketTypeShout=np.array([])
+
+
+
+
+
 #other indicators
 #for buying selling determine
 #bull/bear
 
 
-#price/portion sizing
-#kelly
 
 
 
@@ -286,19 +285,19 @@ def atrUpdate():
 	   	tr=0
 	   	if(quoteBase_high[x]-quoteBase_low[x]>tr):
 	   		tr=quoteBase_high[x]-quoteBase_low[x]
-	   	elif(math.abs(quoteBase_high[x]-quoteBase_open[x)>tr):
+	   	if(math.abs(quoteBase_high[x]-quoteBase_open[x)>tr):
 	   		tr=math.abs(quoteBase_high[x]-quoteBase_open[x])
-		elif(math.abs(quoteBase_low[x]-quoteBase_open[x])>tr):
+		if(math.abs(quoteBase_low[x]-quoteBase_open[x])>tr):
 	   		tr=math.abs(quoteBase_low[x]-quoteBase_open[x]
 		temp=temp+tr
-	    atrValue=np.append(atrValue,temp/atrPeriod)
-	elif(len(quoteBase_open>atrPeriod and len(quoteBase_high>atrPeriod and len(quoteBase_low)>atrPeriod):
+	   atrValue=np.append(atrValue,temp/atrPeriod)
+	elif(len(quoteBase_open)>atrPeriod and len(quoteBase_high)>atrPeriod and len(quoteBase_low)>atrPeriod):
 		tr=0
 	   	if(quoteBase_high[x]-quoteBase_low[x]>tr):
 	   		tr=quoteBase_high[x]-quoteBase_low[x]
-	   	elif(math.abs(quoteBase_high[x]-quoteBase_open[x)>tr):
+	   	if(math.abs(quoteBase_high[x]-quoteBase_open[x)>tr):
 	   		tr=math.abs(quoteBase_high[x]-quoteBase_open[x])
-		elif(math.abs(quoteBase_low[x]-quoteBase_open[x])>tr):
+		if(math.abs(quoteBase_low[x]-quoteBase_open[x])>tr):
 	   		tr=math.abs(quoteBase_low[x]-quoteBase_open[x]
 		atrValue=np.append(atrValue,((atrValue[len(atrValue)-2]*atrPeriod-1)+tr)/atrPeriod)
 				    	
