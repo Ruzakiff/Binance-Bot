@@ -37,6 +37,19 @@ maxPercent=0.3
 minPercent=0.1
 minAmount=1
 
+#sma
+close200=np.array([])
+close150=np.array([])
+close100=np.array([])
+close50=np.array([])
+
+#bollinger
+closeBoll=np.array([])
+highBoll=np.array([])
+midBoll=np.array([])
+lowBoll=np.array([])
+
+
 #rsi
 rsiPeriod=14
 avgGainRSI=0
@@ -78,6 +91,7 @@ marketTypeValue=np.array([])
 
 rsiShout=np.array([])
 atrShout=np.array([])
+bollShout=np.array([])
 marketTypeShout=np.array([])
 #other indicators
 #for buying selling determine
@@ -248,7 +262,13 @@ def rsiListen():
 		temp=0
 		for x in range(0,len(rsiValue)):
 			temp=temp+rsiValue[x]
-		rsiShout=np.append(rsiShout,temp/len(rsiValue))
+		avgRsi=temp/len(rsiValue)
+		if(avgRsi<30):
+			rsiShout=np.append(rsiShout,1)
+		elif(avgRsi>70):
+			rsiShout=np.append(rsiShout,-1)
+		else:
+			rsiShout=np.append(rsiShout,0)
 
 
 	#update values
@@ -260,10 +280,60 @@ def atrUpdate():
 def atrListen():
 
 	return 1
+
+def bollUpdate():
+	global closeBoll
+	global lowBoll
+	global midBoll
+	global highBoll
+	if(len(closeBoll)==60000):
+		std=np.std(closeBoll)
+		avg=talib.SMA(closeBoll,timeperiod=len(closeBoll))
+		highBoll=np.append(highBoll,avg+(2*std))
+		lowBoll=np.append(lowBoll,avg-(2*std))
+		midBoll=np.append(midBoll,avg)
+def bollListen():
+	if(len(lowBoll)and len(midBoll) and len(highBoll)>=1):
+		if(quoteBase_close[len(quoteBase_close)-1]<lowBoll[len(lowBoll)-1]):
+			bollShout=np.append(bollShout,1)
+		elif(quoteBase_close[len(quoteBase_close)-1]>highBoll[len])
+			bollShout=np.append(bollShout,-1)
+		else:
+			bollShout=np.append(bollShout,0)
 	
 def marketTypeUpdate():
+	global close200
+	global close150
+	global close100
+	global close50
+	if(len(close200)==200):
+		temp=talib.SMA(close200,199-50,timeperiod=50)
+		close50=np.append(close50,temp[len(temp)-1])
+		temp=talib.SMA(close200,199-100,timeperiod=100)
+		close100=np.append(close100,temp[len(temp)-1])
+		temp=talib.SMA(close200,199-150,timeperiod=150)
+		close150=np.append(close150,temp[len(temp)-1])
 
 def marketTypeListen():
+	if(len(close50)andlen(close100)and len(close150)>=1):
+		if(close150[len(close150)-1]>close50[len(close50)-1]):
+			marketTypeShout=np.append(marketTypeShout,-1)
+		elif(quoteBase_close[len(quoteBase_close)-1]<close150[len(close150)-1]):
+			marketTypeShout=np.append(marketTypeShout,-1)
+		elif(quoteBase_close[len(quoteBase_close)-1]<close100[len(close100)-1]):
+			if(close100[len(close100)-1]<close100[0]):
+				marketTypeShout=np.append(marketTypeShout,-1)
+			else:
+				marketTypeShout=np.append(marketTypeShout,0)
+		elif(quoteBase_close[len(quoteBase_close)-1]<close50[len(close50)-1]):
+			if(close100[len(close100)-1]<close100[0]):
+				marketTypeShout=np.append(marketTypeShout,0)
+			else:
+				marketTypeShout=np.append(marketTypeShout,1)
+		else:
+			marketTypeShout=np.append(marketTypeShout,1)
+
+
 	
 client=login()
 tickerData=open(tickerRead+".txt","r")
@@ -274,7 +344,12 @@ while 1:
 	if not lineTick:
 		tickerData.seek(whereTick)
 	else:
-		quoteBase_close=np.append(quoteBase_close,float(lineTick[]))
+		quoteBase_close=np.append(quoteBase_close,float(lineTick[31:40]))
+		closeBoll=np.append(closeBoll,float(lineTick[31:40]))
+		while(len(quoteBase_close)>actionPeriod):
+			quoteBase_close=np.delete(quoteBase_close,0)
+		while(len(closeBoll)>60000):
+			closeBoll=np.delete(closeBoll,0)
 	whereKline=klineData.tell()
 	lineKline=klineData.readline()
 	if not lineKline:
@@ -282,10 +357,17 @@ while 1:
 	else:
 		quoteBase_high=np.append(quoteBase_high,float(lineKline[32:42]))
 		quoteBase_low=np.append(quoteBase_low,float(lineKline[46:56]))
+		while(len(quoteBase_high)>actionPeriod):
+			quoteBase_high=np.delete(quoteBase_high,0)
+		while(len(quoteBase_low)>actionPeriod):
+			quoteBase_low=np.delete(quoteBase_low,0)
 
 	rsiUpdate()
 	atrUpdate()
+	bollUpdate()
+
 	marketTypeValue()
+	
 	#rsiValue=np.append(rsiValue,rsiUpdate())
 	#atrValue=np.append(atrValue,atrUpdate())
 	#marketTypeValue=np.append(marketTypeValue,marketTypeUpdate())
@@ -293,11 +375,25 @@ while 1:
 		rsiValue=np.delete(rsiValue,0)
 	while(len(atrValue)>actionPeriod):
 		atrValue=np.delete(atrValue,0)
-	while(len(marketTypeValue)>actionPeriod):
-		marketTypeValue=np.delete(marketTypeValue,0)
+	while(len(close150)>actionPeriod):
+		close150=np.delete(close150,0)
+	while(len(close100)>actionPeriod):
+		close100=np.delete(close100,0)
+	while(len(close50)>actionPeriod):
+		close50=np.delete(close50,0)
+	while(len(lowBoll)>actionPeriod):
+		lowBoll=np.delete(lowBoll,0)
+	while(len(midBoll)>actionPeriod):
+		midBoll=np.delete(midBoll,0)
+	while(len(highBoll)>actionPeriod):
+		highBoll=np.delete(highBoll,0)
+
 	rsiListen()
 	atrListen()
+	bollListen()
+
 	marketTypeListen()
+
 	
 	#rsiShout=np.append(rsiShout,rsiListen())
 #	atrShout=np.append(atrShout,atrListen())
@@ -314,8 +410,10 @@ while 1:
 		if(marketTypeShout[len(marketTypeShout)-1]==1):
 			#bulls
 			if(len(quoteBase_close)%actionPeriod==0):
-				#for each indiactors we care about particular to market
-				#based off those, buy, sell or nothing
+				if(bollShout[len(bollShout)-1]==1):
+					Buy()
+				elif(bollShout[len(bollShout)-1]==-1):
+					Sell()
 		elif(marketTypeShout[len(marketTypeShout)-1]==0):
 			#side
 			if(len(quoteBase_close)%actionPeriod==0):
