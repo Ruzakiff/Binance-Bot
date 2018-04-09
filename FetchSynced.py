@@ -28,7 +28,7 @@ def sendNotification(subject,mesg):
 def login():
 	print "Connecting..."
 	try:
-		client = Client("as", "fds")
+		client = Client(config.client_key, config.client_secret)
 	except:
 		sys.exit("Failed to connect") #kills entire interpreter, so if 2 scripts, both die.
 	else:
