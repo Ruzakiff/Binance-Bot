@@ -10,7 +10,9 @@ import os
 import smtplib
 from decimal import *
 import math
-
+import re
+import schedule
+from coinmarketcap import Market
 #bot assumptions
 #We can buy as much we want
 #But we sell everything
@@ -18,6 +20,8 @@ import math
 #everything is done in base, unless for binanace api
 
 #files
+quoteHist="/Users/ryan/Desktop/Doggo4/ADA Hist"
+baseHist="/Users/ryan/Desktop/Doggo4/ETH Hist"
 klineRead="/Users/ryan/Desktop/Doggo4/klines"
 tickerRead="/Users/ryan/Desktop/Doggo4/ticker"
 resultFile="/Users/ryan/Desktop/Doggo4/trades"
@@ -27,6 +31,8 @@ send_list=['crstradingbot@gmail.com','ryanchenyang@gmail.com','maxpol191999@gmai
 pair='ADAETH'
 base="ETH"
 quote="ADA"
+baseFull="Ethereum"
+quoteFull="Cardano"
 
 #Time seconds
 actionPeriod=30
@@ -39,10 +45,13 @@ minAmount=1
 
 #sma
 #day
+histQuoteClose=np.array([])
+histBaseClose=np.array([])
 close200=np.array([])
 close150=np.array([])
 close100=np.array([])
 close50=np.array([])
+
 
 #bollinger
 bollLength=60000
@@ -90,6 +99,8 @@ quoteBase_low=np.array([])
 
 marketTypeValue=np.array([])
 marketTypeShout=np.array([])
+
+
 
 
 
@@ -269,36 +280,30 @@ def rsiListen():
 			rsiShout=np.append(rsiShout,-1)
 		else:
 			rsiShout=np.append(rsiShout,0)
-
-
-	#update values
-	#if not stoploss
-	#check marketdireciton
-	#checkShout buy/sell
 def atrUpdate():
 	global atrValue
 	tr=0
 	if(len(quoteBase_open)==atrPeriod and len(quoteBase_high)==atrPeriod and len(quoteBase_low)==atrPeriod):
-	   temp=0
-	   tr=0
-	   for x in range(0,atrPeriod):
-	   	tr=0
-	   	if(quoteBase_high[x]-quoteBase_low[x]>tr):
-	   		tr=quoteBase_high[x]-quoteBase_low[x]
-	   	if(math.abs(quoteBase_high[x]-quoteBase_open[x)>tr):
-	   		tr=math.abs(quoteBase_high[x]-quoteBase_open[x])
-		if(math.abs(quoteBase_low[x]-quoteBase_open[x])>tr):
-	   		tr=math.abs(quoteBase_low[x]-quoteBase_open[x]
-		temp=temp+tr
-	   atrValue=np.append(atrValue,temp/atrPeriod)
+		temp=0
+		tr=0
+		for x in range(0,atrPeriod):
+			tr=0
+			if(quoteBase_high[x]-quoteBase_low[x]>tr):
+				tr=quoteBase_high[x]-quoteBase_low[x]
+			if(math.abs(quoteBase_high[x]-quoteBase_open[x])>tr):
+				tr=math.abs(quoteBase_high[x]-quoteBase_open[x])
+			if(math.abs(quoteBase_low[x]-quoteBase_open[x])>tr):
+				tr=math.abs(quoteBase_low[x]-quoteBase_open[x])
+			temp=temp+tr
+		atrValue=np.append(atrValue,temp/atrPeriod)
 	elif(len(quoteBase_open)>atrPeriod and len(quoteBase_high)>atrPeriod and len(quoteBase_low)>atrPeriod):
 		tr=0
-	   	if(quoteBase_high[x]-quoteBase_low[x]>tr):
-	   		tr=quoteBase_high[x]-quoteBase_low[x]
-	   	if(math.abs(quoteBase_high[x]-quoteBase_open[x)>tr):
-	   		tr=math.abs(quoteBase_high[x]-quoteBase_open[x])
+		if(quoteBase_high[x]-quoteBase_low[x]>tr):
+			tr=quoteBase_high[x]-quoteBase_low[x]
+		if(math.abs(quoteBase_high[x]-quoteBase_open[x])>tr):
+			tr=math.abs(quoteBase_high[x]-quoteBase_open[x])
 		if(math.abs(quoteBase_low[x]-quoteBase_open[x])>tr):
-	   		tr=math.abs(quoteBase_low[x]-quoteBase_open[x]
+			tr=math.abs(quoteBase_low[x]-quoteBase_open[x])
 		atrValue=np.append(atrValue,((atrValue[len(atrValue)-2]*atrPeriod-1)+tr)/atrPeriod)
 				    	
 	#open high low
@@ -333,7 +338,7 @@ def bollListen():
 	if(len(lowBoll)>=1 and len(midBoll)>=1 and len(highBoll)>=1):
 		if(quoteBase_close[len(quoteBase_close)-1]<lowBoll[len(lowBoll)-1]):
 			bollShout=np.append(bollShout,1)
-		elif(quoteBase_close[len(quoteBase_close)-1]>highBoll[len(highBoll)-1])
+		elif(quoteBase_close[len(quoteBase_close)-1]>highBoll[len(highBoll)-1]):
 			bollShout=np.append(bollShout,-1)
 		else:
 			bollShout=np.append(bollShout,0)
@@ -353,7 +358,6 @@ def marketTypeUpdate():
 
 def marketTypeListen():
 	global marketTypeShout
-	
 	if(len(close50)>=1 and len(close100)>=1 and len(close150)>=1):
 		if(close150[len(close150)-1]>close50[len(close50)-1]):
 			marketTypeShout=np.append(marketTypeShout,-1)
@@ -372,12 +376,53 @@ def marketTypeListen():
 		else:
 			marketTypeShout=np.append(marketTypeShout,1)
 
+def daysma():
+	global histQuoteClose
+	global histBaseClose
+	global close200
+	coinRaw=json.dumps(coinmarketcap.ticker(quoteFull))
+	histQuoteClose=np.append(histQuoteClose,float(coinRaw[50:58]))
+	coinRaw=json.dumps(coinmarketcap.ticker(baseFull))
+	histBaseClose=np.append(histBaseClose,float(coinRaw[50:58]))
+	close200=np.append(close200,histQuoteClose[len(histQuoteClose)-1]/histBaseClose[len(histBaseClose)-1])
 
-	
+
+re1='.*?'	# Non-greedy match on filler
+re2='[+-]?\\d*\\.\\d+(?![-+0-9\\.])'	# Uninteresting: float
+re3='.*?'	# Non-greedy match on filler
+re4='[+-]?\\d*\\.\\d+(?![-+0-9\\.])'	# Uninteresting: float
+re5='.*?'	# Non-greedy match on filler
+re6='[+-]?\\d*\\.\\d+(?![-+0-9\\.])'	# Uninteresting: float
+re7='.*?'	# Non-greedy match on filler
+re8='([+-]?\\d*\\.\\d+)(?![-+0-9\\.])'	# Float 1
+rg = re.compile(re1+re2+re3+re4+re5+re6+re7+re8,re.IGNORECASE|re.DOTALL)
+with open(quoteHist+".txt","r") as out:
+	temptxt=out.readlines()
+#txt='Jan 05, 2018 1.17 1.25 0.903503 0.999559 508,100,00 030,364,400,000'
+for txt in temptxt:
+	m = rg.search(txt)
+	if m:
+		float1=m.group(1)
+		histQuoteClose=np.append(histQuoteClose,float1)
+with open(baseHist+".txt","r") as out:
+	temptxt=out.readlines()
+for txt in temptxt:
+	m = rg.search(txt)
+	if m:
+		float1=m.group(1)
+		histBaseClose=np.append(histBaseClose,float1)
+
+
 client=login()
 tickerData=open(tickerRead+".txt","r")
 klineData=open(klineRead+".txt","r")
+coinmarketcap = Market()
+for x in range(0,len(histQuoteClose)):
+	close200=np.append(close200,histQuoteClose[x]/histBaseClose)
+schedule.every().day.at("11:30").do(daysma)
+
 while 1:
+	schedule.run_pending()
 	whereTick=tickerData.tell()
 	lineTick=tickerData.readline()
 	if not lineTick:
@@ -401,8 +446,7 @@ while 1:
 	rsiUpdate()
 	atrUpdate()
 	bollUpdate()
-
-	marketTypeValue()
+	marketTypeUpdate()
 	
 	#rsiValue=np.append(rsiValue,rsiUpdate())
 	#atrValue=np.append(atrValue,atrUpdate())
@@ -438,7 +482,8 @@ while 1:
 	
 	#stoploss
 	if(atrShout[len(atrShout)-1]==-1):
-		Sell()
+		print "Sell ATR"
+		#Sell()
 	else:
 		#bull=1
 		#side=0
@@ -447,21 +492,28 @@ while 1:
 			#bulls
 			if(len(quoteBase_close)%actionPeriod==0):
 				if(bollShout[len(bollShout)-1]==1):
-					Buy()
+					print "Buy Boll"
+					#Buy()
 				elif(bollShout[len(bollShout)-1]==-1):
-					Sell()
+					print"Sell Boll"
+					#Sell()
 		elif(marketTypeShout[len(marketTypeShout)-1]==0):
 			#side
 			if(len(quoteBase_close)%actionPeriod==0):
 				if(rsiShout[len(rsiShout)-1]==1):
-					Buy()
+					print "Buy RSI"
+					#Buy()
 				elif(rsiShout[len(rsiShout)-1]==-1):
-					Sell()
+					print "Sell RSI"
+					#Sell()
 				#for each indiactors we care about particular to market
 				#based off those, buy, sell or nothing		
 		elif(marketTypeShout[len(marketTypeShout)-1]==-1):
 			#bear
+			print "bear"
 			if(len(quoteBase_close)%actionPeriod==0):
+				print "d"
+
 				#for each indiactors we care about particular to market
 				#based off those, buy, sell or nothing
 				
