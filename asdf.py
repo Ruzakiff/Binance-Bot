@@ -14,6 +14,8 @@ import re
 import schedule
 from coinmarketcap import Market
 #bot assumptions
+#shout arrays are filled every second with some sort of data
+#whether its -1,0,or 1
 #We can buy as much we want
 #But we sell everything
 #LAST index is latest value
@@ -72,6 +74,15 @@ avgLossRSI=0
 atrPeriod=14
 atrValue=np.array([])
 atrShout=np.array([])
+lowerStop=0
+
+macdValue=np.array([])
+macdSignal=np.array([])
+macdHisto=np.array([])
+macdShout=np.array([])
+macdFastLength=5
+macdSlowLength=lengthTime
+macdSignalLength=15
 
 quoteTransactionAmount=0
 #amountQuote
@@ -320,8 +331,18 @@ def atrUpdate():
 	#guccigang
 
 def atrListen():
-
-	return 1
+	global atrShout
+	global lowerStop
+	#should this be with update? or listen?
+	if(len(atrValue)>0 and len(buyPrice)>0):
+		if(quoteBase_close[len(quoteBase_close)-1]>buyPrice[len(buyPrice)-1]):
+			lowerStop=quoteBase_close[len(quoteBase_close)-1]
+		else:
+			lowerStop=buyPrice[len(buyPrice)-1]-(2*atrValue[len(atrValue)-1])
+		if(quoteBase_close[len(quoteBase_close)-1]<=lowerStop):
+			atrShout=np.append(atrShout,-1)
+		else:
+			atrShout=np.append(atrShout,0)
 
 def bollUpdate():
 	global lowBoll
@@ -342,6 +363,42 @@ def bollListen():
 			bollShout=np.append(bollShout,-1)
 		else:
 			bollShout=np.append(bollShout,0)
+
+def macdUpdate():
+	global macdValue,macdShout,macdSignal,macdHisto
+	tempArray=np.array([])
+	tempFast=np.array([])
+	tempSignal=np.array([])
+	tempSlow=np.array([])
+	if(len(quoteBase_close)>=lengthTime):
+		tempArray=quoteBase_close[len(quoteBase_close)-macdFastLength:len(quoteBase_close)]
+		tempFast=talib.EMA(tempArray,timeperiod=macdFastLength)
+
+		tempArray=quoteBase_close[len(quoteBase_close)-macdSignalLength:len(quoteBase_close)]
+		tempSignal=talib.EMA(tempArray,timeperiod=macdSignalLength)
+
+		tempArray=quoteBase_close[len(quoteBase_close)-macdSlowLength:len(quoteBase_close)]
+		tempSlow=talib.EMA(tempArray,timeperiod=macdSlowLength)
+
+		emaFast=tempFast[len(tempFast)-1]
+		emaSignal=tempSignal[len(tempSignal)-1]
+		emaSlow=tempSlow[len(tempSlow)-1]
+
+		macdValue=np.append(macdValue,emaFast-emaSlow)
+		macdSignal=np.append(macdSignal,emaSignal)
+		macdHisto=np.append(macdHisto,macdValue[len(macdValue)-1]-macdSignal[len(macdSignal)-1])
+
+
+def macdListen():
+	global macdShout
+	if(macdHisto[len(macdHisto)-2]>macdValue[len(macdValue)-2]):
+		if(macdHisto[len(macdHisto)-1]<=macdValue[len(macdValue)-1]):
+			macdShout=np.append(macdShout,-1)
+	elif(macdHisto[len(macdHisto)-2]<macdValue[len(macdValue)-2]):
+		if(macdHisto[len(macdHisto)-1]>=macdValue[len(macdValue)-1]):
+			macdShout=np.append(macdShout,1)
+	else:
+		macdShout=np.append(macdShout,0)
 	
 def marketTypeUpdate():
 	global close200
@@ -512,7 +569,12 @@ while 1:
 			#bear
 			print "bear"
 			if(len(quoteBase_close)%actionPeriod==0):
-				print "d"
+				if(macdShout[len(macdShout)-1]==1 and rsiShout[len(rsiShout)-1]==1):
+					print "Buy macd"
+					#Buy()
+				elif(macdShout[len(macdShout)-1]==-1 and rsiShout[len(rsiShout)-1]==-1):
+					print "Sell macd"
+					#Sell()
 
 				#for each indiactors we care about particular to market
 				#based off those, buy, sell or nothing
