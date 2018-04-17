@@ -503,15 +503,26 @@ while 1:
 	rsiUpdate()
 	atrUpdate()
 	bollUpdate()
+	macdUpdate()
 	marketTypeUpdate()
 	
 	#rsiValue=np.append(rsiValue,rsiUpdate())
 	#atrValue=np.append(atrValue,atrUpdate())
 	#marketTypeValue=np.append(marketTypeValue,marketTypeUpdate())
+	while(len(macdValue)>lengthTime):
+		macdValue=np.delete(macdValue,0)
+	while(len(macdShout)>lengthTime):
+		macdShout=np.delete(macdShout,0)
+	while(len(macdSignal)>lengthTime):
+		macdSignal=np.delete(macdSignal,0)
+	while(len(macdHisto)>lengthTime):
+		macdHisto=np.delete(macdHisto,0)
 	while(len(rsiValue)>actionPeriod):
 		rsiValue=np.delete(rsiValue,0)
 	while(len(atrValue)>actionPeriod):
 		atrValue=np.delete(atrValue,0)
+	
+		
 	while(len(close150)>actionPeriod):
 		close150=np.delete(close150,0)
 	while(len(close100)>actionPeriod):
@@ -528,7 +539,7 @@ while 1:
 	rsiListen()
 	atrListen()
 	bollListen()
-
+	macdListen()
 	marketTypeListen()
 
 	
