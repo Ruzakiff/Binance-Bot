@@ -35,15 +35,13 @@ base="ETH"
 quote="ADA"
 baseFull="Ethereum"
 quoteFull="Cardano"
-
+precision=1 #1=0 decimals
 #Time seconds
-actionPeriod=30
-lengthTime=1000
+actionPeriod=15
+lengthTime=1209600 #14 day seconds
 
 
-maxPercent=0.3
-minPercent=0.1
-minAmount=1
+
 
 #sma
 #day
@@ -56,7 +54,7 @@ close50=np.array([])
 
 
 #bollinger
-bollLength=60000
+bollLength=60000 #cannot be greater than lengthtime!
 highBoll=np.array([])
 midBoll=np.array([])
 lowBoll=np.array([])
@@ -80,9 +78,9 @@ macdValue=np.array([])
 macdSignal=np.array([])
 macdHisto=np.array([])
 macdShout=np.array([])
-macdFastLength=5
+macdFastLength=604800 #7day seconds
 macdSlowLength=lengthTime
-macdSignalLength=15
+macdSignalLength=777600 #9day seconds
 
 quoteTransactionAmount=0
 #amountQuote
@@ -90,6 +88,9 @@ quoteTransactionAmount=0
 #kelly
 kellyLength=60
 kellyCoeff=1
+maxPercent=0.3
+minPercent=0.1
+minAmount=1
 amountBuyBase=np.array([])
 amountBuyQuote=np.array([])
 buyPrice=np.array([])
@@ -102,8 +103,6 @@ kellyReady=False
 accountBalanceBase=0
 accountBalanceQuote=0
 
-
-
 quoteBase_close=np.array([])
 quoteBase_high=np.array([])
 quoteBase_low=np.array([])
@@ -114,15 +113,9 @@ marketTypeShout=np.array([])
 
 
 
-
-
-
 #other indicators
 #for buying selling determine
 #bull/bear
-
-
-
 
 
 #defining functions
@@ -158,14 +151,18 @@ def sendNotification(subject,mesg):
 	except:
 		print 'Email Send Failure'
 def Buy():
-	#truncate floor
 	global amountBuyBase
 	global amountBuyQuote
 	global buyPrice
-	global sellPrice
 	global amountSellBase
 	global amountSellQuote
 	global difference
+	global accountBalanceBase
+	global accountBalanceQuote
+	accountStringQuote=json.dumps(client.get_asset_balance(quote))
+	accountBalanceQuote=float(accountStringQuote[12:22])+float(accountStringQuote[50:60])
+	accountStringBase=json.dumps(client.get_asset_balance(base))
+	accountBalanceBase=float(accountStringBase[12:22])+float(accountStringBase[50:60])
 	buyPrice=np.append(buyPrice,quoteBase_close[len(quoteBase_close)-1])
 	if(kellyReady):
 		amountBuyBase=np.append(amountBuyQuote,accountBalanceBase*kellyCoeff*maxPercent)
@@ -174,27 +171,34 @@ def Buy():
 	#quote*price=base
 	#fix rounding truncate
 	temp=amountBuyBase[len(amountBuyBase)-1]/buyPrice[len(buyPrice)-1]
-	amountBuyQuote=np.append(amountBuyBase,math.floor(temp))
-	#kellyReady?...urg
-	#rounding, truncate
+	temp=temp*precision
+	temp=double(math.floor(temp))/double(precision)
+	amountBuyQuote=np.append(amountBuyBase,temp)
 	order = client.order_market_buy(
 		symbol=pair,
 		quantity=amountBuyQuote[len(amountBuyQuote)-1],
 		recvWindow=5000)
-
+	accountStringQuote=json.dumps(client.get_asset_balance(quote))
+	accountBalanceQuote=float(accountStringQuote[12:22])+float(accountStringQuote[50:60])
+	accountStringBase=json.dumps(client.get_asset_balance(base))
+	accountBalanceBase=float(accountStringBase[12:22])+float(accountStringBase[50:60])
 	return order
 
 def Sell():
-	#truncate amount
 	global kellyReady
 	global kellyCoeff
 	global amountBuyBase
 	global amountBuyQuote
-	global buyPrice
 	global sellPrice
 	global amountSellBase
 	global amountSellQuote
 	global difference
+	global accountStringBase
+	global accountStringQuote
+	accountStringQuote=json.dumps(client.get_asset_balance(quote))
+	accountBalanceQuote=float(accountStringQuote[12:22])+float(accountStringQuote[50:60])
+	accountStringBase=json.dumps(client.get_asset_balance(base))
+	accountBalanceBase=float(accountStringBase[12:22])+float(accountStringBase[50:60])
 	kellyReady=False
 	sellPrice=np.append(sellPrice,quoteBase_close[len(quoteBase_close)])
 	for x in range(0,len(amountBuyQuote)):
@@ -232,15 +236,22 @@ def Sell():
 	for x in range(0,len(amountSellQuote)):
 		amountSell=amountSell+amountSellQuote[x]
 	#if we have content to sell (not first sell/buy) then sell logic
+	amountSell=amountSell*precision
+	amountSell=double(math.floor(amountSell))/double(precision)
 	order = client.order_market_sell(
 		symbol=pair,
 		quantity=amountSell,
 		recvWindow=5000)
+	accountStringQuote=json.dumps(client.get_asset_balance(quote))
+	accountBalanceQuote=float(accountStringQuote[12:22])+float(accountStringQuote[50:60])
+	accountStringBase=json.dumps(client.get_asset_balance(base))
+	accountBalanceBase=float(accountStringBase[12:22])+float(accountStringBase[50:60])
 	#wipe
 	amountSellQuote=np.array([])
 	amountSellBase=np.array([])
 	amountBuyQuote=np.array([])
 	amountBuyBase=np.array([])
+
 	return order
 def rsiUpdate():
 	global rsiValue
@@ -277,7 +288,7 @@ def rsiUpdate():
 		avgGainRSI=((rsiPeriod-1)*avgGainRSI + currentGains)/rsiPeriod #this is setting avggain and loss that is from intialize. values persist
 		avgLossRSI=((rsiPeriod-1)*avgLossRSI + currentLosses)/rsiPeriod
 		rs = avgGainRSI/avgLossRSI
-		rsiValye=np.append(rsiValue,100-(100/(1+rs)))
+		rsiValue=np.append(rsiValue,100-(100/(1+rs)))
 def rsiListen():
 	global rsiShout
 	if(len(rsiValue)>=actionPeriod):
@@ -315,7 +326,14 @@ def atrUpdate():
 			tr=math.abs(quoteBase_high[x]-quoteBase_open[x])
 		if(math.abs(quoteBase_low[x]-quoteBase_open[x])>tr):
 			tr=math.abs(quoteBase_low[x]-quoteBase_open[x])
-		atrValue=np.append(atrValue,((atrValue[len(atrValue)-2]*atrPeriod-1)+tr)/atrPeriod)
+		temp=((atrValue[len(atrValue)-1]*(atrPeriod-1))+tr)/atrPeriod #double?
+		atrValue=np.append(atrValue,temp)
+
+	if(len(atrValue)>0 and len(buyPrice)>0):
+		if(quoteBase_close[len(quoteBase_close)-1]>buyPrice[len(buyPrice)-1]):
+			lowerStop=quoteBase_close[len(quoteBase_close)-1]
+		else:
+			lowerStop=buyPrice[len(buyPrice)-1]-(2*atrValue[len(atrValue)-1])
 				    	
 	#open high low
 	#high-low abs
@@ -333,12 +351,7 @@ def atrUpdate():
 def atrListen():
 	global atrShout
 	global lowerStop
-	#should this be with update? or listen?
 	if(len(atrValue)>0 and len(buyPrice)>0):
-		if(quoteBase_close[len(quoteBase_close)-1]>buyPrice[len(buyPrice)-1]):
-			lowerStop=quoteBase_close[len(quoteBase_close)-1]
-		else:
-			lowerStop=buyPrice[len(buyPrice)-1]-(2*atrValue[len(atrValue)-1])
 		if(quoteBase_close[len(quoteBase_close)-1]<=lowerStop):
 			atrShout=np.append(atrShout,-1)
 		else:
@@ -348,9 +361,12 @@ def bollUpdate():
 	global lowBoll
 	global midBoll
 	global highBoll
-	if(len(quoteBase_close)==bollLength):
+	#>= bolllength?...
+	if(len(quoteBase_close)>=bollLength):
 		std=np.std(quoteBase_close)
-		avg=talib.SMA(quoteBase_close,timeperiod=len(quoteBase_close))
+		tempArray=np.array([])
+		tempArray=quoteBase_close[len(quoteBase_close)-bollLength:len(quoteBase_close)]
+		avg=talib.SMA(tempArray,timeperiod=bollLength)
 		avg=avg[len(avg)-1]
 		highBoll=np.append(highBoll,avg+(2*std))
 		lowBoll=np.append(lowBoll,avg-(2*std))
@@ -444,6 +460,7 @@ def daysma():
 	close200=np.append(close200,histQuoteClose[len(histQuoteClose)-1]/histBaseClose[len(histBaseClose)-1])
 
 
+#regex all the other stuff as well? not be lazy
 re1='.*?'	# Non-greedy match on filler
 re2='[+-]?\\d*\\.\\d+(?![-+0-9\\.])'	# Uninteresting: float
 re3='.*?'	# Non-greedy match on filler
@@ -478,6 +495,10 @@ for x in range(0,len(histQuoteClose)):
 	close200=np.append(close200,histQuoteClose[x]/histBaseClose)
 schedule.every().day.at("11:30").do(daysma)
 
+accountStringQuote=json.dumps(client.get_asset_balance(quote))
+accountBalanceQuote=float(accountStringQuote[12:22])+float(accountStringQuote[50:60])
+accountStringBase=json.dumps(client.get_asset_balance(base))
+accountBalanceBase=float(accountStringBase[12:22])+float(accountStringBase[50:60])
 while 1:
 	schedule.run_pending()
 	whereTick=tickerData.tell()
