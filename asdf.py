@@ -104,6 +104,7 @@ accountBalanceBase=0
 accountBalanceQuote=0
 
 quoteBase_close=np.array([])
+quoteBase_open=np.array([])
 quoteBase_high=np.array([])
 quoteBase_low=np.array([])
 
@@ -261,10 +262,10 @@ def rsiUpdate():
 	change=0
 	currentGains=0
 	currentLosses=0
-	if(len(quoteBase_close)==rsiPeriod):
+	if(len(quoteBase_close)==rsiPeriod+1):
 		tempGain=0
 		tempLoss=0
-		for x in range(0, rsiPeriod-2):
+		for x in range(0, rsiPeriod):
 		 	change=quoteBase_close[x+1]-quoteBase_close[x]
 		 	if(change>0):
 		 		tempGain=tempGain+change
@@ -289,6 +290,8 @@ def rsiUpdate():
 		avgLossRSI=((rsiPeriod-1)*avgLossRSI + currentLosses)/rsiPeriod
 		rs = avgGainRSI/avgLossRSI
 		rsiValue=np.append(rsiValue,100-(100/(1+rs)))
+	if(len(rsiValue)>1):
+		print rsiValue[len(rsiValue)-1]
 def rsiListen():
 	global rsiShout
 	if(len(rsiValue)>=actionPeriod):
@@ -312,20 +315,21 @@ def atrUpdate():
 			tr=0
 			if(quoteBase_high[x]-quoteBase_low[x]>tr):
 				tr=quoteBase_high[x]-quoteBase_low[x]
-			if(math.abs(quoteBase_high[x]-quoteBase_open[x])>tr):
-				tr=math.abs(quoteBase_high[x]-quoteBase_open[x])
-			if(math.abs(quoteBase_low[x]-quoteBase_open[x])>tr):
-				tr=math.abs(quoteBase_low[x]-quoteBase_open[x])
+			if(math.fabs(quoteBase_high[x]-quoteBase_open[x])>tr):
+				tr=math.fabs(quoteBase_high[x]-quoteBase_open[x])
+			if(math.fabs(quoteBase_low[x]-quoteBase_open[x])>tr):
+				tr=math.fabs(quoteBase_low[x]-quoteBase_open[x])
 			temp=temp+tr
 		atrValue=np.append(atrValue,temp/atrPeriod)
 	elif(len(quoteBase_open)>atrPeriod and len(quoteBase_high)>atrPeriod and len(quoteBase_low)>atrPeriod):
 		tr=0
-		if(quoteBase_high[x]-quoteBase_low[x]>tr):
-			tr=quoteBase_high[x]-quoteBase_low[x]
-		if(math.abs(quoteBase_high[x]-quoteBase_open[x])>tr):
-			tr=math.abs(quoteBase_high[x]-quoteBase_open[x])
-		if(math.abs(quoteBase_low[x]-quoteBase_open[x])>tr):
-			tr=math.abs(quoteBase_low[x]-quoteBase_open[x])
+		#latest value right?...
+		if(quoteBase_high[len(quoteBase_high)-1]-quoteBase_low[len(quoteBase_low)-1]>tr):
+			tr=quoteBase_high[len(quoteBase_high)-1]-quoteBase_low[len(quoteBase_low)-1]
+		if(math.fabs(quoteBase_high[len(quoteBase_high)-1]-quoteBase_open[len(quoteBase_open)-1])>tr):
+			tr=math.fabs(quoteBase_high[len(quoteBase_high)-1]-quoteBase_open[len(quoteBase_open)-1])
+		if(math.fabs(quoteBase_low[len(quoteBase_low)-1]-quoteBase_open[len(quoteBase_open)-1])>tr):
+			tr=math.fabs(quoteBase_low[len(quoteBase_low)-1]-quoteBase_open[len(quoteBase_open)-1])
 		temp=((atrValue[len(atrValue)-1]*(atrPeriod-1))+tr)/atrPeriod #double?
 		atrValue=np.append(atrValue,temp)
 
@@ -407,14 +411,15 @@ def macdUpdate():
 
 def macdListen():
 	global macdShout
-	if(macdHisto[len(macdHisto)-2]>macdValue[len(macdValue)-2]):
-		if(macdHisto[len(macdHisto)-1]<=macdValue[len(macdValue)-1]):
-			macdShout=np.append(macdShout,-1)
-	elif(macdHisto[len(macdHisto)-2]<macdValue[len(macdValue)-2]):
-		if(macdHisto[len(macdHisto)-1]>=macdValue[len(macdValue)-1]):
-			macdShout=np.append(macdShout,1)
-	else:
-		macdShout=np.append(macdShout,0)
+	if(len(macdValue)>=2):
+		if(macdHisto[len(macdHisto)-2]>macdValue[len(macdValue)-2]):
+			if(macdHisto[len(macdHisto)-1]<=macdValue[len(macdValue)-1]):
+				macdShout=np.append(macdShout,-1)
+		elif(macdHisto[len(macdHisto)-2]<macdValue[len(macdValue)-2]):
+			if(macdHisto[len(macdHisto)-1]>=macdValue[len(macdValue)-1]):
+				macdShout=np.append(macdShout,1)
+		else:
+			macdShout=np.append(macdShout,0)
 	
 def marketTypeUpdate():
 	global close200
@@ -492,7 +497,7 @@ tickerData=open(tickerRead+".txt","r")
 klineData=open(klineRead+".txt","r")
 coinmarketcap = Market()
 for x in range(0,len(histQuoteClose)):
-	close200=np.append(close200,histQuoteClose[x]/histBaseClose)
+	close200=np.append(close200,float(histQuoteClose[x])/float(histBaseClose[x]))
 schedule.every().day.at("11:30").do(daysma)
 
 accountStringQuote=json.dumps(client.get_asset_balance(quote))
@@ -516,52 +521,55 @@ while 1:
 	else:
 		quoteBase_high=np.append(quoteBase_high,float(lineKline[32:42]))
 		quoteBase_low=np.append(quoteBase_low,float(lineKline[46:56]))
+		quoteBase_open=np.append(quoteBase_open,float(lineKline[18:28]))
 		while(len(quoteBase_high)>actionPeriod):
 			quoteBase_high=np.delete(quoteBase_high,0)
 		while(len(quoteBase_low)>actionPeriod):
 			quoteBase_low=np.delete(quoteBase_low,0)
+		while(len(quoteBase_open)>actionPeriod):
+			quoteBase_open=np.delete(quoteBase_open,0)
 
-	rsiUpdate()
-	atrUpdate()
-	bollUpdate()
-	macdUpdate()
-	marketTypeUpdate()
+		rsiUpdate()
+		atrUpdate()
+		bollUpdate()
+		macdUpdate()
+		marketTypeUpdate()
 	
-	#rsiValue=np.append(rsiValue,rsiUpdate())
-	#atrValue=np.append(atrValue,atrUpdate())
-	#marketTypeValue=np.append(marketTypeValue,marketTypeUpdate())
-	while(len(macdValue)>lengthTime):
-		macdValue=np.delete(macdValue,0)
-	while(len(macdShout)>lengthTime):
-		macdShout=np.delete(macdShout,0)
-	while(len(macdSignal)>lengthTime):
-		macdSignal=np.delete(macdSignal,0)
-	while(len(macdHisto)>lengthTime):
-		macdHisto=np.delete(macdHisto,0)
-	while(len(rsiValue)>actionPeriod):
-		rsiValue=np.delete(rsiValue,0)
-	while(len(atrValue)>actionPeriod):
-		atrValue=np.delete(atrValue,0)
-	
+		#rsiValue=np.append(rsiValue,rsiUpdate())
+		#atrValue=np.append(atrValue,atrUpdate())
+		#marketTypeValue=np.append(marketTypeValue,marketTypeUpdate())
+		while(len(macdValue)>lengthTime):
+			macdValue=np.delete(macdValue,0)
+		while(len(macdShout)>lengthTime):
+			macdShout=np.delete(macdShout,0)
+		while(len(macdSignal)>lengthTime):
+			macdSignal=np.delete(macdSignal,0)
+		while(len(macdHisto)>lengthTime):
+			macdHisto=np.delete(macdHisto,0)
+		while(len(rsiValue)>actionPeriod):
+			rsiValue=np.delete(rsiValue,0)
+		while(len(atrValue)>actionPeriod):
+			atrValue=np.delete(atrValue,0)
 		
-	while(len(close150)>actionPeriod):
-		close150=np.delete(close150,0)
-	while(len(close100)>actionPeriod):
-		close100=np.delete(close100,0)
-	while(len(close50)>actionPeriod):
-		close50=np.delete(close50,0)
-	while(len(lowBoll)>actionPeriod):
-		lowBoll=np.delete(lowBoll,0)
-	while(len(midBoll)>actionPeriod):
-		midBoll=np.delete(midBoll,0)
-	while(len(highBoll)>actionPeriod):
-		highBoll=np.delete(highBoll,0)
+			
+		while(len(close150)>actionPeriod):
+			close150=np.delete(close150,0)
+		while(len(close100)>actionPeriod):
+			close100=np.delete(close100,0)
+		while(len(close50)>actionPeriod):
+			close50=np.delete(close50,0)
+		while(len(lowBoll)>actionPeriod):
+			lowBoll=np.delete(lowBoll,0)
+		while(len(midBoll)>actionPeriod):
+			midBoll=np.delete(midBoll,0)
+		while(len(highBoll)>actionPeriod):
+			highBoll=np.delete(highBoll,0)
 
-	rsiListen()
-	atrListen()
-	bollListen()
-	macdListen()
-	marketTypeListen()
+		rsiListen()
+		atrListen()
+		bollListen()
+		macdListen()
+		marketTypeListen()
 
 	
 	#rsiShout=np.append(rsiShout,rsiListen())
@@ -570,46 +578,47 @@ while 1:
 
 	
 	#stoploss
-	if(atrShout[len(atrShout)-1]==-1):
-		print "Sell ATR"
-		#Sell()
-	else:
-		#bull=1
-		#side=0
-		#bear=-1
-		if(marketTypeShout[len(marketTypeShout)-1]==1):
-			#bulls
-			if(len(quoteBase_close)%actionPeriod==0):
-				if(bollShout[len(bollShout)-1]==1):
-					print "Buy Boll"
-					#Buy()
-				elif(bollShout[len(bollShout)-1]==-1):
-					print"Sell Boll"
-					#Sell()
-		elif(marketTypeShout[len(marketTypeShout)-1]==0):
-			#side
-			if(len(quoteBase_close)%actionPeriod==0):
-				if(rsiShout[len(rsiShout)-1]==1):
-					print "Buy RSI"
-					#Buy()
-				elif(rsiShout[len(rsiShout)-1]==-1):
-					print "Sell RSI"
-					#Sell()
-				#for each indiactors we care about particular to market
-				#based off those, buy, sell or nothing		
-		elif(marketTypeShout[len(marketTypeShout)-1]==-1):
-			#bear
-			print "bear"
-			if(len(quoteBase_close)%actionPeriod==0):
-				if(macdShout[len(macdShout)-1]==1 and rsiShout[len(rsiShout)-1]==1):
-					print "Buy macd"
-					#Buy()
-				elif(macdShout[len(macdShout)-1]==-1 and rsiShout[len(rsiShout)-1]==-1):
-					print "Sell macd"
-					#Sell()
+	if(len(atrShout)>0 and len(rsiShout)>0 and len(macdShout)>0 and len(bollShout)>0):
+		if(atrShout[len(atrShout)-1]==-1):
+			print "Sell ATR"
+			#Sell()
+		else:
+			#bull=1
+			#side=0
+			#bear=-1
+			if(marketTypeShout[len(marketTypeShout)-1]==1):
+				#bulls
+				if(len(quoteBase_close)%actionPeriod==0):
+					if(bollShout[len(bollShout)-1]==1):
+						print "Buy Boll"
+						#Buy()
+					elif(bollShout[len(bollShout)-1]==-1):
+						print"Sell Boll"
+						#Sell()
+			elif(marketTypeShout[len(marketTypeShout)-1]==0):
+				#side
+				if(len(quoteBase_close)%actionPeriod==0):
+					if(rsiShout[len(rsiShout)-1]==1):
+						print "Buy RSI"
+						#Buy()
+					elif(rsiShout[len(rsiShout)-1]==-1):
+						print "Sell RSI"
+						#Sell()
+					#for each indiactors we care about particular to market
+					#based off those, buy, sell or nothing		
+			elif(marketTypeShout[len(marketTypeShout)-1]==-1):
+				#bear
+				print "bear"
+				if(len(quoteBase_close)%actionPeriod==0):
+					if(macdShout[len(macdShout)-1]==1 and rsiShout[len(rsiShout)-1]==1):
+						print "Buy macd"
+						#Buy()
+					elif(macdShout[len(macdShout)-1]==-1 and rsiShout[len(rsiShout)-1]==-1):
+						print "Sell macd"
+						#Sell()
 
-				#for each indiactors we care about particular to market
-				#based off those, buy, sell or nothing
-				
-	
-				
+					#for each indiactors we care about particular to market
+					#based off those, buy, sell or nothing
+					
+		
+					
