@@ -5,6 +5,7 @@ import json
 import time
 import schedule
 import threading
+import smtplib
 
 pair='ADAETH'
 gmail_user = 'doggo4notification@gmail.com'  
@@ -67,3 +68,4 @@ schedule.every(1).minute.do(run_threaded,getKline)
 schedule.every(1).second.do(getTicker)
 while 1:
 	schedule.run_pending()
+	
