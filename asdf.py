@@ -8,6 +8,8 @@ import json
 import datetime
 import os
 import smtplib
+import imaplib
+import email
 from decimal import *
 import math
 import re
@@ -20,6 +22,8 @@ from coinmarketcap import Market
 #But we sell everything
 #LAST index is latest value
 #everything is done in base, unless for binanace api
+#We do not start bot at 11:30?...
+#Do NOT start with quote in account (throws off percent change)
 
 #files
 quoteHist="/Users/ryan/Desktop/Doggo4/ADA Hist"
@@ -27,6 +31,9 @@ baseHist="/Users/ryan/Desktop/Doggo4/ETH Hist"
 klineRead="/Users/ryan/Desktop/Doggo4/klines"
 tickerRead="/Users/ryan/Desktop/Doggo4/ticker"
 resultFile="/Users/ryan/Desktop/Doggo4/trades"
+
+gmail_user = 'doggo4notification@gmail.com'  
+gmail_password = 'doggo4notify'
 send_list=['crstradingbot@gmail.com','ryanchenyang@gmail.com','maxpol191999@gmail.com','robxu09@gmail.com']
 
 #currency settings
@@ -35,22 +42,31 @@ base="ETH"
 quote="ADA"
 baseFull="Ethereum"
 quoteFull="Cardano"
-precision=1 #1=0 decimals
+precision=1 #1=0 decimals,10=1 decimal
 #Time seconds
 actionPeriod=15
 lengthTime=1209600 #14 day seconds
+reading=False
 
+stopPercent=0.1
+maxPercent=0.3
+minPercent=0.1
+minAmount=1
 
+timeCancel=1
+tradeID=np.array([])
+tradeTime=0
+statusChecked=False
 
 
 #sma
 #day
 histQuoteClose=np.array([])
 histBaseClose=np.array([])
+sma200=np.array([])
+sma100=np.array([])
+sma50=np.array([])
 close200=np.array([])
-close150=np.array([])
-close100=np.array([])
-close50=np.array([])
 
 
 #bollinger
@@ -88,9 +104,7 @@ quoteTransactionAmount=0
 #kelly
 kellyLength=60
 kellyCoeff=1
-maxPercent=0.3
-minPercent=0.1
-minAmount=1
+
 amountBuyBase=np.array([])
 amountBuyQuote=np.array([])
 buyPrice=np.array([])
@@ -102,6 +116,7 @@ kellyReady=False
 
 accountBalanceBase=0
 accountBalanceQuote=0
+totalOld=0
 
 quoteBase_close=np.array([])
 quoteBase_open=np.array([])
@@ -111,6 +126,7 @@ quoteBase_low=np.array([])
 marketTypeValue=np.array([])
 marketTypeShout=np.array([])
 
+run=True
 
 
 
@@ -151,6 +167,33 @@ def sendNotification(subject,mesg):
 		print 'Email sent!'
 	except:
 		print 'Email Send Failure'
+
+conn = imaplib.IMAP4_SSL("imap.gmail.com", 993)
+conn.login(gmail_user, gmail_password)
+def extract_body(payload):
+	if isinstance(payload,str):
+		return payload
+	else:
+		return '\n'.join([extract_body(part.get_payload()) for part in payload])
+def checkMessage():
+	global run
+	conn.select()
+	typ, data = conn.search(None, 'UNSEEN')
+	for num in data[0].split():
+		typ, msg_data = conn.fetch(num, '(RFC822)')
+		for response_part in msg_data:
+			if isinstance(response_part, tuple):
+				msg = email.message_from_string(response_part[1])
+				subject=msg['subject']                   
+				#print(subject)
+				payload=msg.get_payload()
+				body=extract_body(payload)
+				print(body)
+				if re.search("STOP",body):
+					run=False
+					sendNotification("Stopped","Error\nBot Stopped:User Turnoff\n"+str(e))
+		typ, response = conn.store(num, '+FLAGS', r'(\Seen)')
+
 def Buy():
 	global amountBuyBase
 	global amountBuyQuote
@@ -174,7 +217,7 @@ def Buy():
 	temp=amountBuyBase[len(amountBuyBase)-1]/buyPrice[len(buyPrice)-1]
 	temp=temp*precision
 	temp=double(math.floor(temp))/double(precision)
-	amountBuyQuote=np.append(amountBuyBase,temp)
+	amountBuyQuote=np.append(amountBuyQuote,temp) #originally np.append(buybase, temp) for some reason
 	order = client.order_market_buy(
 		symbol=pair,
 		quantity=amountBuyQuote[len(amountBuyQuote)-1],
@@ -254,6 +297,13 @@ def Sell():
 	amountBuyBase=np.array([])
 
 	return order
+def sma(start,end):
+	temp=0
+	for x in range(start,end):
+		temp=temp+quoteBase_close[x]
+	return temp/(end-start)
+
+
 def rsiUpdate():
 	global rsiValue
 	global avgGainRSI
@@ -290,18 +340,26 @@ def rsiUpdate():
 		avgLossRSI=((rsiPeriod-1)*avgLossRSI + currentLosses)/rsiPeriod
 		rs = avgGainRSI/avgLossRSI
 		rsiValue=np.append(rsiValue,100-(100/(1+rs)))
-	if(len(rsiValue)>1):
-		print rsiValue[len(rsiValue)-1]
-def rsiListen():
+	#if(len(rsiValue)>1):
+		#print rsiValue[len(rsiValue)-1]
+def rsiListen(market):
 	global rsiShout
+	low=30
+	high=70
+	if(market==0):
+		low=30
+		high=70
+	if(market==-1):
+		low=40
+		high=60
 	if(len(rsiValue)>=actionPeriod):
 		temp=0
 		for x in range(0,len(rsiValue)):
 			temp=temp+rsiValue[x]
 		avgRsi=temp/len(rsiValue)
-		if(avgRsi<30):
+		if(avgRsi<low):
 			rsiShout=np.append(rsiShout,1)
-		elif(avgRsi>70):
+		elif(avgRsi>high):
 			rsiShout=np.append(rsiShout,-1)
 		else:
 			rsiShout=np.append(rsiShout,0)
@@ -338,19 +396,7 @@ def atrUpdate():
 			lowerStop=quoteBase_close[len(quoteBase_close)-1]
 		else:
 			lowerStop=buyPrice[len(buyPrice)-1]-(2*atrValue[len(atrValue)-1])
-				    	
-	#open high low
-	#high-low abs
-	#high-open abs
-	#low-open abs
-	#choose biggest range
-	#tr=biggest
-	#14 periods(minutes)
-	#first atr=avg 14 tr's
-	#next atr's
-	#previous atr*13+currentTR
-	#divide 14
-	#guccigang
+
 
 def atrListen():
 	global atrShout
@@ -420,38 +466,35 @@ def macdListen():
 				macdShout=np.append(macdShout,1)
 		else:
 			macdShout=np.append(macdShout,0)
-	
 def marketTypeUpdate():
-	global close200
-	global close150
-	global close100
-	global close50
-	if(len(close200)==200):
-		temp=talib.SMA(close200,199-50,timeperiod=50)
-		close50=np.append(close50,temp[len(temp)-1])
-		temp=talib.SMA(close200,199-100,timeperiod=100)
-		close100=np.append(close100,temp[len(temp)-1])
-		temp=talib.SMA(close200,199-150,timeperiod=150)
-		close150=np.append(close150,temp[len(temp)-1])
+	global sma200
+	global sma100
+	global sma50
+	if(len(close200)>=200 and len(quoteBase_close)>=200):
+		sma50=np.append(sma50,sma(len(close200)-50,len(close200)))
+		sma100=np.append(sma100,sma(len(close200)-100,len(close200)))
+		sma200=np.append(sma200,sma(len(close200)-200,len(close200)))
+
 
 def marketTypeListen():
+	#sma100 first index? always 0?
 	global marketTypeShout
-	if(len(close50)>=1 and len(close100)>=1 and len(close150)>=1):
-		if(close150[len(close150)-1]>close50[len(close50)-1]):
-			marketTypeShout=np.append(marketTypeShout,-1)
-		elif(quoteBase_close[len(quoteBase_close)-1]<close150[len(close150)-1]):
-			marketTypeShout=np.append(marketTypeShout,-1)
-		elif(quoteBase_close[len(quoteBase_close)-1]<close100[len(close100)-1]):
-			if(close100[len(close100)-1]<close100[0]):
-				marketTypeShout=np.append(marketTypeShout,-1)
-			else:
-				marketTypeShout=np.append(marketTypeShout,0)
-		elif(quoteBase_close[len(quoteBase_close)-1]<close50[len(close50)-1]):
-			if(close100[len(close100)-1]<close100[0]):
-				marketTypeShout=np.append(marketTypeShout,0)
-			else:
-				marketTypeShout=np.append(marketTypeShout,1)
-		else:
+	if(len(sma50)>=1 and len(sma100)>=1 and len(sma200)>=1):
+	 	if(sma200[len(sma200)-1]>sma50[len(sma50)-1]):
+	 		marketTypeShout=np.append(marketTypeShout,-1)
+	 	elif(quoteBase_close[len(quoteBase_close)-1]<sma200[len(sma200)-1]):
+	 		marketTypeShout=np.append(marketTypeShout,-1)
+	 	elif(quoteBase_close[len(quoteBase_close)-1]<sma100[len(sma100)-1]):
+	 		if(sma100[len(sma100)-1]<sma100[0]):
+	 			marketTypeShout=np.append(marketTypeShout,-1)
+	 		else:
+	 			marketTypeShout=np.append(marketTypeShout,0)
+	 	elif(quoteBase_close[len(quoteBase_close)-1]<close50[len(close50)-1]):
+	 		if(sma100[len(sma100)-1]<sma100[0]):
+	 			marketTypeShout=np.append(marketTypeShout,0)
+	 		else:
+	 			marketTypeShout=np.append(marketTypeShout,1)
+	 	else:
 			marketTypeShout=np.append(marketTypeShout,1)
 
 def daysma():
@@ -464,6 +507,16 @@ def daysma():
 	histBaseClose=np.append(histBaseClose,float(coinRaw[50:58]))
 	close200=np.append(close200,histQuoteClose[len(histQuoteClose)-1]/histBaseClose[len(histBaseClose)-1])
 
+def percentChange():
+	global totalOld
+	totalNew=accountBalanceBase+(accountBalanceQuote*quoteBase_close[len(quoteBase_close)-1])
+	change=(totalnew-totalOld)/totalOld
+	change=change*100
+	msg="\nCurrent Account Total (Base):"+str(totalNew)+ \
+	"\nYesterdays Account Total (Base):"+str(totalOld)+ \
+	"\nPercent Change:"+str(change)
+	totalOld=accountBalanceBase+(accountBalanceQuote*quoteBase_close[len(quoteBase_close)-1])
+	sendNotification("Daily Percent Change",msg)
 
 #regex all the other stuff as well? not be lazy
 re1='.*?'	# Non-greedy match on filler
@@ -491,26 +544,36 @@ for txt in temptxt:
 		float1=m.group(1)
 		histBaseClose=np.append(histBaseClose,float1)
 
-
+coinmarketcap = Market()
 client=login()
+
 tickerData=open(tickerRead+".txt","r")
 klineData=open(klineRead+".txt","r")
-coinmarketcap = Market()
+
 for x in range(0,len(histQuoteClose)):
 	close200=np.append(close200,float(histQuoteClose[x])/float(histBaseClose[x]))
 schedule.every().day.at("11:30").do(daysma)
+schedule.every().day.at("11:30").do(percentChange)
 
 accountStringQuote=json.dumps(client.get_asset_balance(quote))
 accountBalanceQuote=float(accountStringQuote[12:22])+float(accountStringQuote[50:60])
 accountStringBase=json.dumps(client.get_asset_balance(base))
 accountBalanceBase=float(accountStringBase[12:22])+float(accountStringBase[50:60])
-while 1:
+
+totalOld=accountBalanceBase
+#sendNotification("Started","Bot Started:May The Odds Be Ever In Your Favor")
+print "Bot Started"
+print "Account Base:",accountBalanceBase
+print "Account Quote:",accountBalanceQuote
+while run:
 	schedule.run_pending()
 	whereTick=tickerData.tell()
 	lineTick=tickerData.readline()
 	if not lineTick:
+		reading=False
 		tickerData.seek(whereTick)
 	else:
+		reading=True
 		quoteBase_close=np.append(quoteBase_close,float(lineTick[31:40]))
 		while(len(quoteBase_close)>bollLength):
 			quoteBase_close=np.delete(quoteBase_close,0)
@@ -529,15 +592,13 @@ while 1:
 		while(len(quoteBase_open)>actionPeriod):
 			quoteBase_open=np.delete(quoteBase_open,0)
 
-		rsiUpdate()
+	if(reading):
+		marketTypeUpdate()
 		atrUpdate()
 		bollUpdate()
 		macdUpdate()
-		marketTypeUpdate()
+		rsiUpdate()
 	
-		#rsiValue=np.append(rsiValue,rsiUpdate())
-		#atrValue=np.append(atrValue,atrUpdate())
-		#marketTypeValue=np.append(marketTypeValue,marketTypeUpdate())
 		while(len(macdValue)>lengthTime):
 			macdValue=np.delete(macdValue,0)
 		while(len(macdShout)>lengthTime):
@@ -550,75 +611,276 @@ while 1:
 			rsiValue=np.delete(rsiValue,0)
 		while(len(atrValue)>actionPeriod):
 			atrValue=np.delete(atrValue,0)
-		
-			
-		while(len(close150)>actionPeriod):
-			close150=np.delete(close150,0)
-		while(len(close100)>actionPeriod):
-			close100=np.delete(close100,0)
-		while(len(close50)>actionPeriod):
-			close50=np.delete(close50,0)
+
+		while(len(sma200)>actionPeriod):
+			sma200=np.delete(sma200,0)
+		while(len(sma100)>actionPeriod):
+			sma100=np.delete(sma100,0)
+		while(len(sma50)>actionPeriod):
+			sma50=np.delete(sma50,0)
 		while(len(lowBoll)>actionPeriod):
 			lowBoll=np.delete(lowBoll,0)
 		while(len(midBoll)>actionPeriod):
 			midBoll=np.delete(midBoll,0)
 		while(len(highBoll)>actionPeriod):
 			highBoll=np.delete(highBoll,0)
-
-		rsiListen()
+		print len(close200)
+		marketTypeListen()
 		atrListen()
 		bollListen()
 		macdListen()
-		marketTypeListen()
+		if(len(marketTypeShout)>0):
+			rsiListen(marketTypeShout[len(marketTypeShout)-1])
+		print "Info Updated:",datetime.datetime.now().strftime("%a, %d %B %Y %I:%M:%S")
 
-	
 	#rsiShout=np.append(rsiShout,rsiListen())
 #	atrShout=np.append(atrShout,atrListen())
 	#marketTypeShout=np.append(marketTypeShout,marketTypeListen())
 
-	
+	#nothing happens if not reading
 	#stoploss
-	if(len(atrShout)>0 and len(rsiShout)>0 and len(macdShout)>0 and len(bollShout)>0):
-		if(atrShout[len(atrShout)-1]==-1):
-			print "Sell ATR"
-			#Sell()
+		if(len(atrShout)>0):
+			if(atrShout[len(atrShout)-1]==-1):
+				print "Sell Stop"
+				try:
+					tradeResult=json.dumps(Sell())
+					tradeTime=time.time()
+					statusChecked=False
+					tradefile.write(tradeResult+"\n")
+					tradeID=np.append(tradeID,int(tradeResult[12:20]))
+				except Exception as e:
+					sendNotification("Stopped","Error\nBot Stopped:Sell Failed\n"+str(e))
+					print "Error Occured While Selling:",str(e)
+					sys.exit("Error Occured While Selling")
+
+				msg="\nATR:"+str(atrValue[len(atrValue)-1]) + \
+				"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
+				"\nBuy Price:"+str(buyPrice[len(buyPrice)-1]) + \
+				"\nLower Limit:"+str(lowerStop) + \
+				"\nAmount Sold (Quote):"+str(quoteTransactionAmount) + \
+				"\nAmount Sold (Base):"+str(quoteTransactionAmount*sellPrice[len(sellPrice)-1])+ \
+				"\nAccount Balance (Quote):"+str(accountBalanceQuote) + \
+				"\nAccount Balance (Base):"+str(accountBalanceBase)
+				"\nAccount Balance Total (Base):"+str(accountBalanceBase+(accountBalanceQuote*quoteBase_close[len(quoteBase_close)-1]))
+				sendNotification("Selling Stoploss",msg)
 		else:
-			#bull=1
-			#side=0
-			#bear=-1
+			print "ATR Not Ready"
+		if(len(marketTypeShout)>0):
+				#bull=1
+				#side=0
+				#bear=-1
 			if(marketTypeShout[len(marketTypeShout)-1]==1):
 				#bulls
 				if(len(quoteBase_close)%actionPeriod==0):
-					if(bollShout[len(bollShout)-1]==1):
-						print "Buy Boll"
-						#Buy()
-					elif(bollShout[len(bollShout)-1]==-1):
-						print"Sell Boll"
-						#Sell()
+					print "Bull Market"
+					print "Price:",str(quoteBase_close[len(quoteBase_close)-1])
+					print "Account Balance (Quote):",str(accountBalanceQuote)
+					print "Account Balance (Base):",str(accountBalanceBase)
+					print "Account Balance Total (Base):",str(accountBalanceBase+(accountBalanceQuote*quoteBase_close[len(quoteBase_close)-1]))
+					if(len(bollShout)>0):
+						if(bollShout[len(bollShout)-1]==1):
+							print "Buy Bull"
+							try:
+								tradeResult=json.dumps(Buy())
+								tradeTime=time.time()
+								statusChecked=False
+								tradefile.write(tradeResult+"\n")
+								tradeID=np.append(tradeID,int(tradeResult[12:20]))
+							except Exception as e:
+								sendNotification("Stopped","Error\nBot Stopped:Buy Failed\n"+str(e))
+								print "Error Occured While Buying:",str(e)
+								sys.exit("Error Occured While Buying")
+							#Buy()
+							msg="\nBull Market"+ \
+							"\nBoll:"+str(bollShout[len(bollShout)-1]) + \
+							"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
+							"\nKelly:"+str(kellyCoeff) + \
+							"\nAmount Bought (Quote):"+str(quoteTransactionAmount) + \
+							"\nAmount Bought (Base):"+str(quoteTransactionAmount*buyPrice[len(buyPrice)-1])+ \
+							"\nAccount Balance (Quote):"+str(accountBalanceQuote)+ \
+							"\nAccount Balance (Base):"+str(accountBalanceBase)+ \
+							"\nAccount Balance Total (Base):"+str(accountBalanceBase+(accountBalanceQuote*quoteBase_close[len(quoteBase_close)-1]))
+							sendNotification("Buying",msg)
+						elif(bollShout[len(bollShout)-1]==-1):
+							print"Sell Bull"
+							try:
+								tradeResult=json.dumps(Sell())
+								tradeTime=time.time()
+								statusChecked=False
+								tradefile.write(tradeResult+"\n")
+								tradeID=np.append(tradeID,int(tradeResult[12:20]))
+							except Exception as e:
+								sendNotification("Stopped","Error\nBot Stopped:Sell Failed\n"+str(e))
+								print "Error Occured While Selling:",str(e)
+								sys.exit("Error Occured While Selling")
+
+							msg="\nBull Market"+ \
+							"\nBoll:"+str(bollShout[len(bollShout)-1]) + \
+							"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
+							"\nKelly:"+str(kellyCoeff) + \
+							"\nAmount Sold (Quote):"+str(quoteTransactionAmount) + \
+							"\nAmount Sold (Base):"+str(quoteTransactionAmount*sellPrice[len(sellPrice)-1])+ \
+							"\nAccount Balance (Quote):"+str(accountBalanceQuote)+ \
+							"\nAccount Balance (Base):"+str(accountBalanceBase)+ \
+							"\nAccount Balance Total (Base):"+str(accountBalanceBase+(accountBalanceQuote*quoteBase_close[len(quoteBase_close)-1]))
+     		 				sendNotification("Selling",msg)
+					else:
+						print "Boll Not Ready"
 			elif(marketTypeShout[len(marketTypeShout)-1]==0):
 				#side
 				if(len(quoteBase_close)%actionPeriod==0):
-					if(rsiShout[len(rsiShout)-1]==1):
-						print "Buy RSI"
-						#Buy()
-					elif(rsiShout[len(rsiShout)-1]==-1):
-						print "Sell RSI"
-						#Sell()
+					print "Side Market"
+					print "Price:",str(quoteBase_close[len(quoteBase_close)-1])
+					print "Account Balance (Quote):",str(accountBalanceQuote)
+					print "Account Balance (Base):",str(accountBalanceBase)
+					print "Account Balance Total (Base):",str(accountBalanceBase+(accountBalanceQuote*quoteBase_close[len(quoteBase_close)-1]))
+					if(len(rsiShout)>0):
+						if(rsiShout[len(rsiShout)-1]==1):
+							print "Buy Side"
+							try:
+								tradeResult=json.dumps(Buy())
+								tradeTime=time.time()
+								statusChecked=False
+								tradefile.write(tradeResult+"\n")
+								tradeID=np.append(tradeID,int(tradeResult[12:20]))
+							except Exception as e:
+								sendNotification("Stopped","Error\nBot Stopped:Buy Failed\n"+str(e))
+								print "Error Occured While Buying:",str(e)
+								sys.exit("Error Occured While Buying")
+
+							msg="\nSide Market"+ \
+							"\nRSI:"+str(rsiShout[len(rsiShout)-1]) + \
+							"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
+							"\nKelly:"+str(kellyCoeff) + \
+							"\nAmount Bought (Quote):"+str(quoteTransactionAmount) + \
+							"\nAmount Bought (Base):"+str(quoteTransactionAmount*buyPrice[len(buyPrice)-1])+ \
+							"\nAccount Balance (Quote):"+str(accountBalanceQuote)+ \
+							"\nAccount Balance (Base):"+str(accountBalanceBase)+ \
+							"\nAccount Balance Total (Base):"+str(accountBalanceBase+(accountBalanceQuote*quoteBase_close[len(quoteBase_close)-1]))
+							sendNotification("Buying",msg)
+						elif(rsiShout[len(rsiShout)-1]==-1):
+							print "Sell Side"
+							try:
+								tradeResult=json.dumps(Sell())
+								tradeTime=time.time()
+								statusChecked=False
+								tradefile.write(tradeResult+"\n")
+								tradeID=np.append(tradeID,int(tradeResult[12:20]))
+							except Exception as e:
+								sendNotification("Stopped","Error\nBot Stopped:Sell Failed\n"+str(e))
+								print "Error Occured While Selling:",str(e)
+								sys.exit("Error Occured While Selling")
+
+							msg="\nSide Market"+ \
+							"\nRSI:"+str(rsiShout[len(rsiShout)-1]) + \
+   	 		 				"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
+     		 				"\nKelly:"+str(kellyCoeff) + \
+     		 				"\nAmount Sold (Quote):"+str(quoteTransactionAmount) + \
+     		 				"\nAmount Sold (Base):"+str(quoteTransactionAmount*sellPrice[len(sellPrice)-1])+ \
+     		 				"\nAccount Balance (Quote):"+str(accountBalanceQuote)+ \
+     		 				"\nAccount Balance (Base):"+str(accountBalanceBase)+ \
+     		 				"\nAccount Balance Total (Base):"+str(accountBalanceBase+(accountBalanceQuote*quoteBase_close[len(quoteBase_close)-1]))
+     		 				sendNotification("Selling",msg)
+					else:
+						print "RSI Not Ready"
 					#for each indiactors we care about particular to market
 					#based off those, buy, sell or nothing		
 			elif(marketTypeShout[len(marketTypeShout)-1]==-1):
 				#bear
-				print "bear"
 				if(len(quoteBase_close)%actionPeriod==0):
-					if(macdShout[len(macdShout)-1]==1 and rsiShout[len(rsiShout)-1]==1):
-						print "Buy macd"
-						#Buy()
-					elif(macdShout[len(macdShout)-1]==-1 and rsiShout[len(rsiShout)-1]==-1):
-						print "Sell macd"
-						#Sell()
+					print "Bear Market"
+					print "Price:",str(quoteBase_close[len(quoteBase_close)-1])
+					print "Account Balance (Quote):",str(accountBalanceQuote)
+					print "Account Balance (Base):",str(accountBalanceBase)
+					print "Account Balance Total (Base):",str(accountBalanceBase+(accountBalanceQuote*quoteBase_close[len(quoteBase_close)-1]))
+					if(len(rsiShout)<=0):
+						print "RSI Not Ready"
+					if(len(macdShout)<=0):
+						print "MACD Not Ready"
+					if(len(macdShout)>0 and len(rsiShout)>0):
+						if(macdShout[len(macdShout)-1]==1 and rsiShout[len(rsiShout)-1]==1):
+							print "Buy Bear"
+							try:
+								tradeResult=json.dumps(Buy())
+								tradeTime=time.time()
+								statusChecked=False
+								tradefile.write(tradeResult+"\n")
+								tradeID=np.append(tradeID,int(tradeResult[12:20]))
+							except Exception as e:
+								sendNotification("Stopped","Error\nBot Stopped:Buy Failed\n"+str(e))
+								print "Error Occured While Buying:",str(e)
+								sys.exit("Error Occured While Buying")
+							msg="\nBear Market"+ \
+							"\nRSI:"+str(rsiShout[len(rsiShout)-1]) + \
+							"\nMACD:"+str(macdValue[len(macdValue)-1])+ \
+							"\nMACD Histo:"+str(macdHisto[len(macdHisto)-1]) + \
+   	 		  				"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
+     		  				"\nKelly:"+str(kellyCoeff) + \
+     		  				"\nAmount Bought (Quote):"+str(quoteTransactionAmount) + \
+     		  				"\nAmount Bought (Base):"+str(quoteTransactionAmount*buyPrice[len(buyPrice)-1])+ \
+     		  				"\nAccount Balance (Quote):"+str(accountBalanceQuote)+ \
+     		  				"\nAccount Balance (Base):"+str(accountBalanceBase)+ \
+							"\nAccount Balance Total (Base):"+str(accountBalanceBase+(accountBalanceQuote*quoteBase_close[len(quoteBase_close)-1]))
+							sendNotification("Buying",msg)
+						elif(macdShout[len(macdShout)-1]==-1 and rsiShout[len(rsiShout)-1]==-1):
+							print "Sell Bear"
+							try:
+								tradeResult=json.dumps(Sell())
+								tradeTime=time.time()
+								statusChecked=False
+								tradefile.write(tradeResult+"\n")
+								tradeID=np.append(tradeID,int(tradeResult[12:20]))
+							except Exception as e:
+								sendNotification("Stopped","Error\nBot Stopped:Sell Failed\n"+str(e))
+								print "Error Occured While Selling:",str(e)
+								sys.exit("Error Occured While Selling")
+								
+							msg="\nBear Market"+ \
+							"\nRSI:"+str(rsiShout[len(rsiShout)-1]) + \
+							"\nMACD:"+str(macdValue[len(macdValue)-1])+ \
+							"\nMACD Histo:"+str(macdHisto[len(macdHisto)-1]) + \
+							"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
+							"\nKelly:"+str(kellyCoeff) + \
+							"\nAmount Sold (Quote):"+str(quoteTransactionAmount) + \
+							"\nAmount Sold (Base):"+str(quoteTransactionAmount*sellPrice[len(sellPrice)-1])+ \
+							"\nAccount Balance (Quote):"+str(accountBalanceQuote)+ \
+							"\nAccount Balance (Base):"+str(accountBalanceBase)+ \
+							"\nAccount Balance Total (Base):"+str(accountBalanceBase+(accountBalanceQuote*quoteBase_close[len(quoteBase_close)-1]))
+     		 				sendNotification("Selling",msg)
+		else:
+			print "Markettype Not Ready"
+	else:
+		print "No New Data"
 
-					#for each indiactors we care about particular to market
-					#based off those, buy, sell or nothing
-					
-		
-					
+
+	if(len(quoteBase_close)==1):
+		stopPercent=stopPercent*((accountBalanceBase/quoteBase_close[len(quoteBase_close)-1])+accountBalanceQuote)
+	if(len(quoteBase_close)>0):
+		if((accountBalanceBase/quoteBase_close[len(quoteBase_close)-1])+accountBalanceQuote<=minAmount or (accountBalanceBase/quoteBase_close[len(quoteBase_close)-1])+accountBalanceQuote<=stopPercent):
+			sendNotification("Stopped","Error\nBot Stopped:RIP Money")
+			sys.exit("RIP Money")
+	if(time.time()-tradeTime>=timeCancel*60 and len(tradeID)>0 and statusChecked==False):
+		print "Checking Status"
+		try:
+			status=client.get_order(
+				symbol=pair,
+				orderId=int(tradeID[len(tradeID)-1]))
+			tempStat=json.dumps(status)
+			print tempStat
+			checkStat=tempStat[tempStat.find("status")+10]
+			print checkStat
+		except Exception as e:
+			sendNotification("Stopped","Error\nBot Stopped:Order Status Failed\n"+str(e))
+			print "Error Occured While Checking:",str(e)
+			sys.exit("Error Occured While Checking")
+		if(checkStat!="F"):
+			try:
+				client.cancel_order(
+				symbol=pair,
+				orderId=int(tradeID[len(tradeID)-1]))
+			except Exception as e:
+				sendNotification("Stopped","Error\nBot Stopped:Cancel Failed\n"+str(e))
+				print "Error Occured While Canceling:",str(e)
+				sys.exit("Error Occured While Canceling")
+		statusChecked=True
+						
