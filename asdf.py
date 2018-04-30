@@ -563,6 +563,12 @@ accountBalanceBase=float(accountStringBase[12:22])+float(accountStringBase[50:60
 
 totalOld=accountBalanceBase
 #sendNotification("Started","Bot Started:May The Odds Be Ever In Your Favor")
+
+
+#intialize quotebase files and stuff
+#find length of things, read one by one till at length
+#copy paste update normally
+#THEN START #lazy
 print "Bot Started"
 print "Account Base:",accountBalanceBase
 print "Account Quote:",accountBalanceQuote
