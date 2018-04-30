@@ -549,6 +549,7 @@ client=login()
 
 tickerData=open(tickerRead+".txt","r")
 klineData=open(klineRead+".txt","r")
+tradefile=open(resultFile+".txt","a")
 
 for x in range(0,len(histQuoteClose)):
 	close200=np.append(close200,float(histQuoteClose[x])/float(histBaseClose[x]))
