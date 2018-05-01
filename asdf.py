@@ -37,7 +37,7 @@ klineRead="/Users/ryan/Desktop/Doggo4/klines"
 tickerRead="/Users/ryan/Desktop/Doggo4/ticker"
 resultFile="/Users/ryan/Desktop/Doggo4/trades"
 
-checkInterval=1 #min
+checkInterval=0.1 #min
 checkTime=0
 gmail_user = 'doggo4notification@gmail.com'  
 gmail_password = 'doggo4notify'
@@ -608,7 +608,6 @@ while run:
 		print "Checking Stop Message"
 		checkMessage()
 
-
 	whereKline=klineData.tell()
 	lineKline=klineData.readline()
 	reading=False
@@ -641,7 +640,6 @@ while run:
 
 
 	if(reading):
-		checkMessage()
 		marketTypeUpdate()
 		atrUpdate()
 		bollUpdate()
@@ -690,6 +688,7 @@ while run:
 	#nothing happens if not reading
 	#stoploss
 		if(len(quoteBase_high)>initialKline and len(quoteBase_close)>initialTick):
+			checkMessage()
 			if(len(atrShout)>0):
 				if(atrShout[len(atrShout)-1]==-1):
 					print "Sell Stop"
@@ -724,6 +723,7 @@ while run:
 					#bulls
 					if(len(quoteBase_close)%actionPeriod==0):
 						print "Bull Market"
+						print "Low Boll",str(lowBoll[len(lowBoll)-1])
 						print "Price:",str(quoteBase_close[len(quoteBase_close)-1])
 						print "Account Balance (Quote):",str(accountBalanceQuote)
 						print "Account Balance (Base):",str(accountBalanceBase)
