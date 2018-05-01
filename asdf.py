@@ -28,7 +28,7 @@ from coinmarketcap import Market
 #Update all indiactors, regardless if its updated on kline vs ticker
 #just repeat old values
 #KEEP IN MIND FOR a indicator which retains old values to calculate
-#IE RSI
+#EX RSI
 
 #files
 quoteHist="/Users/ryan/Desktop/Doggo4/ADA Hist"
@@ -641,6 +641,7 @@ while run:
 
 
 	if(reading):
+		checkMessage()
 		marketTypeUpdate()
 		atrUpdate()
 		bollUpdate()
