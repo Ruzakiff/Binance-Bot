@@ -723,7 +723,7 @@ while run:
 					#bulls
 					if(len(quoteBase_close)%actionPeriod==0):
 						print "Bull Market"
-						print "Low Boll",str(lowBoll[len(lowBoll)-1])
+						print "Low Boll:",str(lowBoll[len(lowBoll)-1])
 						print "Price:",str(quoteBase_close[len(quoteBase_close)-1])
 						print "Account Balance (Quote):",str(accountBalanceQuote)
 						print "Account Balance (Base):",str(accountBalanceBase)
