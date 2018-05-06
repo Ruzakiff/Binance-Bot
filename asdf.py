@@ -107,7 +107,6 @@ macdFastLength=604800 #7day seconds
 macdSlowLength=lengthTime
 macdSignalLength=777600 #9day seconds
 
-quoteTransactionAmount=0
 #amountQuote
 
 #kelly
@@ -205,7 +204,8 @@ def checkMessage():
 						sendNotification("Stopped",msg)
 			typ, response = conn.store(num, '+FLAGS', r'(\Seen)')
 	except:
-		sendNotification("Error","Read Check Failed, Bot Not Stopped!")
+		print "Read Check Failed"
+		#sendNotification("Error","Read Check Failed, Bot Not Stopped!")
 		#sendNotification("Stopped","Error\nBot Stopped:Read Check Failed")
 		#sys.exit("Read Check Failed")
 
@@ -240,6 +240,15 @@ def Buy():
 	accountBalanceQuote=float(accountStringQuote[12:22])+float(accountStringQuote[50:60])
 	accountStringBase=json.dumps(client.get_asset_balance(base))
 	accountBalanceBase=float(accountStringBase[12:22])+float(accountStringBase[50:60])
+	
+	totalAccount=accountBalanceBase+(accountBalanceQuote*quoteBase_close[len(quoteBase_close)-1])
+	msg="\nBuy Price:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
+	"\nKelly:"+str(kellyCoeff) + \
+	"\nAmount Bought (Quote):"+str(amountBuyQuote[len(amountBuyQuote)-1]) + \
+	"\nAmount Bought (Base):"+str(amountBuyBase[len(amountBuyBase)-1])+ \
+	"\nAccount Balance (Quote):"+str(accountBalanceQuote)+ \
+	"\nAccount Balance (Base):"+str(accountBalanceBase)+ \
+	"\nAccount Balance Total (Base):"+str(totalAccount)
 	return order
 
 def Sell():
@@ -304,6 +313,20 @@ def Sell():
 	accountBalanceQuote=float(accountStringQuote[12:22])+float(accountStringQuote[50:60])
 	accountStringBase=json.dumps(client.get_asset_balance(base))
 	accountBalanceBase=float(accountStringBase[12:22])+float(accountStringBase[50:60])
+	
+	totalAccount=accountBalanceBase+(accountBalanceQuote*quoteBase_close[len(quoteBase_close)-1])
+	msg="\nCurrent Price:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
+	"\nBuy Price:"+str(buyPrice[len(buyPrice)-1]) + \
+	"\nKelly:"+str(kellyCoeff) + \
+	"\nLower Limit:"+str(lowerStop) + \
+	"\nAmount Sold (Quote):"+str(amountSellQuote) + \
+	"\nAmount Sold (Base):"+str(quoteTransactionAmount*sellPrice[len(sellPrice)-1])+ \
+	"\nAccount Balance (Quote):"+str(accountBalanceQuote) + \
+	"\nAccount Balance (Base):"+str(accountBalanceBase)
+	"\nAccount Balance Total (Base):"+str(totalAccount)
+	print msg
+	sendNotification("Selling",msg)
+
 	#wipe
 	amountSellQuote=np.array([])
 	amountSellBase=np.array([])
@@ -705,34 +728,25 @@ while run:
 
 	#nothing happens if not reading
 	#stoploss
-		#if(len(quoteBase_high)>initialKline and len(quoteBase_close)>initialTick):
-		if(True):
-			#checkMessage()
+		if(len(quoteBase_high)>initialKline and len(quoteBase_close)>initialTick):
+			checkMessage()
 			if(len(atrShout)>0):
-				if(atrShout[len(atrShout)-1]==-1 and amountBuyQuote>0):
+				if(atrShout[len(atrShout)-1]==-1 and len(amountBuyQuote)>0):
 					print "Sell Stop"
-					#try:
-					#	tradeResult=json.dumps(Sell())
-					#	tradeTime=time.time()
-					#	statusChecked=False
-					#	tradefile.write(tradeResult+"\n")
-					#	tradeID=np.append(tradeID,int(tradeResult[12:20]))
-					#except Exception as e:
-					#	sendNotification("Stopped","Error\nBot Stopped:Sell Failed\n"+str(e))
-					#	print "Error Occured While Selling:",str(e)
-					#	sys.exit("Error Occured While Selling")
-					totalAccount=accountBalanceBase+(accountBalanceQuote*quoteBase_close[len(quoteBase_close)-1])
-					msg="\nATR:"+str(atrValue[len(atrValue)-1]) + \
-					"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
-					"\nBuy Price:"+str(buyPrice[len(buyPrice)-1]) + \
-					"\nLower Limit:"+str(lowerStop) + \
-					"\nAmount Sold (Quote):"+str(quoteTransactionAmount) + \
-					"\nAmount Sold (Base):"+str(quoteTransactionAmount*sellPrice[len(sellPrice)-1])+ \
-					"\nAccount Balance (Quote):"+str(accountBalanceQuote) + \
-					"\nAccount Balance (Base):"+str(accountBalanceBase)
-					"\nAccount Balance Total (Base):"+str(totalAccount)
+					try:
+						tradeResult=json.dumps(Sell())
+						tradeTime=time.time()
+						statusChecked=False
+						tradefile.write(tradeResult+"\n")
+						tradeID=np.append(tradeID,int(tradeResult[12:20]))
+					except Exception as e:
+						sendNotification("Stopped","Error\nBot Stopped:Sell Failed\n"+str(e))
+						print "Error Occured While Selling:",str(e)
+						sys.exit("Error Occured While Selling")
+					msg="\nATR:"+str(atrValue[len(atrValue)-1])
 					print msg
-					#sendNotification("Selling Stoploss",msg)
+					sendNotification("Stoploss Hit:",msg)
+					
 			else:
 				print "ATR Not Ready"
 			if(len(marketTypeShout)>0):
@@ -751,53 +765,41 @@ while run:
 						if(len(bollShout)>0):
 							if(bollShout[len(bollShout)-1]==1):
 								print "Buy Bull"
-								#try:
-								#	tradeResult=json.dumps(Buy())
-								#	tradeTime=time.time()
-								#	statusChecked=False
-								#	tradefile.write(tradeResult+"\n")
-								#	tradeID=np.append(tradeID,int(tradeResult[12:20]))
-								#except Exception as e:
-								#	sendNotification("Stopped","Error\nBot Stopped:Buy Failed\n"+str(e))
-								#	print "Error Occured While Buying:",str(e)
-								#	sys.exit("Error Occured While Buying")
-								#Buy()
-								totalAccount=accountBalanceBase+(accountBalanceQuote*quoteBase_close[len(quoteBase_close)-1])
-								msg="\nBull Market"+ \
-								"\nBoll:"+str(bollShout[len(bollShout)-1]) + \
-								"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
-								"\nKelly:"+str(kellyCoeff) + \
-								"\nAmount Bought (Quote):"+str(quoteTransactionAmount) + \
-								"\nAmount Bought (Base):"+str(quoteTransactionAmount*buyPrice[len(buyPrice)-1])+ \
-								"\nAccount Balance (Quote):"+str(accountBalanceQuote)+ \
-								"\nAccount Balance (Base):"+str(accountBalanceBase)+ \
-								"\nAccount Balance Total (Base):"+str(totalAccount)
+								try:
+									tradeResult=json.dumps(Buy())
+									tradeTime=time.time()
+									statusChecked=False
+									tradefile.write(tradeResult+"\n")
+									tradeID=np.append(tradeID,int(tradeResult[12:20]))
+								except Exception as e:
+									sendNotification("Stopped","Error\nBot Stopped:Buy Failed\n"+str(e))
+									print "Error Occured While Buying:",str(e)
+									sys.exit("Error Occured While Buying")
+
+								msg="\nHigh Boll"+str(highBoll[len(highBoll)-1])+ \
+								"\nMid Boll:"+str(midBoll[len(midBoll)-1]) + \
+								"\nLow Boll:"+str(lowBoll[len(lowBoll)-1])
 								print msg
-								#sendNotification("Buying",msg)
-							elif(bollShout[len(bollShout)-1]==-1 and amountBuyQuote>0):
+								sendNotification("Bull Buy",msg)
+							elif(bollShout[len(bollShout)-1]==-1 and len(amountBuyQuote)>0):
 								print"Sell Bull"
-								#try:
-								#	tradeResult=json.dumps(Sell())
-								#	tradeTime=time.time()
-								#	statusChecked=False
-								#	tradefile.write(tradeResult+"\n")
-								#	tradeID=np.append(tradeID,int(tradeResult[12:20]))
-								#except Exception as e:
-								#	sendNotification("Stopped","Error\nBot Stopped:Sell Failed\n"+str(e))
-								#	print "Error Occured While Selling:",str(e)
-								#	sys.exit("Error Occured While Selling")
-								totalAccount=accountBalanceBase+(accountBalanceQuote*quoteBase_close[len(quoteBase_close)-1])
-								msg="\nBull Market"+ \
-								"\nBoll:"+str(bollShout[len(bollShout)-1]) + \
-								"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
-								"\nKelly:"+str(kellyCoeff) + \
-								"\nAmount Sold (Quote):"+str(quoteTransactionAmount) + \
-								"\nAmount Sold (Base):"+str(quoteTransactionAmount*sellPrice[len(sellPrice)-1])+ \
-								"\nAccount Balance (Quote):"+str(accountBalanceQuote)+ \
-								"\nAccount Balance (Base):"+str(accountBalanceBase)+ \
-								"\nAccount Balance Total (Base):"+str(totalAccount)
+								try:
+									tradeResult=json.dumps(Sell())
+									tradeTime=time.time()
+									statusChecked=False
+									tradefile.write(tradeResult+"\n")
+									tradeID=np.append(tradeID,int(tradeResult[12:20]))
+								except Exception as e:
+									sendNotification("Stopped","Error\nBot Stopped:Sell Failed\n"+str(e))
+									print "Error Occured While Selling:",str(e)
+									sys.exit("Error Occured While Selling")
+								
+								msg="\nHigh Boll"+str(highBoll[len(highBoll)-1])+ \
+								"\nMid Boll:"+str(midBoll[len(midBoll)-1]) + \
+								"\nLow Boll:"+str(lowBoll[len(lowBoll)-1])
 								print msg
-								#sendNotification("Selling",msg)
+								sendNotification("Bull Sell",msg)
+
 						else:
 							print "Boll Not Ready"
 				elif(marketTypeShout[len(marketTypeShout)-1]==0):
@@ -811,52 +813,36 @@ while run:
 						if(len(rsiShout)>0):
 							if(rsiShout[len(rsiShout)-1]==1):
 								print "Buy Side"
-								#try:
-								#	tradeResult=json.dumps(Buy())
-								#	tradeTime=time.time()
-								#	statusChecked=False
-								#	tradefile.write(tradeResult+"\n")
-								#	tradeID=np.append(tradeID,int(tradeResult[12:20]))
-								#except Exception as e:
-								#	sendNotification("Stopped","Error\nBot Stopped:Buy Failed\n"+str(e))
-								#	print "Error Occured While Buying:",str(e)
-								#	sys.exit("Error Occured While Buying")
-								totalAccount=accountBalanceBase+(accountBalanceQuote*quoteBase_close[len(quoteBase_close)-1])
-								msg="\nSide Market"+ \
-								"\nRSI:"+str(rsiShout[len(rsiShout)-1]) + \
-								"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
-								"\nKelly:"+str(kellyCoeff) + \
-								"\nAmount Bought (Quote):"+str(quoteTransactionAmount) + \
-								"\nAmount Bought (Base):"+str(quoteTransactionAmount*buyPrice[len(buyPrice)-1])+ \
-								"\nAccount Balance (Quote):"+str(accountBalanceQuote)+ \
-								"\nAccount Balance (Base):"+str(accountBalanceBase)+ \
-								"\nAccount Balance Total (Base):"+str(totalAccount)
+								try:
+									tradeResult=json.dumps(Buy())
+									tradeTime=time.time()
+									statusChecked=False
+									tradefile.write(tradeResult+"\n")
+									tradeID=np.append(tradeID,int(tradeResult[12:20]))
+								except Exception as e:
+									sendNotification("Stopped","Error\nBot Stopped:Buy Failed\n"+str(e))
+									print "Error Occured While Buying:",str(e)
+									sys.exit("Error Occured While Buying")
+								
+								msg="\nRSI:"+str(rsiShout[len(rsiShout)-1])
 								print msg
-								#sendNotification("Buying",msg)
-							elif(rsiShout[len(rsiShout)-1]==-1 and amountBuyQuote>0):
+								sendNotification("Side Buy",msg)
+							elif(rsiShout[len(rsiShout)-1]==-1 and len(amountBuyQuote)>0):
 								print "Sell Side"
-								#try:
-								#	tradeResult=json.dumps(Sell())
-								#	tradeTime=time.time()
-								#	statusChecked=False
-								#	tradefile.write(tradeResult+"\n")
-								#	tradeID=np.append(tradeID,int(tradeResult[12:20]))
-								#except Exception as e:
-								#	sendNotification("Stopped","Error\nBot Stopped:Sell Failed\n"+str(e))
-								#	print "Error Occured While Selling:",str(e)
-								#	sys.exit("Error Occured While Selling")
-								totalAccount=accountBalanceBase+(accountBalanceQuote*quoteBase_close[len(quoteBase_close)-1])
-								msg="\nSide Market"+ \
-								"\nRSI:"+str(rsiShout[len(rsiShout)-1]) + \
-								"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
-								"\nKelly:"+str(kellyCoeff) + \
-								"\nAmount Sold (Quote):"+str(quoteTransactionAmount) + \
-								"\nAmount Sold (Base):"+str(quoteTransactionAmount*sellPrice[len(sellPrice)-1])+ \
-								"\nAccount Balance (Quote):"+str(accountBalanceQuote)+ \
-								"\nAccount Balance (Base):"+str(accountBalanceBase)+ \
-								"\nAccount Balance Total (Base):"+str(totalAccount)
+								try:
+									tradeResult=json.dumps(Sell())
+									tradeTime=time.time()
+									statusChecked=False
+									tradefile.write(tradeResult+"\n")
+									tradeID=np.append(tradeID,int(tradeResult[12:20]))
+								except Exception as e:
+									sendNotification("Stopped","Error\nBot Stopped:Sell Failed\n"+str(e))
+									print "Error Occured While Selling:",str(e)
+									sys.exit("Error Occured While Selling")
+								
+								msg="\nRSI:"+str(rsiShout[len(rsiShout)-1])
 								print msg
-								#sendNotification("Selling",msg)
+								sendNotification("Selling",msg)
 						else:
 							print "RSI Not Ready"
 						#for each indiactors we care about particular to market
@@ -876,55 +862,40 @@ while run:
 						if(len(macdShout)>0 and len(rsiShout)>0):
 							if(macdShout[len(macdShout)-1]==1 and rsiShout[len(rsiShout)-1]==1):
 								print "Buy Bear"
-								#try:
-								#	tradeResult=json.dumps(Buy())
-								#	tradeTime=time.time()
-								#	statusChecked=False
-								#	tradefile.write(tradeResult+"\n")
-								#	tradeID=np.append(tradeID,int(tradeResult[12:20]))
-								#except Exception as e:
-								#	sendNotification("Stopped","Error\nBot Stopped:Buy Failed\n"+str(e))
-								#	print "Error Occured While Buying:",str(e)
-								#	sys.exit("Error Occured While Buying")
-								msg="\nBear Market"+ \
-								"\nRSI:"+str(rsiShout[len(rsiShout)-1]) + \
+								try:
+									tradeResult=json.dumps(Buy())
+									tradeTime=time.time()
+									statusChecked=False
+									tradefile.write(tradeResult+"\n")
+									tradeID=np.append(tradeID,int(tradeResult[12:20]))
+								except Exception as e:
+									sendNotification("Stopped","Error\nBot Stopped:Buy Failed\n"+str(e))
+									print "Error Occured While Buying:",str(e)
+									sys.exit("Error Occured While Buying")
+
+								msg="\nRSI:"+str(rsiShout[len(rsiShout)-1]) + \
 								"\nMACD:"+str(macdValue[len(macdValue)-1])+ \
-								"\nMACD Histo:"+str(macdHisto[len(macdHisto)-1]) + \
-								"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
-								"\nKelly:"+str(kellyCoeff) + \
-								"\nAmount Bought (Quote):"+str(quoteTransactionAmount) + \
-								"\nAmount Bought (Base):"+str(quoteTransactionAmount*buyPrice[len(buyPrice)-1])+ \
-								"\nAccount Balance (Quote):"+str(accountBalanceQuote)+ \
-								"\nAccount Balance (Base):"+str(accountBalanceBase)+ \
-								"\nAccount Balance Total (Base):"+str(accountBalanceBase+(accountBalanceQuote*quoteBase_close[len(quoteBase_close)-1]))
+								"\nMACD Histo:"+str(macdHisto[len(macdHisto)-1])
 								print msg
-								#sendNotification("Buying",msg)
-							elif(macdShout[len(macdShout)-1]==-1 and rsiShout[len(rsiShout)-1]==-1 and amountBuyQuote>0):
+								sendNotification("Bear Buy",msg)
+							elif(macdShout[len(macdShout)-1]==-1 and rsiShout[len(rsiShout)-1]==-1 and len(amountBuyQuote)>0):
 								print "Sell Bear"
-							#	try:
-							#		tradeResult=json.dumps(Sell())
-							#		tradeTime=time.time()
-							#		statusChecked=False
-							#		tradefile.write(tradeResult+"\n")
-							#		tradeID=np.append(tradeID,int(tradeResult[12:20]))
-							#	except Exception as e:
-							#		#sendNotification("Stopped","Error\nBot Stopped:Sell Failed\n"+str(e))
-							#		print "Error Occured While Selling:",str(e)
-							#		sys.exit("Error Occured While Selling")
+								try:
+									tradeResult=json.dumps(Sell())
+									tradeTime=time.time()
+									statusChecked=False
+									tradefile.write(tradeResult+"\n")
+									tradeID=np.append(tradeID,int(tradeResult[12:20]))
+								except Exception as e:
+									sendNotification("Stopped","Error\nBot Stopped:Sell Failed\n"+str(e))
+									print "Error Occured While Selling:",str(e)
+									sys.exit("Error Occured While Selling")
 									
-								msg="\nBear Market"+ \
-								"\nRSI:"+str(rsiShout[len(rsiShout)-1]) + \
+								msg="\nRSI:"+str(rsiShout[len(rsiShout)-1]) + \
 								"\nMACD:"+str(macdValue[len(macdValue)-1])+ \
-								"\nMACD Histo:"+str(macdHisto[len(macdHisto)-1]) + \
-								"\nPrice:"+str(quoteBase_close[len(quoteBase_close)-1]) + \
-								"\nKelly:"+str(kellyCoeff) + \
-								"\nAmount Sold (Quote):"+str(quoteTransactionAmount) + \
-								"\nAmount Sold (Base):"+str(quoteTransactionAmount*sellPrice[len(sellPrice)-1])+ \
-								"\nAccount Balance (Quote):"+str(accountBalanceQuote)+ \
-								"\nAccount Balance (Base):"+str(accountBalanceBase)+ \
-								"\nAccount Balance Total (Base):"+str(accountBalanceBase+(accountBalanceQuote*quoteBase_close[len(quoteBase_close)-1]))
+								"\nMACD Histo:"+str(macdHisto[len(macdHisto)-1])
 								print msg
-								#sendNotification("Selling",msg)
+								sendNotification("Bear Sell",msg)
 			else:
 				print "Markettype Not Ready"
 		elif(len(quoteBase_close)==initialTick and len(quoteBase_high)==initialKline):
