@@ -366,7 +366,7 @@ def rsiUpdate():
 		else:
 	 		rs = avgGainRSI/avgLossRSI
 			rsiValue=np.append(rsiValue,100-(100/(1+rs)))
-	elif(len(quoteBase_close)>rsiPeriod):
+	elif(len(quoteBase_close)>rsiPeriod+1):
 		change=quoteBase_close[len(quoteBase_close)-1]-quoteBase_close[len(quoteBase_close)-2]
 		if(change>0):
 			currentGains=change
