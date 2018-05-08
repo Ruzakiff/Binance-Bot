@@ -377,8 +377,14 @@ def rsiUpdate():
 		else:
 			currentGains=0
 			currentLosses=0
+		print avgGainRSI
+		print currentGains
+		print avgLossRSI
 		avgGainRSI=((rsiPeriod-1)*avgGainRSI + currentGains)/rsiPeriod #this is setting avggain and loss that is from intialize. values persist
 		avgLossRSI=((rsiPeriod-1)*avgLossRSI + currentLosses)/rsiPeriod
+		print avgGainRSI
+		print currentGains
+		print avgLossRSI
 		if(avgLossRSI==0 and avgGainRSI==0):
 			rs=0
 			rsiValue=np.append(rsiValue,50)
@@ -388,6 +394,7 @@ def rsiUpdate():
 	#if(len(rsiValue)>1):
 		#print rsiValue[len(rsiValue)-1]
 def rsiListen(market):
+	#call every action period
 	global rsiShout
 	low=30
 	high=70
