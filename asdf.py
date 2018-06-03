@@ -99,6 +99,7 @@ atrValue=np.array([])
 atrShout=np.array([])
 lowerStop=0
 
+
 macdValue=np.array([])
 macdSignal=np.array([])
 macdHisto=np.array([])
@@ -424,6 +425,7 @@ def rsiListen(market):
 			rsiShout=np.append(rsiShout,0)
 def atrUpdate():
 	global atrValue
+	global lowerStop
 	tr=0
 	if(len(quoteBase_open)==atrPeriod and len(quoteBase_high)==atrPeriod and len(quoteBase_low)==atrPeriod):
 		temp=0
@@ -452,7 +454,8 @@ def atrUpdate():
 
 	if(len(atrValue)>0 and len(buyPrice)>0):
 		if(quoteBase_close[len(quoteBase_close)-1]>buyPrice[len(buyPrice)-1]):
-			lowerStop=quoteBase_close[len(quoteBase_close)-1]
+			if(lowerStop<quoteBase_close[len(quoteBase_close)-1]-(1*atrValue[len(atrValue)-1])):
+				lowerStop=quoteBase_close[len(quoteBase_close)-1]-(1*atrValue[len(atrValue)-1])#might change 1 to another value
 		else:
 			lowerStop=buyPrice[len(buyPrice)-1]-(2*atrValue[len(atrValue)-1])
 
@@ -461,7 +464,7 @@ def atrListen():
 	global atrShout
 	global lowerStop
 	if(len(atrValue)>0 and len(buyPrice)>0):
-		if(quoteBase_close[len(quoteBase_close)-1]<=lowerStop):
+		if(quoteBase_close[len(quoteBase_close)-1]<lowerStop):
 			atrShout=np.append(atrShout,-1)
 		else:
 			atrShout=np.append(atrShout,0)
