@@ -691,7 +691,7 @@ while run:
 		atrUpdate()
 		bollUpdate()
 		macdUpdate()
-		if(len(quoteBase_close)%10==0):
+		if(len(quoteBase_close)%15==0):
 			rsiUpdate()
 			#every 10 secs, take current price at that sec and use for rsi calc
 	
