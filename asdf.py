@@ -532,7 +532,7 @@ def marketTypeUpdate():
 	global sma200
 	global sma100
 	global sma50
-	if(len(close200)>=200 and len(quoteBase_close)>=200):
+	if(len(close200)>=200 and len(histQuoteClose)>=200 and len(histBaseClose)>=200):
 		sma50=np.append(sma50,sma(len(close200)-50,len(close200)))
 		sma100=np.append(sma100,sma(len(close200)-100,len(close200)))
 		sma200=np.append(sma200,sma(len(close200)-200,len(close200)))
@@ -580,6 +580,8 @@ def daysma():
 	float1=m.group(1)
 	histBaseClose=np.append(histBaseClose,float1)
 	close200=np.append(close200,histQuoteClose[len(histQuoteClose)-1]/histBaseClose[len(histBaseClose)-1])
+	if(len(close200)>200):
+		close=np.delete(close,0)
 
 def percentChange():
 	global totalOld
