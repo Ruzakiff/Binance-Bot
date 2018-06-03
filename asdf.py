@@ -392,6 +392,10 @@ def rsiUpdate():
 		if(avgLossRSI==0 and avgGainRSI==0):
 			rs=0
 			rsiValue=np.append(rsiValue,50)
+		elif(avgLossRSI==0):
+			sys.exit("RSI Dumb")
+		elif(avgGainRSI==0):
+			sys.exit("RSI Dumb")
 		else:
 	 		rs = avgGainRSI/avgLossRSI
 			rsiValue=np.append(rsiValue,100-(100/(1+rs)))
