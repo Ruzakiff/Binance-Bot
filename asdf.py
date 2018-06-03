@@ -476,7 +476,7 @@ def bollUpdate():
 	#>= bolllength?...
 	if(len(quoteBase_close)>=bollLength):
 	#	highBoll,midBoll,lowBoll=talib.BBANDS(quoteBase_close,timeperiod=bollLength)
-		std=np.std(quoteBase_close)
+		std=np.std(quoteBase_close) #std of huge array, instead of 1200
 	#	tempArray=np.array([])
 		#tempArray=quoteBase_close[len(quoteBase_close)-bollLength:len(quoteBase_close)]
 		avg=sma(len(quoteBase_close)-bollLength,len(quoteBase_close))
