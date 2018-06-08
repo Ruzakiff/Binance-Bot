@@ -28,7 +28,9 @@ from coinmarketcap import Market
 #Update all indiactors, regardless if its updated on kline vs ticker
 #just repeat old values
 #KEEP IN MIND FOR a indicator which retains old values to calculate
+#change ema lengths when change macd lengths
 #EX RSI
+#EMA Variables change length when macd changes length
 
 #files
 quoteHist="/Users/ryan/Desktop/Doggo4/ADA Hist"
@@ -85,6 +87,11 @@ midBoll=np.array([])
 lowBoll=np.array([])
 bollShout=np.array([])
 
+
+#ema
+ema7=np.array([])
+ema9=np.array([])
+ema14=np.array([])
 
 #rsi
 rsiPeriod=28 #14
@@ -335,12 +342,18 @@ def Sell():
 	amountBuyBase=np.array([])
 
 	return order
+
 def sma(start,end):
 	temp=0
 	for x in range(start,end):
 		temp=temp+quoteBase_close[x]
 	return temp/(end-start)
 
+def ema(start,end,a):
+	if((end-start)==len(quoteBase_close)):
+		a=np.append(a,sma(start,end))
+	elif((end-start)>len(quoteBase_close)):
+		a=np.append(a,((quoteBase_close[len(quoteBase_close)-1]-a[len(a)-1])*(7.0/16.0)+a[len(a)-1]))
 
 def rsiUpdate():
 	global rsiValue
@@ -495,6 +508,8 @@ def bollListen():
 		else:
 			bollShout=np.append(bollShout,0)
 
+
+#DELETE THIS! OR COMMENT OUT! NEW ONE UNDERNEATH
 def macdUpdate():
 	global macdValue,macdShout,macdSignal,macdHisto
 	tempArray=np.array([])
@@ -504,6 +519,7 @@ def macdUpdate():
 	if(len(quoteBase_close)>=lengthTime):
 		tempArray=quoteBase_close[len(quoteBase_close)-macdFastLength:len(quoteBase_close)]
 		tempFast=talib.EMA(tempArray,timeperiod=macdFastLength)
+
 
 		tempArray=quoteBase_close[len(quoteBase_close)-macdSignalLength:len(quoteBase_close)]
 		tempSignal=talib.EMA(tempArray,timeperiod=macdSignalLength)
@@ -519,6 +535,18 @@ def macdUpdate():
 		macdSignal=np.append(macdSignal,emaSignal)
 		macdHisto=np.append(macdHisto,macdValue[len(macdValue)-1]-macdSignal[len(macdSignal)-1])
 
+def macdUpdate():
+	global macdValue,macdShout,macdSignal,macdHisto
+	global ema7,ema9,ema14
+	#7days in seconds is 7*24*60*60
+	ema((len(quoteBase_close)-(7*24*60*60)),len(quoteBase_close),ema7)
+	ema((len(quoteBase_close)-(9*24*60*60)),len(quoteBase_close),ema9)
+	ema((len(quoteBase_close)-(14*24*60*60)),len(quoteBase_close),ema14)
+
+	if(len(quoteBase_close)>=lengthTime):
+		macdValue=np.append(macdValue,ema7[len(ema7)-1]-ema14[len(ema14)-1])
+		macdSignal=np.append(macdSignal,ema9[len(ema9)-1])
+		macdHisto=np.append(macdHisto,macdValue[len(macdValue)-1]-macdSignal[len(macdSignal)-1])
 
 def macdListen():
 	global macdShout
