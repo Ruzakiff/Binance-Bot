@@ -367,11 +367,11 @@ def rsiUpdate():
 		tempGain=0
 		tempLoss=0
 		for x in range(0, rsiPeriod):
-		 	change=quoteBase_close[x+1]-quoteBase_close[x]
-		 	if(change>0):
-		 		tempGain=tempGain+change
-		 	elif(change<0):
-		 		tempLoss=tempLoss+abs(change)
+			change=quoteBase_close[x+1]-quoteBase_close[x]
+			if(change>0):
+				tempGain=tempGain+change
+			elif(change<0):
+				tempLoss=tempLoss+abs(change)
 		avgGainRSI=tempGain/rsiPeriod
 		avgLossRSI=tempLoss/rsiPeriod
 		if(avgLossRSI==0 and avgGainRSI==0):
@@ -382,7 +382,7 @@ def rsiUpdate():
 		elif(avgGainRSI==0):
 			sys.exit("RSI Dumb")
 		else:
-	 		rs = avgGainRSI/avgLossRSI
+			rs = avgGainRSI/avgLossRSI
 			rsiValue=np.append(rsiValue,100-(100/(1+rs)))
 	elif(len(quoteBase_close)>rsiPeriod):
 		change=quoteBase_close[len(quoteBase_close)-1]-quoteBase_close[len(quoteBase_close)-2]
@@ -411,7 +411,7 @@ def rsiUpdate():
 		elif(avgGainRSI==0):
 			sys.exit("RSI Dumb")
 		else:
-	 		rs = avgGainRSI/avgLossRSI
+			rs = avgGainRSI/avgLossRSI
 			rsiValue=np.append(rsiValue,100-(100/(1+rs)))
 	if(len(rsiValue)>1):
 		print "RSI:",rsiValue[len(rsiValue)-1]
@@ -509,31 +509,31 @@ def bollListen():
 			bollShout=np.append(bollShout,0)
 
 
-#DELETE THIS! OR COMMENT OUT! NEW ONE UNDERNEATH
-def macdUpdate():
-	global macdValue,macdShout,macdSignal,macdHisto
-	tempArray=np.array([])
-	tempFast=np.array([])
-	tempSignal=np.array([])
-	tempSlow=np.array([])
-	if(len(quoteBase_close)>=lengthTime):
-		tempArray=quoteBase_close[len(quoteBase_close)-macdFastLength:len(quoteBase_close)]
-		tempFast=talib.EMA(tempArray,timeperiod=macdFastLength)
+# #DELETE THIS! OR COMMENT OUT! NEW ONE UNDERNEATH
+# def macdUpdate():
+# 	global macdValue,macdShout,macdSignal,macdHisto
+# 	tempArray=np.array([])
+# 	tempFast=np.array([])
+# 	tempSignal=np.array([])
+# 	tempSlow=np.array([])
+# 	if(len(quoteBase_close)>=lengthTime):
+# 		tempArray=quoteBase_close[len(quoteBase_close)-macdFastLength:len(quoteBase_close)]
+# 		tempFast=talib.EMA(tempArray,timeperiod=macdFastLength)
 
 
-		tempArray=quoteBase_close[len(quoteBase_close)-macdSignalLength:len(quoteBase_close)]
-		tempSignal=talib.EMA(tempArray,timeperiod=macdSignalLength)
+# 		tempArray=quoteBase_close[len(quoteBase_close)-macdSignalLength:len(quoteBase_close)]
+# 		tempSignal=talib.EMA(tempArray,timeperiod=macdSignalLength)
 
-		tempArray=quoteBase_close[len(quoteBase_close)-macdSlowLength:len(quoteBase_close)]
-		tempSlow=talib.EMA(tempArray,timeperiod=macdSlowLength)
+# 		tempArray=quoteBase_close[len(quoteBase_close)-macdSlowLength:len(quoteBase_close)]
+# 		tempSlow=talib.EMA(tempArray,timeperiod=macdSlowLength)
 
-		emaFast=tempFast[len(tempFast)-1]
-		emaSignal=tempSignal[len(tempSignal)-1]
-		emaSlow=tempSlow[len(tempSlow)-1]
+# 		emaFast=tempFast[len(tempFast)-1]
+# 		emaSignal=tempSignal[len(tempSignal)-1]
+# 		emaSlow=tempSlow[len(tempSlow)-1]
 
-		macdValue=np.append(macdValue,emaFast-emaSlow)
-		macdSignal=np.append(macdSignal,emaSignal)
-		macdHisto=np.append(macdHisto,macdValue[len(macdValue)-1]-macdSignal[len(macdSignal)-1])
+# 		macdValue=np.append(macdValue,emaFast-emaSlow)
+# 		macdSignal=np.append(macdSignal,emaSignal)
+# 		macdHisto=np.append(macdHisto,macdValue[len(macdValue)-1]-macdSignal[len(macdSignal)-1])
 
 def macdUpdate():
 	global macdValue,macdShout,macdSignal,macdHisto
@@ -573,21 +573,21 @@ def marketTypeListen():
 	#sma100 first index? always 0?
 	global marketTypeShout
 	if(len(sma50)>=1 and len(sma100)>=1 and len(sma200)>=1):
-	 	if(sma200[len(sma200)-1]>sma50[len(sma50)-1]):
-	 		marketTypeShout=np.append(marketTypeShout,-1)
-	 	elif(quoteBase_close[len(quoteBase_close)-1]<sma200[len(sma200)-1]):
-	 		marketTypeShout=np.append(marketTypeShout,-1)
-	 	elif(quoteBase_close[len(quoteBase_close)-1]<sma100[len(sma100)-1]):
-	 		if(sma100[len(sma100)-1]<sma100[0]):
-	 			marketTypeShout=np.append(marketTypeShout,-1)
-	 		else:
-	 			marketTypeShout=np.append(marketTypeShout,0)
-	 	elif(quoteBase_close[len(quoteBase_close)-1]<sma50[len(sma50)-1]):
-	 		if(sma100[len(sma100)-1]<sma100[0]):
-	 			marketTypeShout=np.append(marketTypeShout,0)
-	 		else:
-	 			marketTypeShout=np.append(marketTypeShout,1)
-	 	else:
+		if(sma200[len(sma200)-1]>sma50[len(sma50)-1]):
+			marketTypeShout=np.append(marketTypeShout,-1)
+		elif(quoteBase_close[len(quoteBase_close)-1]<sma200[len(sma200)-1]):
+			marketTypeShout=np.append(marketTypeShout,-1)
+		elif(quoteBase_close[len(quoteBase_close)-1]<sma100[len(sma100)-1]):
+			if(sma100[len(sma100)-1]<sma100[0]):
+				marketTypeShout=np.append(marketTypeShout,-1)
+			else:
+				marketTypeShout=np.append(marketTypeShout,0)
+		elif(quoteBase_close[len(quoteBase_close)-1]<sma50[len(sma50)-1]):
+			if(sma100[len(sma100)-1]<sma100[0]):
+				marketTypeShout=np.append(marketTypeShout,0)
+			else:
+				marketTypeShout=np.append(marketTypeShout,1)
+		else:
 			marketTypeShout=np.append(marketTypeShout,1)
 
 def daysma():
@@ -717,13 +717,13 @@ while run:
 	whereTick=tickerData.tell()
 	lineTick=tickerData.readline()
 	if not lineTick:
-	 	reading=False
-	 	tickerData.seek(whereTick)
+		reading=False
+		tickerData.seek(whereTick)
 	else:
 		reading=True
-	 	quoteBase_close=np.append(quoteBase_close,float(lineTick[31:41]))
-	 	while(len(quoteBase_close)>lengthTime):
-	 		quoteBase_close=np.delete(quoteBase_close,0)
+		quoteBase_close=np.append(quoteBase_close,float(lineTick[31:41]))
+		while(len(quoteBase_close)>lengthTime):
+			quoteBase_close=np.delete(quoteBase_close,0)
 
 
 
