@@ -343,16 +343,20 @@ def Sell():
 
 	return order
 
-def sma(start,end):
+def sma(start,end,a):
 	temp=0
 	for x in range(start,end):
-		temp=temp+quoteBase_close[x]
+		temp=temp+a[x]
 	return temp/(end-start)
 
 def ema(start,end,a):
+	print end-start
+	print len(quoteBase_close)
 	if((end-start)==len(quoteBase_close)):
-		a=np.append(a,sma(start,end))
+		print end-start
+		a=np.append(a,sma(start,end,quoteBase_close))
 	elif((end-start)>len(quoteBase_close)):
+		print end-start
 		a=np.append(a,((quoteBase_close[len(quoteBase_close)-1]-a[len(a)-1])*(7.0/16.0)+a[len(a)-1]))
 
 def rsiUpdate():
@@ -492,7 +496,7 @@ def bollUpdate():
 		std=np.std(quoteBase_close) #std of huge array, instead of 1200
 	#	tempArray=np.array([])
 		#tempArray=quoteBase_close[len(quoteBase_close)-bollLength:len(quoteBase_close)]
-		avg=sma(len(quoteBase_close)-bollLength,len(quoteBase_close))
+		avg=sma(len(quoteBase_close)-bollLength,len(quoteBase_close),quoteBase_close)
 		#avg=talib.SMA(tempArray,timeperiod=bollLength)
 		#avg=avg[len(avg)-1]
 		highBoll=np.append(highBoll,avg+(2*std))
@@ -539,11 +543,12 @@ def macdUpdate():
 	global macdValue,macdShout,macdSignal,macdHisto
 	global ema7,ema9,ema14
 	#7days in seconds is 7*24*60*60
-	ema((len(quoteBase_close)-(7*24*60*60)),len(quoteBase_close),ema7)
-	ema((len(quoteBase_close)-(9*24*60*60)),len(quoteBase_close),ema9)
-	ema((len(quoteBase_close)-(14*24*60*60)),len(quoteBase_close),ema14)
 
 	if(len(quoteBase_close)>=lengthTime):
+		ema((len(quoteBase_close)-(macdFastLength)),len(quoteBase_close),ema7)
+		ema((len(quoteBase_close)-(macdSignalLength)),len(quoteBase_close),ema9)
+		ema((len(quoteBase_close)-(macdSlowLength)),len(quoteBase_close),ema14)
+		
 		macdValue=np.append(macdValue,ema7[len(ema7)-1]-ema14[len(ema14)-1])
 		macdSignal=np.append(macdSignal,ema9[len(ema9)-1])
 		macdHisto=np.append(macdHisto,macdValue[len(macdValue)-1]-macdSignal[len(macdSignal)-1])
@@ -564,9 +569,9 @@ def marketTypeUpdate():
 	global sma100
 	global sma50
 	if(len(close200)>=200 and len(histQuoteClose)>=200 and len(histBaseClose)>=200):
-		sma50=np.append(sma50,sma(len(close200)-50,len(close200)))
-		sma100=np.append(sma100,sma(len(close200)-100,len(close200)))
-		sma200=np.append(sma200,sma(len(close200)-200,len(close200)))
+		sma50=np.append(sma50,sma(len(close200)-50,len(close200),close200))
+		sma100=np.append(sma100,sma(len(close200)-100,len(close200),close200))
+		sma200=np.append(sma200,sma(len(close200)-200,len(close200),close200))
 
 
 def marketTypeListen():
