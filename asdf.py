@@ -3,7 +3,6 @@ import numpy as np
 import config
 import sys
 import time
-import talib
 import json
 import datetime
 import os
@@ -33,11 +32,11 @@ from coinmarketcap import Market
 #EMA Variables change length when macd changes length
 
 #files
-quoteHist="/Users/ryan/Desktop/Doggo4/ADA Hist"
-baseHist="/Users/ryan/Desktop/Doggo4/ETH Hist"
-klineRead="/Users/ryan/Desktop/Doggo4/klines"
-tickerRead="/Users/ryan/Desktop/Doggo4/ticker"
-resultFile="/Users/ryan/Desktop/Doggo4/trades"
+quoteHist="C:\\Users\\Len\\Desktop\\Doggo4\\ADA Hist"
+baseHist="C:\\Users\\Len\\Desktop\\Doggo4\\ETH Hist"
+klineRead="C:\\Users\\Len\\Desktop\\Doggo4\\klines"
+tickerRead="C:\\Users\\Len\\Desktop\\Doggo4\\ticker"
+resultFile="C:\\Users\\Len\\Desktop\\Doggo4\\trades"
 
 checkInterval=0.1 #min
 checkTime=0
@@ -411,9 +410,11 @@ def rsiUpdate():
 			rs=0
 			rsiValue=np.append(rsiValue,50)
 		elif(avgLossRSI==0):
-			sys.exit("RSI Dumb")
+			rs=0
+			rsiValue=np.append(rsiValue,50)
 		elif(avgGainRSI==0):
-			sys.exit("RSI Dumb")
+			rs=0
+			rsiValue=np.append(rsiValue,50)
 		else:
 			rs = avgGainRSI/avgLossRSI
 			rsiValue=np.append(rsiValue,100-(100/(1+rs)))
@@ -726,6 +727,8 @@ while run:
 		tickerData.seek(whereTick)
 	else:
 		reading=True
+		print lineTick
+		print lineTick[31:41]  
 		quoteBase_close=np.append(quoteBase_close,float(lineTick[31:41]))
 		while(len(quoteBase_close)>lengthTime):
 			quoteBase_close=np.delete(quoteBase_close,0)
