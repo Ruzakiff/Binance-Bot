@@ -728,8 +728,14 @@ while run:
 	else:
 		reading=True
 		print lineTick
-		print lineTick[31:41]  
-		quoteBase_close=np.append(quoteBase_close,float(lineTick[31:41]))
+		print lineTick[31:41]
+		re1='.*?'	# Non-greedy match on filler
+		re2='([+-]?\\d*\\.\\d+)(?![-+0-9\\.])'	# Float 1
+		rg = re.compile(re1+re2,re.IGNORECASE|re.DOTALL)
+		m = rg.search(lineTick)
+		if m:
+    			float1=m.group(1)
+			quoteBase_close=np.append(quoteBase_close,float(float1))
 		while(len(quoteBase_close)>lengthTime):
 			quoteBase_close=np.delete(quoteBase_close,0)
 
