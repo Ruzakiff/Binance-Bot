@@ -1,16 +1,8 @@
-# Doggo4
-Somehow you've managed to stumble upon this project...
+# Binance Bot
+Simple cryptotrading bot
+Using Binance API wrapper in python
 
-A project made by 3 people who are really good at being bad
+With Email notification features, and Emergency Stop Command
 
-Amongst the thousands of other github projects you could have looked at
+Hand coded regular Stock Indicators (RSI,Bollinger,MACD,etc)
 
-You chose this one
-
-Not doggo1
-
-Not doggo2
-
-But doggo4
-
-Congrats
